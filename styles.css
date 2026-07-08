@@ -252,3 +252,74 @@ a.inline{transition:color .15s ease;}
   .tw-cursor,.status .live::after{animation:none!important;}
   .btn-primary:hover,.btn-ghost:hover,.btn-link:hover,.card:hover,.post:hover{transform:none!important;}
 }
+
+/* ===========================================================
+   PHASE 2 — signature graphics
+   =========================================================== */
+
+/* ---- floating tag chips (hero) ---- */
+.chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px;}
+.chip-tag{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.05em;
+  border:1px solid var(--line);border-radius:999px;padding:7px 14px;background:var(--card);color:var(--muted);}
+.chip-tag.acc{border-color:var(--amber);color:var(--amber-deep);background:var(--amber-tint);}
+.motion .chip-tag{animation:floaty 4.5s ease-in-out infinite;}
+.motion .chip-tag:nth-child(2){animation-delay:.5s;}
+.motion .chip-tag:nth-child(3){animation-delay:1s;}
+.motion .chip-tag:nth-child(4){animation-delay:1.5s;}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+
+/* ---- radial hub diagram ---- */
+.hub-wrap{max-width:540px;margin:36px auto 8px;}
+.hub{width:100%;height:auto;display:block;overflow:visible;}
+.hub .line{stroke:var(--amber);stroke-width:2;opacity:.5;stroke-dasharray:1;stroke-dashoffset:1;}
+.motion .reveal.in .hub .line{animation:hubdraw .8s ease forwards var(--d,0s);}
+@keyframes hubdraw{to{stroke-dashoffset:0;}}
+.hub .ttl{font-family:var(--grotesk);fill:var(--ink);}
+.hub .n{font-family:var(--mono);fill:var(--blue);}          /* blue sprinkle */
+.hub .clab{font-family:var(--mono);fill:#9A968C;letter-spacing:1px;}
+.hub .node{opacity:1;}
+.motion .hub .node{opacity:0;transform:scale(.55);transform-box:fill-box;transform-origin:center;}
+.motion .reveal.in .hub .node{animation:hubpop .55s cubic-bezier(.2,.7,.3,1.4) forwards var(--d,0s);}
+@keyframes hubpop{to{opacity:1;transform:scale(1);}}
+.motion .hub .pulse{transform-box:fill-box;transform-origin:center;animation:hubpulse 2.8s ease-out infinite;}
+@keyframes hubpulse{0%{transform:scale(1);opacity:.35}70%{transform:scale(1.4);opacity:0}100%{opacity:0}}
+.hub-legend{margin-top:26px;}
+.hub-legend .n{font-family:var(--mono);font-weight:700;color:var(--blue);font-size:13px;}
+.hub-legend h3{margin:4px 0 4px;font-size:18px;}
+.hub-legend p{font-size:15px;margin:0;color:var(--muted);}
+
+/* ---- scorecard gauge ---- */
+.gauge-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px;text-align:center;}
+.gauge{width:220px;height:130px;display:block;margin:0 auto;overflow:visible;}
+.gauge .track{fill:none;stroke:var(--line);stroke-width:16;stroke-linecap:round;}
+.gauge .fill{fill:none;stroke:var(--amber);stroke-width:16;stroke-linecap:round;
+  stroke-dasharray:1;stroke-dashoffset:1;}
+.gauge-num{font-family:var(--grotesk);font-weight:700;font-size:46px;line-height:1;margin-top:-46px;}
+.gauge-num small{font-size:18px;color:var(--muted);font-weight:500;}
+.gauge-label{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-top:14px;}
+
+/* ---- big statement band ---- */
+.statement{padding:100px 0;}
+.statement h2{font-size:52px;line-height:1.08;letter-spacing:-.02em;max-width:20ch;}
+.statement.center h2{margin-left:auto;margin-right:auto;}
+@media(max-width:860px){.statement{padding:64px 0;} .statement h2{font-size:32px;}}
+
+/* ---- comparison table ---- */
+.compare-wrap{overflow-x:auto;margin-top:30px;}
+.compare{width:100%;border-collapse:collapse;font-size:15px;min-width:560px;}
+.compare th,.compare td{padding:14px 16px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle;}
+.compare thead th{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700;}
+.compare tbody td:first-child{font-weight:500;}
+.compare .mecol{background:var(--amber-tint);}
+.compare thead .mecol{color:var(--amber-deep);}
+.compare .yes{color:var(--amber-deep);font-weight:700;}
+.compare .no{color:#BDB9AF;}
+.compare tbody tr:last-child td{border-bottom:none;}
+
+/* reduced motion resets for phase 2 */
+@media (prefers-reduced-motion: reduce){
+  .chip-tag,.hub .pulse{animation:none!important;}
+  .hub .line{stroke-dashoffset:0!important;}
+  .hub .node{opacity:1!important;transform:none!important;animation:none!important;}
+  .gauge .fill{stroke-dashoffset:0!important;}
+}

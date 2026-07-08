@@ -90,6 +90,42 @@
       }
     }
 
+    /* ---------- 3b. Scorecard gauge ---------- */
+    function animateGauge(card) {
+      var fill = card.querySelector(".gauge .fill");
+      var numEl = card.querySelector(".gauge-num .val");
+      var score = parseInt(card.getAttribute("data-score") || "0", 10);
+      var frac = score / 100;              // arc spans 0–100
+      if (reduce) {
+        if (fill) fill.style.strokeDashoffset = String(1 - frac);
+        if (numEl) numEl.textContent = String(score);
+        return;
+      }
+      var dur = 1300, start = null;
+      function frame(now) {
+        if (start === null) start = now;
+        var p = Math.min((now - start) / dur, 1);
+        var eased = 1 - Math.pow(1 - p, 3);
+        if (fill) fill.style.strokeDashoffset = String(1 - frac * eased);
+        if (numEl) numEl.textContent = String(Math.round(score * eased));
+        if (p < 1) requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    }
+    var gauges = Array.prototype.slice.call(document.querySelectorAll(".gauge-card"));
+    if (gauges.length) {
+      if (!("IntersectionObserver" in window)) {
+        gauges.forEach(animateGauge);
+      } else {
+        var iog = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) { animateGauge(e.target); iog.unobserve(e.target); }
+          });
+        }, { threshold: 0.5 });
+        gauges.forEach(function (g) { iog.observe(g); });
+      }
+    }
+
     /* ---------- 4. Header shrink on scroll ---------- */
     var header = document.querySelector(".site-header");
     if (header) {
