@@ -126,6 +126,21 @@
       }
     }
 
+    /* ---------- 3c. Before / after slider ---------- */
+    Array.prototype.slice.call(document.querySelectorAll(".ba")).forEach(function (ba) {
+      var dragging = false;
+      function setPos(clientX) {
+        var r = ba.getBoundingClientRect();
+        var p = (clientX - r.left) / r.width;
+        p = Math.max(0, Math.min(1, p));
+        ba.style.setProperty("--pos", (p * 100) + "%");
+      }
+      ba.addEventListener("pointerdown", function (e) { dragging = true; setPos(e.clientX); ba.setPointerCapture(e.pointerId); });
+      ba.addEventListener("pointermove", function (e) { if (dragging) setPos(e.clientX); });
+      ba.addEventListener("pointerup", function () { dragging = false; });
+      ba.addEventListener("pointercancel", function () { dragging = false; });
+    });
+
     /* ---------- 4. Header shrink on scroll ---------- */
     var header = document.querySelector(".site-header");
     if (header) {
