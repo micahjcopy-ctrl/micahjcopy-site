@@ -31,6 +31,19 @@
       });
     }
 
+    /* ---------- 1b. Reveal standalone blocks (.scan etc, not <section>) ---------- */
+    var blocks = Array.prototype.slice.call(document.querySelectorAll(".reveal:not(section)"));
+    if (reduce || !("IntersectionObserver" in window)) {
+      blocks.forEach(function (b) { b.classList.add("in"); });
+    } else {
+      var iob = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { e.target.classList.add("in"); iob.unobserve(e.target); }
+        });
+      }, { threshold: 0.25, rootMargin: "0px 0px -6% 0px" });
+      blocks.forEach(function (b) { iob.observe(b); });
+    }
+
     /* ---------- 2. Count-up on stat numbers ---------- */
     function countUp(el) {
       var raw = el.getAttribute("data-final");

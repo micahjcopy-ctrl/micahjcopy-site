@@ -6,7 +6,7 @@
 <title>Micah Jacobi — Marketing built to make you money</title>
 <meta name="description" content="A results-focused marketing specialist. I find where your marketing is leaking, fix it with real strategy, and turn strangers into buyers through SEO, websites, email & SMS, and paid media.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -22,27 +22,29 @@
   </div>
 </nav></div></header>
 
-<!-- HERO -->
-<section class="hero">
+<!-- HERO (dark bun) -->
+<section class="hero hero-dark band-dark">
   <div class="wrap">
     <div class="hero-grid">
       <div>
-        <span class="status"><span class="live"></span> Taking on a limited number of clients</span>
-        <h1>Marketing built to make you <span class="rotate u" data-words="money,more leads,more buyers,more revenue">money</span><br>Not just look busy.</h1>
+        <span class="eyebrow">Micah Jacobi · Marketing specialist · USA + German roots</span>
+        <h1 class="hl">Marketing built to make you <span class="rotate" data-words="money,more leads,more buyers,more revenue">money</span><sup>01/06</sup><br>Not just look busy.</h1>
         <p class="lead mt24">Most marketing burns budget on activity that never turns into revenue. <b>I do the opposite.</b> I find where your marketing is leaking, fix it with a real strategy, and build the systems that turn strangers into leads, leads into buyers, and buyers into your highest-value customers.</p>
         <div class="btn-row mt24">
           <a class="btn btn-primary" href="#book">Book a call</a>
           <a class="btn-link" href="services.html">See how I work →</a>
         </div>
-        <div class="chips">
-          <span class="chip-tag acc">SEO</span>
-          <span class="chip-tag">Website Design</span>
-          <span class="chip-tag">Email &amp; SMS</span>
-          <span class="chip-tag">Media Buying</span>
+        <div class="coordstrip">
+          <span>FAIRFIELD · USA / GERMAN ROOTS</span>
+          <span>SEO · WEB · EMAIL · ADS</span>
+          <span>4 CLIENTS AT A TIME</span>
         </div>
       </div>
       <div>
-        <div class="ph portrait">Photo of Micah<br>(replace)</div>
+        <!-- MAIN PROFESSIONAL PHOTO = the black-and-white headshot. Drop file at: img/headshot-bw.jpg -->
+        <div class="hero-portrait">
+          <img src="img/headshot-bw.jpg" alt="Micah Jacobi" onerror="this.style.display='none';this.parentNode.classList.add('ph','portrait');this.parentNode.innerHTML='B&amp;W HEADSHOT<br>img/headshot-bw.jpg';">
+        </div>
       </div>
     </div>
   </div>
@@ -61,6 +63,7 @@
     </div>
   </div>
 </section>
+<div class="fade"></div>
 
 <!-- PROBLEM -->
 <section>
@@ -85,26 +88,34 @@
   </div>
 </section>
 
-<!-- DIAGNOSIS + GAUGE -->
+<!-- DIAGNOSIS — scanline diagram -->
 <section>
   <div class="wrap">
-    <div class="hero-grid">
-      <div>
-        <span class="eyebrow">It starts with a diagnosis</span>
-        <h2>I find the leak before I spend a dollar fixing it</h2>
-        <p class="mt16">Before I touch a single ad or email, I audit your whole funnel and score it. <b>You see exactly where the money's leaking</b> and which fix moves the needle most, so nothing gets spent on the wrong thing.</p>
-        <div class="btn-row"><a class="btn btn-primary" href="#book">Get your marketing scored</a></div>
+    <span class="eyebrow">It starts with a diagnosis</span>
+    <h2>Diagnosis first. <span class="em">Like a doctor.</span></h2>
+    <p class="mt16">Before I touch a single ad or email, I map your whole funnel and run a scan across it. <b>You see exactly where the money's leaking</b> and which fix moves the needle most, so nothing gets spent on the wrong thing.</p>
+    <div class="scan reveal mt32">
+      <div class="scan-flow">
+        <div class="snode"><b>Traffic</b><span>where they come from</span></div>
+        <div class="sarrow">→</div>
+        <div class="snode"><b>Website</b><span>where they decide</span></div>
+        <div class="sarrow">→</div>
+        <div class="snode"><b>Follow-up</b><span>email &amp; SMS</span></div>
+        <div class="sarrow">→</div>
+        <div class="snode"><b>Sale</b><span>where the money is</span></div>
       </div>
-      <div class="gauge-card" data-score="62">
-        <span class="eyebrow" style="justify-content:center;">Marketing health score</span>
-        <svg class="gauge" viewBox="0 0 220 130" role="img" aria-label="Marketing health score gauge">
-          <path class="track" d="M18 120 A92 92 0 0 1 202 120" pathLength="1"/>
-          <path class="fill" d="M18 120 A92 92 0 0 1 202 120" pathLength="1"/>
-        </svg>
-        <div class="gauge-num"><span class="val">0</span><small>/100</small></div>
-        <div class="gauge-label">Typical score before we start</div>
+      <div class="scanner"></div>
+      <div class="scan-tags">
+        <span class="stag bad">Message not landing</span>
+        <span class="stag bad">No tracking</span>
+        <span class="stag bad">Leads go cold</span>
+        <span class="stag fix">Rebuild the message</span>
+        <span class="stag fix">Set up tracking</span>
+        <span class="stag fix">Follow-up flow</span>
       </div>
+      <p class="scan-foot">Red = what's costing you. Gold = the fix. <b>The plan and the call are free.</b></p>
     </div>
+    <div class="btn-row mt32"><a class="btn btn-primary" href="#book">Get your marketing scored</a></div>
   </div>
 </section>
 
@@ -194,7 +205,50 @@
         <p><b>I use AI too. I just don't outsource my thinking to it.</b> When you work with me you get someone who takes your revenue as seriously as you do, who's genuinely available, and who's picky enough about who he works with that every client gets real attention. One point of accountability, always: me.</p>
         <div class="btn-row"><a class="btn btn-primary" href="#book">Book a call</a></div>
       </div>
-      <div><div class="ph portrait">Photo of Micah<br>(working / candid — replace)</div></div>
+      <div><div class="photo portrait">
+        <img src="img/basketball.jpg" alt="Micah Jacobi" onerror="this.style.display='none';this.parentNode.classList.remove('photo');this.parentNode.classList.add('ph','portrait');this.parentNode.innerHTML='PHOTO<br>img/basketball.jpg';">
+        <span class="cap">Competitor by training</span>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<!-- THERE'S A LINE (dark beat) -->
+<section class="band-dark hero-dark center">
+  <div class="wrap center">
+    <span class="eyebrow" style="justify-content:center;">There's a line</span>
+    <h2>Most marketing sits on the <span class="em">wrong side</span> of it.</h2>
+    <p class="lead mt16" style="max-width:600px;">On one side: cheap, disposable work. On the other: a bloated agency where you're account #37. I built something that sits in between.</p>
+    <div class="line-grid">
+      <div class="line-col line-cheap">
+        <div class="tag">The cheap option</div>
+        <div class="item">Fiverr gig</div>
+        <div class="item">Raw AI output</div>
+        <div class="item">"Post more" advice</div>
+        <div class="item">No strategy</div>
+        <div class="item">No accountability</div>
+      </div>
+      <div class="line-mid">
+        <span class="ember"></span>
+        <div class="badge">The line</div>
+        <h3>You + me + my small team</h3>
+        <ul class="pts">
+          <li>One senior person accountable: me</li>
+          <li>4 clients at a time, so you get real attention</li>
+          <li>Data-driven strategy, not guesswork</li>
+          <li>Systems built to pay for themselves</li>
+        </ul>
+      </div>
+      <div class="line-col line-agency">
+        <div class="tag">The big agency</div>
+        <div class="org">
+          <div class="lvl">Founder (you never meet)</div>
+          <div class="lvl">Account director</div>
+          <div class="lvl">Coordinator</div>
+          <div class="lvl intern">…the intern doing your work</div>
+        </div>
+        <div class="cost">$4,000+/mo</div>
+      </div>
     </div>
   </div>
 </section>
@@ -261,6 +315,7 @@
     <p>If you're looking for the cheapest option or someone to just "post more," I'm not your guy, and I'll tell you that on the call instead of selling you something that won't work.</p>
   </div>
 </section>
+<div class="fade-up"></div>
 
 <!-- FINAL CTA -->
 <section class="band-dark center" id="book">

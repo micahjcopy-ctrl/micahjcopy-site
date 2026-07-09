@@ -6,7 +6,7 @@
 <title>About — Micah Jacobi</title>
 <meta name="description" content="From an Upwork freelancer at 15 to a marketing specialist running growth for $10M ecommerce brands and $80M real estate companies. Data-driven, relationship-first marketing.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -20,18 +20,24 @@
   </div>
 </nav></div></header>
 
-<section class="page-hero">
+<section class="page-hero hero-dark band-dark">
   <div class="wrap">
     <div class="hero-grid">
       <div>
-        <span class="eyebrow">About Micah</span>
-        <h1>I've been doing this since before it was a career. It was just what I <span class="u">loved</span>.</h1>
+        <span class="eyebrow">About Micah · USA-born, German roots</span>
+        <h1 class="hl">I've been doing this since before it was a career. It was just what I <span class="em">loved</span>.</h1>
         <p class="lead mt24">I started freelancing on Upwork as a sophomore in high school. No connections, no capital, just a laptop and a lot of hours. I bought every course I could afford, taught myself the craft, and eventually ended up helping run some of the same marketing communities I'd learned from.</p>
       </div>
-      <div><div class="ph portrait">Photo of Micah<br>(portrait — replace)</div></div>
+      <div>
+        <!-- MAIN professional photo (B&W headshot). Drop file at: img/headshot-bw.jpg -->
+        <div class="hero-portrait">
+          <img src="img/headshot-bw.jpg" alt="Micah Jacobi" onerror="this.style.display='none';this.parentNode.classList.add('ph','portrait');this.parentNode.innerHTML='B&amp;W HEADSHOT<br>img/headshot-bw.jpg';">
+        </div>
+      </div>
     </div>
   </div>
 </section>
+<div class="fade"></div>
 
 <section>
   <div class="wrap">
@@ -41,7 +47,7 @@
       <p>It started small for me. An email project here. A landing page there. But every project taught me something, and every person I met opened another door. Over time that turned into a team and a client roster that now includes ten-million-dollar ecommerce brands, an eighty-million-dollar real estate company, and local businesses fighting to get more people through the door.</p>
       <p>What never changed is the standard: treat your money like my money, and only spend it where the data says it'll come back bigger.</p>
       <div class="sign">
-        <div class="ava"><div class="inner">Photo<br>(replace)</div></div>
+        <div class="ava"><div class="inner" style="padding:0;overflow:hidden;"><img src="img/headshot-bw.jpg" alt="Micah Jacobi" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" onerror="this.replaceWith(document.createTextNode('MJ'));"></div></div>
         <div class="sig">Micah Jacobi<small>Founder &amp; marketing specialist</small></div>
       </div>
     </div>
@@ -51,7 +57,10 @@
 <section class="band-alt">
   <div class="wrap">
     <div class="hero-grid">
-      <div><div class="ph square">Photo — basketball / hometown<br>(replace)</div></div>
+      <div><div class="photo square">
+        <img src="img/basketball.jpg" alt="Micah playing basketball" onerror="this.style.display='none';this.parentNode.classList.remove('photo');this.parentNode.classList.add('ph','square');this.parentNode.innerHTML='PHOTO — basketball<br>img/basketball.jpg';">
+        <span class="cap">Four-year varsity, a couple of college offers</span>
+      </div></div>
       <div>
         <span class="eyebrow">How I got here</span>
         <h2>Basketball first. Then a laptop.</h2>
@@ -67,6 +76,22 @@
     <span class="eyebrow">The mentor who shaped how I work</span>
     <h2>Foundations most marketers skip</h2>
     <p class="mt16">A lot of what I know traces back to my mentor, Andrew Bass, one of the leaders of the program I came up in. He taught me the fundamentals most marketers skip: <b>how to write well, how to nail a brand's voice, how to design something that actually pulls people in, and how to move a person through a buying decision without pressure.</b></p>
+  </div>
+</section>
+
+<!-- PERSONAL / ADVENTURE -->
+<section class="band-alt">
+  <div class="wrap">
+    <span class="eyebrow">Off the clock</span>
+    <h2>American by birth. German by blood. <span class="em">Restless by nature.</span></h2>
+    <p class="mt16">I was born in the USA and I'm proud of it, but a big part of me lives an ocean away. My roots run deep into Germany, where a large part of my family still is, and getting back to see them is one of my favorite things in the world.</p>
+    <p>When I'm not building marketing systems, I'm usually going somewhere. I've been lucky enough to see a good chunk of the world, from the Swiss Alps to Spain to the mountains of Germany, and I've driven clear across the United States more than once just to see what's out there. The big national parks in Utah are a personal favorite. The same curiosity that makes me want to see what's over the next ridge is the one that makes me want to know why a funnel leaks or why one message beats another. <b>I don't like leaving things unexplored.</b></p>
+    <div class="gallery mt32">
+      <div class="photo tall"><img src="img/germany-dad.jpg" alt="Micah with his father in Germany" onerror="this.style.display='none';this.parentNode.classList.remove('photo');this.parentNode.classList.add('ph','portrait');this.parentNode.innerHTML='PHOTO — Germany, w/ dad<br>img/germany-dad.jpg';"><span class="cap">Germany, with my dad</span></div>
+      <div class="photo tall"><img src="img/utah.jpg" alt="Hiking in Utah" onerror="this.style.display='none';this.parentNode.classList.remove('photo');this.parentNode.classList.add('ph','portrait');this.parentNode.innerHTML='PHOTO — Utah parks<br>img/utah.jpg';"><span class="cap">Utah national parks</span></div>
+      <div class="photo tall"><img src="img/girlfriend.jpg" alt="Micah and his girlfriend" onerror="this.style.display='none';this.parentNode.classList.remove('photo');this.parentNode.classList.add('ph','portrait');this.parentNode.innerHTML='PHOTO — us<br>img/girlfriend.jpg';"><span class="cap">My favorite travel partner</span></div>
+      <div class="photo tall"><img src="img/basketball.jpg" alt="Micah playing basketball" onerror="this.style.display='none';this.parentNode.classList.remove('photo');this.parentNode.classList.add('ph','portrait');this.parentNode.innerHTML='PHOTO — hoops<br>img/basketball.jpg';"><span class="cap">Still competitive</span></div>
+    </div>
   </div>
 </section>
 
@@ -114,7 +139,7 @@
     <p class="mt16">I run a small team so the work never outpaces the quality. Thomas handles copywriting, messaging, and data analysis. Luke runs paid media across Google and Meta. Both work under me on client accounts, which means you get more firepower without losing the thing that matters most: <b>a single point of accountability.</b></p>
     <p>That point is me. I answer the texts. I take the meetings. When something wins, you know who to credit, and when something needs fixing, you know exactly who's on it.</p>
     <div class="grid g3 mt32">
-      <div class="card"><div class="ava" style="margin-bottom:14px;"><div class="inner">Photo</div></div><div class="kick">Micah</div><h3>Strategy &amp; accountability</h3><p>Diagnosis, strategy, and every client relationship. The one name on the results.</p></div>
+      <div class="card"><div class="ava" style="margin-bottom:14px;"><div class="inner" style="padding:0;overflow:hidden;"><img src="img/headshot-bw.jpg" alt="Micah Jacobi" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" onerror="this.replaceWith(document.createTextNode('MJ'));"></div></div><div class="kick">Micah</div><h3>Strategy &amp; accountability</h3><p>Diagnosis, strategy, and every client relationship. The one name on the results.</p></div>
       <div class="card"><div class="ava" style="margin-bottom:14px;"><div class="inner">Photo</div></div><div class="kick">Thomas Taylor</div><h3>Copy, messaging &amp; data</h3><p>Copywriting, messaging, data analysis, and conversion optimization.</p></div>
       <div class="card"><div class="ava" style="margin-bottom:14px;"><div class="inner">Photo</div></div><div class="kick">Luke</div><h3>Media buying</h3><p>Paid media execution across Meta and Google.</p></div>
     </div>
@@ -130,10 +155,11 @@
   </div>
 </section>
 
-<section class="band-dark center" id="book">
+<div class="fade-up"></div>
+<section class="band-dark hero-dark center" id="book">
   <div class="wrap">
     <span class="eyebrow">Let's talk</span>
-    <h2>Want this thinking applied to <span class="u">your business</span>?</h2>
+    <h2>Want this thinking applied to <span class="em">your business</span>?</h2>
     <p class="lead mt16">Book a call and I'll show you where your marketing is leaking and what I'd fix first.</p>
     <div class="btn-row mt24" style="justify-content:center;"><a class="btn btn-primary" href="mailto:micahjcopy@gmail.com">Book a call</a></div>
     <p class="mt24"><small style="font-family:var(--mono);color:#9A968C;">[Wire to your Calendly / booking link]</small></p>
