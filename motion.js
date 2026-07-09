@@ -16,11 +16,14 @@
     if (reduce || !("IntersectionObserver" in window)) {
       sections.forEach(function (s) { s.classList.add("in"); });
     } else {
+      // threshold 0 so tall sections (taller than the viewport) still reveal:
+      // any sliver entering the viewport triggers it. A ratio-based threshold
+      // can never be met by a section taller than the screen.
       var io = new IntersectionObserver(function (entries) {
         entries.forEach(function (e) {
           if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
         });
-      }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
+      }, { threshold: 0, rootMargin: "0px 0px -8% 0px" });
       sections.forEach(function (s) { io.observe(s); });
       // Reveal anything already in view on load (hero).
       requestAnimationFrame(function () {
@@ -29,6 +32,17 @@
           if (r.top < window.innerHeight * 0.9) s.classList.add("in");
         });
       });
+      // Safety net: never leave a section hidden. If any reveal section is in
+      // view after scroll/resize and somehow wasn't caught, force it visible.
+      var failsafe = function () {
+        sections.forEach(function (s) {
+          if (s.classList.contains("in")) return;
+          var r = s.getBoundingClientRect();
+          if (r.top < window.innerHeight && r.bottom > 0) s.classList.add("in");
+        });
+      };
+      window.addEventListener("scroll", failsafe, { passive: true });
+      window.addEventListener("resize", failsafe, { passive: true });
     }
 
     /* ---------- 1b. Reveal standalone blocks (.scan etc, not <section>) ---------- */
