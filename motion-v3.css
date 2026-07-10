@@ -25,6 +25,10 @@ browser re-smooth every frame Lenis writes, causing lag + rubber-band jumps.
 Lenis owns smoothing; native smooth must be OFF whenever the motion layer runs. */
 html.motion-v3{scroll-behavior:auto!important;}
 
+/* scroll-perf: backdrop blur repaints every scrolled frame — trim it and
+promote the header to its own layer while the motion layer is active */
+.motion-v3 .site-header{backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);transform:translateZ(0);}
+
 /* ---- keyword underline: draws itself (headline .u only — not SERP url .u) ---- */
 .motion-v3 h1 .u,.motion-v3 h2 .u{border-bottom:none;padding-bottom:2px;
 background-image:linear-gradient(var(--ul,var(--amber)),var(--ul,var(--amber)));

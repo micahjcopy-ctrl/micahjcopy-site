@@ -86,12 +86,14 @@
   /* ---------- 0. Lenis smooth scroll, synced to ScrollTrigger ---------- */
   var lenis = null;
   if (window.Lenis) {
-    // lerp-based (not duration) = responsive, weighted-but-snappy feel;
-    // duration:1.1 read as "delayed" in QA
-    lenis = new Lenis({ lerp: 0.16, smoothWheel: true, wheelMultiplier: 1 });
+    // lerp-based (not duration) = responsive, weighted-but-snappy feel.
+    // 0.16 read slightly notchy on wheel ticks; 0.12 glides.
+    lenis = new Lenis({ lerp: 0.12, smoothWheel: true, wheelMultiplier: 1 });
     lenis.on("scroll", ScrollTrigger.update);
     gsap.ticker.add(function (t) { lenis.raf(t * 1000); });
-    gsap.ticker.lagSmoothing(0);
+    // NOT lagSmoothing(0): with 0, any main-thread hiccup (image decode, GC)
+    // makes the clock jump and the scroll visibly lurch — QA'd as "random jumps".
+    gsap.ticker.lagSmoothing(500, 33);
   }
 
   document.addEventListener("DOMContentLoaded", function () {
