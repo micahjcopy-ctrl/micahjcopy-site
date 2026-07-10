@@ -86,7 +86,9 @@
   /* ---------- 0. Lenis smooth scroll, synced to ScrollTrigger ---------- */
   var lenis = null;
   if (window.Lenis) {
-    lenis = new Lenis({ duration: 1.1, smoothWheel: true });
+    // lerp-based (not duration) = responsive, weighted-but-snappy feel;
+    // duration:1.1 read as "delayed" in QA
+    lenis = new Lenis({ lerp: 0.16, smoothWheel: true, wheelMultiplier: 1 });
     lenis.on("scroll", ScrollTrigger.update);
     gsap.ticker.add(function (t) { lenis.raf(t * 1000); });
     gsap.ticker.lagSmoothing(0);

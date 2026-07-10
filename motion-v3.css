@@ -20,8 +20,10 @@ background:var(--gold);transform-origin:0 50%;transform:scaleX(0);}
 .motion-v3 .hero .hero-portrait{opacity:0;}
 .motion-v3 .hero .hl{clip-path:inset(0 0 100% 0);}
 
-/* hero glow blobs get GPU-friendly drift (JS scrubs custom props) */
-.hero-dark::before,.hero-dark::after{will-change:transform;}
+/* CRITICAL: styles.css sets html{scroll-behavior:smooth} — that makes the
+browser re-smooth every frame Lenis writes, causing lag + rubber-band jumps.
+Lenis owns smoothing; native smooth must be OFF whenever the motion layer runs. */
+html.motion-v3{scroll-behavior:auto!important;}
 
 /* ---- keyword underline: draws itself (headline .u only — not SERP url .u) ---- */
 .motion-v3 h1 .u,.motion-v3 h2 .u{border-bottom:none;padding-bottom:2px;
