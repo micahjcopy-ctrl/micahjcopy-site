@@ -8,6 +8,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="motion-v3.css">
+<script>if(!matchMedia('(prefers-reduced-motion: reduce)').matches){document.documentElement.classList.add('motion-v3');setTimeout(function(){if(!document.documentElement.classList.contains('v3-ready')){document.documentElement.classList.remove('motion-v3');document.body&&(document.body.style.opacity=1);}},2500);}</script>
 <link rel="canonical" href="https://micahjacobi.me/email-sms">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Micah Jacobi">
@@ -28,132 +30,137 @@
 <body>
 
 <header class="site-header"><div class="wrap"><nav class="nav">
-  <a class="brand" href="index.html">Micah Jacobi<span class="dot">.</span></a>
-  <button class="nav-toggle" aria-label="Menu" onclick="document.getElementById('nav').classList.toggle('open')">☰</button>
-  <div class="nav-links" id="nav">
-    <a href="services.html">Services</a><a href="about.html">About</a><a href="blog.html">Blog</a>
-    <a class="btn btn-primary" href="book.html">Book a call</a>
-  </div>
+<a class="brand" href="index.html">Micah Jacobi<span class="dot">.</span></a>
+<button class="nav-toggle" aria-label="Menu" onclick="document.getElementById('nav').classList.toggle('open')">☰</button>
+<div class="nav-links" id="nav">
+<a href="services.html">Services</a><a href="about.html">About</a><a href="blog.html">Blog</a>
+<a class="btn btn-primary" href="book.html">Book a call</a>
+</div>
 </nav></div></header>
 
 <section class="page-hero hero-dark band-dark">
-  <div class="wrap">
-    <div class="hero-grid">
-      <div>
-        <span class="eyebrow">Email &amp; SMS Marketing</span>
-        <h1 class="hl">The email &amp; SMS revenue you're <span class="em">leaving on the table</span></h1>
-        <p class="lead mt24">You spend real money getting people to your site. Most of them leave without buying, and most brands never follow up. Email and SMS are how you win those people back, turn one-time buyers into repeat customers, and <b>build a revenue line you actually own,</b> one that doesn't depend on the ad algorithm having a good day.</p>
-        <div class="btn-row mt24"><a class="btn btn-primary" href="book.html">Book a call</a><a class="btn-link" href="ecommerce-email-marketing-guide.html">Read the complete playbook →</a></div>
-      </div>
-      <div>
-        <div class="browser">
-          <div class="topbar"><span class="dot3"></span><span class="dot3"></span><span class="dot3"></span><span class="url">inbox — 1 new</span></div>
-          <div class="screen">
-            <span class="sk line" style="width:30%;height:8px"></span>
-            <span class="sk line" style="width:82%;height:20px;margin-top:12px"></span>
-            <span class="sk line" style="width:96%;margin-top:14px"></span>
-            <span class="sk line" style="width:90%"></span>
-            <span class="sk line" style="width:70%"></span>
-            <span class="sk btn amber" style="margin-top:16px;width:150px"></span>
-            <div style="border-top:1px solid var(--line);margin-top:20px;padding-top:12px;font-family:var(--mono);font-size:11px;color:var(--muted);">Abandoned cart · sent automatically</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+<div class="wrap">
+<div class="hero-grid">
+<div>
+<span class="eyebrow">Email &amp; SMS Marketing</span>
+<h1 class="hl">The email &amp; SMS revenue you're <span class="em">leaving on the table</span></h1>
+<p class="lead mt24">You spend real money getting people to your site. Most of them leave without buying, and most brands never follow up. Email and SMS are how you win those people back, turn one-time buyers into repeat customers, and <b>build a revenue line you actually own,</b> one that doesn't depend on the ad algorithm having a good day.</p>
+<div class="btn-row mt24"><a class="btn btn-primary" href="book.html">Book a call</a><a class="btn-link" href="ecommerce-email-marketing-guide.html">Read the complete playbook →</a></div>
+</div>
+<div>
+<div class="browser">
+<div class="topbar"><span class="dot3"></span><span class="dot3"></span><span class="dot3"></span><span class="url">inbox — 1 new</span></div>
+<div class="screen">
+<span class="sk line" style="width:30%;height:8px"></span>
+<span class="sk line" style="width:82%;height:20px;margin-top:12px"></span>
+<span class="sk line" style="width:96%;margin-top:14px"></span>
+<span class="sk line" style="width:90%"></span>
+<span class="sk line" style="width:70%"></span>
+<span class="sk btn amber" style="margin-top:16px;width:150px"></span>
+<div style="border-top:1px solid var(--line);margin-top:20px;padding-top:12px;font-family:var(--mono);font-size:11px;color:var(--muted);">Abandoned cart · sent automatically</div>
+</div>
+</div>
+</div>
+</div>
+</div>
 </section>
 
 <section class="band-dark">
-  <div class="wrap">
-    <span class="eyebrow">No channel returns more per dollar</span>
-    <h2>The math is hard to argue with</h2>
-    <div class="grid g3 mt32">
-      <div class="stat"><div class="num">$36–42</div><div class="lbl">returned for every $1 spent on email</div></div>
-      <div class="stat"><div class="num">30x</div><div class="lbl">higher returns from automated flows vs one-off sends</div></div>
-      <div class="stat"><div class="num">#1</div><div class="lbl">email ROI sits highest in retail &amp; ecommerce</div></div>
-    </div>
-    <p class="mt24"><small style="font-family:var(--mono);color:#8f867c;">Sources: Litmus / EmailMonday 2025, Omnisend</small></p>
-  </div>
+<div class="wrap">
+<span class="eyebrow">No channel returns more per dollar</span>
+<h2>The math is hard to argue with</h2>
+<div class="grid g3 mt32">
+<div class="stat"><div class="num">$36–42</div><div class="lbl">returned for every $1 spent on email</div></div>
+<div class="stat"><div class="num">30x</div><div class="lbl">higher returns from automated flows vs one-off sends</div></div>
+<div class="stat"><div class="num">#1</div><div class="lbl">email ROI sits highest in retail &amp; ecommerce</div></div>
+</div>
+<p class="mt24"><small style="font-family:var(--mono);color:#8f867c;">Sources: Litmus / EmailMonday 2025, Omnisend</small></p>
+</div>
 </section>
 
 <!-- LIFECYCLE FLOW -->
 <section>
-  <div class="wrap">
-    <div class="sec-head center"><span class="eyebrow" style="justify-content:center;">The automated engine</span><h2>Five flows working around the clock</h2><p class="mt16" style="margin:0 auto;">Built once, they welcome new subscribers, recover carts, and bring buyers back, while you sleep.</p></div>
-    <div class="flow mt32">
-      <div class="fnode"><div class="fk">01</div><h4>Welcome</h4><p>First impression, first sale</p></div>
-      <div class="farrow">→</div>
-      <div class="fnode"><div class="fk">02</div><h4>Browse abandon</h4><p>Nudge the window-shoppers</p></div>
-      <div class="farrow">→</div>
-      <div class="fnode"><div class="fk">03</div><h4>Abandoned cart</h4><p>Recover the near-misses</p></div>
-      <div class="farrow">→</div>
-      <div class="fnode"><div class="fk">04</div><h4>Post-purchase</h4><p>Turn buyers into repeats</p></div>
-      <div class="farrow">→</div>
-      <div class="fnode"><div class="fk">05</div><h4>Win-back</h4><p>Reignite the quiet ones</p></div>
-    </div>
-  </div>
+<div class="wrap">
+<div class="sec-head center"><span class="eyebrow" style="justify-content:center;">The automated engine</span><h2>Five flows working around the clock</h2><p class="mt16" style="margin:0 auto;">Built once, they welcome new subscribers, recover carts, and bring buyers back, while you sleep.</p></div>
+<div class="flow mt32">
+<div class="fnode"><div class="fk">01</div><h4>Welcome</h4><p>First impression, first sale</p></div>
+<div class="farrow">→</div>
+<div class="fnode"><div class="fk">02</div><h4>Browse abandon</h4><p>Nudge the window-shoppers</p></div>
+<div class="farrow">→</div>
+<div class="fnode"><div class="fk">03</div><h4>Abandoned cart</h4><p>Recover the near-misses</p></div>
+<div class="farrow">→</div>
+<div class="fnode"><div class="fk">04</div><h4>Post-purchase</h4><p>Turn buyers into repeats</p></div>
+<div class="farrow">→</div>
+<div class="fnode"><div class="fk">05</div><h4>Win-back</h4><p>Reignite the quiet ones</p></div>
+</div>
+</div>
 </section>
 
 <section>
-  <div class="wrap">
-    <span class="eyebrow">What I build for you</span>
-    <h2>Systems that sell while you sleep</h2>
-    <div class="grid g2 mt32">
-      <div class="card"><div class="kick">Flows</div><h3>The flows that make money on autopilot</h3><p>Welcome, abandoned cart, browse abandonment, post-purchase, and win-back. The automated sequences that quietly recover and generate revenue around the clock. Most brands don't have them, or set them up once and forget them.</p></div>
-      <div class="card"><div class="kick">Campaigns</div><h3>Campaigns with a point</h3><p>A consistent calendar of emails and texts that keep you top of mind and drive sales, without burning out your list. One idea, one clear action, every send.</p></div>
-      <div class="card"><div class="kick">Deliverability</div><h3>Segmentation that lands in the inbox</h3><p>The right message to the right segment, landing in the inbox instead of the spam folder. The unglamorous work that decides whether email actually pays off.</p></div>
-      <div class="card"><div class="kick">Data</div><h3>Data-driven, always</h3><p>Everything gets tested and measured. I read the numbers, then make the next move based on what they say.</p></div>
-    </div>
-  </div>
+<div class="wrap">
+<span class="eyebrow">What I build for you</span>
+<h2>Systems that sell while you sleep</h2>
+<div class="grid g2 mt32">
+<div class="card"><div class="kick">Flows</div><h3>The flows that make money on autopilot</h3><p>Welcome, abandoned cart, browse abandonment, post-purchase, and win-back. The automated sequences that quietly recover and generate revenue around the clock. Most brands don't have them, or set them up once and forget them.</p></div>
+<div class="card"><div class="kick">Campaigns</div><h3>Campaigns with a point</h3><p>A consistent calendar of emails and texts that keep you top of mind and drive sales, without burning out your list. One idea, one clear action, every send.</p></div>
+<div class="card"><div class="kick">Deliverability</div><h3>Segmentation that lands in the inbox</h3><p>The right message to the right segment, landing in the inbox instead of the spam folder. The unglamorous work that decides whether email actually pays off.</p></div>
+<div class="card"><div class="kick">Data</div><h3>Data-driven, always</h3><p>Everything gets tested and measured. I read the numbers, then make the next move based on what they say.</p></div>
+</div>
+</div>
 </section>
 
 <section class="band-alt">
-  <div class="wrap">
-    <span class="eyebrow">Email &amp; SMS packages</span>
-    <h2>Build it, then run it</h2>
-    <div class="grid g3 mt32">
-      <div class="card"><div class="kick">Entry</div><h3>Email Audit &amp; Flow Setup</h3><div class="price">$2,000 · one-time</div><p class="mt16">A one-time build that gets your money-making automations live.</p><ul class="tick"><li>Full email audit</li><li>Welcome, cart, browse, post-purchase, win-back</li><li>Segmentation setup</li><li>Copy, design, configuration</li></ul></div>
-      <div class="card"><div class="kick">Core</div><h3>Email Management (Standard)</h3><div class="price">$1,000/mo</div><p class="mt16">I run your ongoing email for you, fully managed.</p><ul class="tick"><li>2 emails/week</li><li>Planning, copy, design</li><li>Scheduling + segmentation</li><li>Monthly reporting</li></ul></div>
-      <div class="card"><div class="kick">Premium</div><h3>Email &amp; SMS (Growth)</h3><div class="price">from ~$1,750/mo</div><p class="mt16">A higher-tempo program across email and SMS for serious revenue.</p><ul class="tick"><li>2–4 sends/week + SMS</li><li>Deeper segmentation</li><li>Deliverability management</li><li>A/B testing + revenue reporting</li></ul></div>
-    </div>
-    <div class="btn-row mt32"><a class="btn btn-primary" href="book.html">Book a call</a></div>
-  </div>
+<div class="wrap">
+<span class="eyebrow">Email &amp; SMS packages</span>
+<h2>Build it, then run it</h2>
+<div class="grid g3 mt32">
+<div class="card"><div class="kick">Entry</div><h3>Email Audit &amp; Flow Setup</h3><div class="price">$2,000 · one-time</div><p class="mt16">A one-time build that gets your money-making automations live.</p><ul class="tick"><li>Full email audit</li><li>Welcome, cart, browse, post-purchase, win-back</li><li>Segmentation setup</li><li>Copy, design, configuration</li></ul></div>
+<div class="card"><div class="kick">Core</div><h3>Email Management (Standard)</h3><div class="price">$1,000/mo</div><p class="mt16">I run your ongoing email for you, fully managed.</p><ul class="tick"><li>2 emails/week</li><li>Planning, copy, design</li><li>Scheduling + segmentation</li><li>Monthly reporting</li></ul></div>
+<div class="card"><div class="kick">Premium</div><h3>Email &amp; SMS (Growth)</h3><div class="price">from ~$1,750/mo</div><p class="mt16">A higher-tempo program across email and SMS for serious revenue.</p><ul class="tick"><li>2–4 sends/week + SMS</li><li>Deeper segmentation</li><li>Deliverability management</li><li>A/B testing + revenue reporting</li></ul></div>
+</div>
+<div class="btn-row mt32"><a class="btn btn-primary" href="book.html">Book a call</a></div>
+</div>
 </section>
 
 <section>
-  <div class="wrap">
-    <span class="eyebrow">Common questions</span>
-    <h2>FAQ</h2>
-    <div class="faq mt24">
-      <details><summary>Which platform do you work with?</summary><p>The major ones, including Klaviyo, Attentive, and others. I'll work in whatever your business already uses or recommend the best fit if you're starting fresh.</p></details>
-      <details><summary>Will this annoy my customers?</summary><p>Done right, no. Good email and SMS feel helpful, not spammy. Segmentation and timing are exactly what keep it that way, and exactly what I manage.</p></details>
-      <details><summary>Do I need SMS as well as email?</summary><p>Not always. SMS is powerful but not right for every brand. I'll tell you honestly whether it's worth adding for your business.</p></details>
-    </div>
-  </div>
+<div class="wrap">
+<span class="eyebrow">Common questions</span>
+<h2>FAQ</h2>
+<div class="faq mt24">
+<details><summary>Which platform do you work with?</summary><p>The major ones, including Klaviyo, Attentive, and others. I'll work in whatever your business already uses or recommend the best fit if you're starting fresh.</p></details>
+<details><summary>Will this annoy my customers?</summary><p>Done right, no. Good email and SMS feel helpful, not spammy. Segmentation and timing are exactly what keep it that way, and exactly what I manage.</p></details>
+<details><summary>Do I need SMS as well as email?</summary><p>Not always. SMS is powerful but not right for every brand. I'll tell you honestly whether it's worth adding for your business.</p></details>
+</div>
+</div>
 </section>
 
 <section class="band-dark center" id="book">
-  <div class="wrap">
-    <span class="eyebrow">Let's talk</span>
-    <h2>Stop leaving <span class="u">revenue</span> on the table</h2>
-    <p class="lead mt16">Book a call and I'll show you which flows you're missing and what they're worth.</p>
-    <div class="btn-row mt24" style="justify-content:center;"><a class="btn btn-primary" href="book.html">Book a call</a></div>
-  </div>
+<div class="wrap">
+<span class="eyebrow">Let's talk</span>
+<h2>Stop leaving <span class="u">revenue</span> on the table</h2>
+<p class="lead mt16">Book a call and I'll show you which flows you're missing and what they're worth.</p>
+<div class="btn-row mt24" style="justify-content:center;"><a class="btn btn-primary" href="book.html">Book a call</a></div>
+</div>
 </section>
 
 <footer class="site-footer"><div class="wrap">
-  <div class="foot-grid">
-    <div><div class="foot-brand">Micah Jacobi<span class="dot">.</span></div>
-      <p style="color:#9A968C;max-width:280px;margin-top:10px;font-size:15px;">Marketing built to make you money. Diagnosis, strategy, and the systems that turn traffic into buyers.</p></div>
-    <div class="foot-links">
-      <div class="foot-col"><b>Services</b><a href="seo.html">SEO</a><a href="website-design.html">Website Design</a><a href="email-sms.html">Email &amp; SMS</a><a href="media-buying.html">Media Buying</a></div>
-      <div class="foot-col"><b>Company</b><a href="about.html">About</a><a href="blog.html">Blog</a><a href="services.html">Services</a></div>
-      <div class="foot-col"><b>Get in touch</b><a href="book.html">Book a call</a><a href="mailto:micahjcopy@gmail.com">Email</a></div>
-    </div>
-  </div>
-  <div class="foot-bottom"><span>© 2026 Micah Jacobi. All rights reserved.</span><span>Marketing specialist</span></div>
+<div class="foot-grid">
+<div><div class="foot-brand">Micah Jacobi<span class="dot">.</span></div>
+<p style="color:#9A968C;max-width:280px;margin-top:10px;font-size:15px;">Marketing built to make you money. Diagnosis, strategy, and the systems that turn traffic into buyers.</p></div>
+<div class="foot-links">
+<div class="foot-col"><b>Services</b><a href="seo.html">SEO</a><a href="website-design.html">Website Design</a><a href="email-sms.html">Email &amp; SMS</a><a href="media-buying.html">Media Buying</a></div>
+<div class="foot-col"><b>Company</b><a href="about.html">About</a><a href="blog.html">Blog</a><a href="services.html">Services</a></div>
+<div class="foot-col"><b>Get in touch</b><a href="book.html">Book a call</a><a href="mailto:micahjcopy@gmail.com">Email</a></div>
+</div>
+</div>
+<div class="foot-bottom"><span>© 2026 Micah Jacobi. All rights reserved.</span><span>Marketing specialist</span></div>
 </div></footer>
 <script>document.querySelectorAll('.nav-links a').forEach(a=>a.addEventListener('click',()=>document.getElementById('nav').classList.remove('open')));</script>
 <script src="motion.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.4/dist/lenis.min.js"></script>
+<script src="motion-v3.js" defer></script>
 </body>
 </html>
