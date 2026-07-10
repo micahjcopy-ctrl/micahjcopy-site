@@ -59,6 +59,14 @@
       result.classList.add("show");
       btn.style.display = "none";
       result.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "center" });
+      // GA4: quiz completion = strong lead-intent signal
+      if (typeof gtag === "function") {
+        gtag("event", "quiz_score_revealed", { score: score, verdict: verdict });
+        var cta = result.querySelector(".btn-primary");
+        if (cta) cta.addEventListener("click", function () {
+          gtag("event", "quiz_cta_click", { score: score });
+        });
+      }
       // failsafe: if the observer didn't fire within 1.6s, set final values directly
       setTimeout(function () {
         var fill = result.querySelector(".gauge .fill");
