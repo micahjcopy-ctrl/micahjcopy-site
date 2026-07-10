@@ -1,0 +1,77 @@
+/* ===========================================================
+Micah Jacobi — MOTION V3 "studio layer" (GSAP + Lenis)
+All initial hidden states are gated on html.motion-v3, which is
+only added by an inline script when JS runs AND the user does
+not prefer reduced motion. No JS / reduced motion = site is
+fully visible and static. If GSAP fails to load, motion-v3.js
+removes the class and everything reverts to visible.
+=========================================================== */
+
+/* ---- scroll progress hairline ---- */
+.v3-progress{position:fixed;top:0;left:0;right:0;height:2px;z-index:200;pointer-events:none;
+background:var(--gold);transform-origin:0 50%;transform:scaleX(0);}
+
+/* ---- hero entrance: initial states (animated to visible by GSAP) ---- */
+.motion-v3 .hero .eyebrow,
+.motion-v3 .hero .hl,
+.motion-v3 .hero .lead,
+.motion-v3 .hero .btn-row,
+.motion-v3 .hero .coordstrip,
+.motion-v3 .hero .hero-portrait{opacity:0;}
+.motion-v3 .hero .hl{clip-path:inset(0 0 100% 0);}
+
+/* hero glow blobs get GPU-friendly drift (JS scrubs custom props) */
+.hero-dark::before,.hero-dark::after{will-change:transform;}
+
+/* ---- keyword underline: draws itself ---- */
+.motion-v3 .u{border-bottom:none;padding-bottom:2px;
+background-image:linear-gradient(var(--ul,var(--amber)),var(--ul,var(--amber)));
+background-repeat:no-repeat;background-position:0 100%;background-size:0% 2px;
+transition:background-size .9s cubic-bezier(.22,.61,.36,1) .15s;}
+.motion-v3 .u.drawn{background-size:100% 2px;}
+.motion-v3 .band-dark .u,.motion-v3 .hero-dark .u{--ul:var(--gold);}
+
+/* ---- statement: words hidden until split/stagger ---- */
+.motion-v3 .statement h2{visibility:hidden;}
+.motion-v3 .statement h2.v3-split{visibility:visible;}
+.motion-v3 .statement h2 .v3-word{display:inline-block;}
+
+/* ---- comparison table cascade ---- */
+.motion-v3 .compare tbody tr{opacity:0;transform:translateX(-14px);}
+.motion-v3 .compare.v3-lit tbody tr{opacity:1;transform:none;
+transition:opacity .45s ease,transform .45s ease;}
+.motion-v3 .compare.v3-lit tbody tr:nth-child(2){transition-delay:.08s;}
+.motion-v3 .compare.v3-lit tbody tr:nth-child(3){transition-delay:.16s;}
+.motion-v3 .compare.v3-lit tbody tr:nth-child(4){transition-delay:.24s;}
+.motion-v3 .compare.v3-lit tbody tr:nth-child(5){transition-delay:.32s;}
+.motion-v3 .compare.v3-lit tbody tr:nth-child(6){transition-delay:.40s;}
+.motion-v3 .compare .mecol{transition:box-shadow .6s ease .75s;}
+.motion-v3 .compare.v3-lit .mecol{box-shadow:inset 0 0 0 100vmax rgba(124,42,42,.06);}
+
+/* ---- cursor glow on dark bands (desktop only, JS-driven) ---- */
+.v3-glow{position:absolute;width:340px;height:340px;border-radius:50%;pointer-events:none;
+background:radial-gradient(circle,rgba(199,154,70,.13),transparent 65%);
+top:0;left:0;opacity:0;z-index:1;will-change:transform;}
+.band-dark{position:relative;}
+.band-dark .wrap{position:relative;z-index:2;}
+
+/* ---- magnetic buttons: transform handled by JS; keep transitions off transform ---- */
+.motion-v3 .v3-magnet{transition:background .18s ease,color .18s ease,box-shadow .18s ease;will-change:transform;}
+
+/* ---- funnel scrub initial state ---- */
+.motion-v3 .funnel .lvl{opacity:1;transform:none;transition:none;}
+
+/* ---- Lenis recommended styles ---- */
+html.lenis,html.lenis body{height:auto;}
+.lenis.lenis-smooth{scroll-behavior:auto!important;}
+.lenis.lenis-smooth [data-lenis-prevent]{overscroll-behavior:contain;}
+
+/* ---- reduced motion: neutralize everything above ---- */
+@media (prefers-reduced-motion: reduce){
+.motion-v3 .hero .eyebrow,.motion-v3 .hero .hl,.motion-v3 .hero .lead,
+.motion-v3 .hero .btn-row,.motion-v3 .hero .coordstrip,.motion-v3 .hero .hero-portrait{opacity:1!important;clip-path:none!important;}
+.motion-v3 .statement h2{visibility:visible!important;}
+.motion-v3 .compare tbody tr{opacity:1!important;transform:none!important;}
+.motion-v3 .u{background-size:100% 2px!important;}
+.v3-progress,.v3-glow{display:none!important;}
+}
