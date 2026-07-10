@@ -289,12 +289,12 @@
 
     /* ---------- 12. V4: scrolly system steps (home) ---------- */
     document.querySelectorAll(".prow").forEach(function (row) {
-      gsap.from(row.children, {
-        opacity: 0, y: 26, duration: 0.55, stagger: 0.12, ease: "power2.out",
-        scrollTrigger: { trigger: row, start: "top 80%", once: true }
-      });
+      // NOTE: no gsap.from() on row children here — the section-level CSS
+      // reveal already staggers .grid>* in, and a from-tween created while
+      // those children are CSS-hidden records opacity 0 as its END value
+      // (invisible-forever bug caught in v4 QA).
       ScrollTrigger.create({
-        trigger: row, start: "top 65%", once: true,
+        trigger: row, start: "top 70%", once: true,
         onEnter: function () { row.classList.add("lit"); }
       });
     });
