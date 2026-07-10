@@ -20,16 +20,23 @@ background:var(--gold);transform-origin:0 50%;transform:scaleX(0);}
 .motion-v3 .hero .hero-portrait{opacity:0;}
 .motion-v3 .hero .hl{clip-path:inset(0 0 100% 0);}
 
-/* hero glow blobs get GPU-friendly drift (JS scrubs custom props) */
-.hero-dark::before,.hero-dark::after{will-change:transform;}
+/* CRITICAL: styles.css sets html{scroll-behavior:smooth} — that makes the
+browser re-smooth every frame Lenis writes, causing lag + rubber-band jumps.
+Lenis owns smoothing; native smooth must be OFF whenever the motion layer runs. */
+html.motion-v3{scroll-behavior:auto!important;}
 
-/* ---- keyword underline: draws itself ---- */
-.motion-v3 .u{border-bottom:none;padding-bottom:2px;
+/* scroll-perf: backdrop blur repaints every scrolled frame — trim it and
+promote the header to its own layer while the motion layer is active */
+.motion-v3 .site-header{backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);transform:translateZ(0);}
+
+/* ---- keyword underline: draws itself (headline .u only — not SERP url .u) ---- */
+.motion-v3 h1 .u,.motion-v3 h2 .u{border-bottom:none;padding-bottom:2px;
 background-image:linear-gradient(var(--ul,var(--amber)),var(--ul,var(--amber)));
 background-repeat:no-repeat;background-position:0 100%;background-size:0% 2px;
 transition:background-size .9s cubic-bezier(.22,.61,.36,1) .15s;}
-.motion-v3 .u.drawn{background-size:100% 2px;}
-.motion-v3 .band-dark .u,.motion-v3 .hero-dark .u{--ul:var(--gold);}
+.motion-v3 h1 .u.drawn,.motion-v3 h2 .u.drawn{background-size:100% 2px;}
+.motion-v3 .band-dark h1 .u,.motion-v3 .hero-dark h1 .u,
+.motion-v3 .band-dark h2 .u,.motion-v3 .hero-dark h2 .u{--ul:var(--gold);}
 
 /* ---- statement: words hidden until split/stagger ---- */
 .motion-v3 .statement h2{visibility:hidden;}
@@ -66,12 +73,74 @@ html.lenis,html.lenis body{height:auto;}
 .lenis.lenis-smooth{scroll-behavior:auto!important;}
 .lenis.lenis-smooth [data-lenis-prevent]{overscroll-behavior:contain;}
 
+/* ===========================================================
+V4 — showpieces
+=========================================================== */
+
+/* ---- page transitions: body fades in (v3-ready guard set by JS) ---- */
+.motion-v3 body{opacity:0;}
+
+/* ---- custom cursor: dot + ring, difference blend for auto-contrast ---- */
+.v4-cursor-on,.v4-cursor-on a,.v4-cursor-on button,.v4-cursor-on summary,
+.v4-cursor-on .qz-chip,.v4-cursor-on .ba .handle{cursor:none;}
+.v4-dot,.v4-ring{position:fixed;top:0;left:0;pointer-events:none;z-index:9999;
+border-radius:50%;mix-blend-mode:difference;opacity:0;}
+.v4-dot{width:8px;height:8px;background:#fff;margin:-4px 0 0 -4px;}
+.v4-ring{width:36px;height:36px;border:1.5px solid #fff;margin:-18px 0 0 -18px;
+transition:width .25s ease,height .25s ease,margin .25s ease,opacity .25s ease;}
+.v4-ring.grow{width:58px;height:58px;margin:-29px 0 0 -29px;}
+@media(pointer:coarse){.v4-dot,.v4-ring{display:none;}}
+
+/* ---- photo reveal masks ---- */
+.motion-v3 .photo{clip-path:inset(0 100% 0 0);transition:clip-path 1s cubic-bezier(.65,.05,.36,1);}
+.motion-v3 .photo.unmasked{clip-path:inset(0 0% 0 0);}
+
+/* ---- scrolly system steps ---- */
+.prow{margin-top:40px;}
+.prow .pk{font-family:var(--mono);font-weight:700;font-size:13px;color:var(--amber);margin-bottom:8px;}
+.prow h3{font-family:var(--fr);font-weight:600;font-size:26px;margin-bottom:10px;}
+.prow p{font-size:16px;color:#57514a;}
+@media(min-width:861px){.prow.flip .mock{order:-1;}}
+/* mockup accents */
+.mock .gauge-label b{color:var(--amber);}
+.motion-v3 .mock .serp .row.top{transition:box-shadow .5s ease .7s;}
+.motion-v3 .prow.lit .serp .row.top{box-shadow:0 6px 18px rgba(124,42,42,.18);}
+.mock .sk.btn.amber{position:relative;}
+.motion-v3 .prow.lit .browser .sk.btn.amber{animation:v4ctapulse 2.2s ease-in-out infinite .8s;}
+@keyframes v4ctapulse{0%,100%{box-shadow:0 0 0 0 rgba(124,42,42,.35);}50%{box-shadow:0 0 0 9px rgba(124,42,42,0);}}
+.motion-v3 .mock .flow .fnode,.motion-v3 .mock .flow .farrow{opacity:.25;transition:opacity .4s ease,border-color .4s ease,box-shadow .4s ease;}
+.motion-v3 .mock .flow .fnode.lit,.motion-v3 .mock .flow .farrow.lit{opacity:1;}
+.motion-v3 .mock .flow .fnode.lit{border-color:var(--amber);box-shadow:0 8px 20px rgba(124,42,42,.12);}
+
+/* ---- marketing score quiz ---- */
+.quiz{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:34px;max-width:820px;margin:32px auto 0;box-shadow:0 20px 44px rgba(23,20,15,.06);}
+.qz-q{padding:18px 0;border-bottom:1px solid var(--line);}
+.qz-q:last-of-type{border-bottom:none;}
+.qz-q .qt{font-family:var(--grotesk);font-weight:600;font-size:17px;margin-bottom:12px;color:var(--ink);}
+.qz-chips{display:flex;gap:10px;flex-wrap:wrap;}
+.qz-chip{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.04em;
+border:1px solid var(--line);border-radius:999px;padding:9px 18px;background:var(--paper);color:var(--muted);
+cursor:pointer;transition:all .18s ease;user-select:none;}
+.qz-chip:hover{border-color:var(--amber);color:var(--amber-deep);}
+.qz-chip.sel{background:var(--amber);border-color:var(--amber);color:#fff;}
+.qz-reveal{display:block;margin:26px auto 0;opacity:.4;pointer-events:none;transition:opacity .3s ease;}
+.qz-reveal.ready{opacity:1;pointer-events:auto;}
+.qz-result{display:none;text-align:center;margin-top:10px;}
+.qz-result.show{display:block;}
+.qz-verdict{font-family:var(--fr);font-weight:600;font-style:italic;font-size:30px;color:var(--amber);margin:16px 0 6px;}
+.qz-sub{font-size:16px;color:#57514a;max-width:480px;margin:0 auto 18px;}
+.qz-note{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-top:14px;}
+
 /* ---- reduced motion: neutralize everything above ---- */
 @media (prefers-reduced-motion: reduce){
 .motion-v3 .hero .eyebrow,.motion-v3 .hero .hl,.motion-v3 .hero .lead,
 .motion-v3 .hero .btn-row,.motion-v3 .hero .coordstrip,.motion-v3 .hero .hero-portrait{opacity:1!important;clip-path:none!important;}
 .motion-v3 .statement h2{visibility:visible!important;}
 .motion-v3 .compare tbody tr{opacity:1!important;transform:none!important;}
-.motion-v3 .u{background-size:100% 2px!important;}
-.v3-progress,.v3-glow{display:none!important;}
+.motion-v3 h1 .u,.motion-v3 h2 .u{background-size:100% 2px!important;}
+.motion-v3 body{opacity:1!important;}
+.motion-v3 .photo{clip-path:none!important;}
+.motion-v3 .mock .flow .fnode,.motion-v3 .mock .flow .farrow{opacity:1!important;}
+.v3-progress,.v3-glow,.v4-dot,.v4-ring{display:none!important;}
+.v4-cursor-on,.v4-cursor-on a,.v4-cursor-on button{cursor:auto!important;}
 }

@@ -9,7 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="motion-v3.css">
-<script>if(!matchMedia('(prefers-reduced-motion: reduce)').matches){document.documentElement.classList.add('motion-v3');}</script>
+<script>if(!matchMedia('(prefers-reduced-motion: reduce)').matches){document.documentElement.classList.add('motion-v3');setTimeout(function(){if(!document.documentElement.classList.contains('v3-ready')){document.documentElement.classList.remove('motion-v3');document.body&&(document.body.style.opacity=1);}},2500);}</script>
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -146,49 +146,75 @@
 <span class="eyebrow">How I grow a business</span>
 <h2>One connected system, not four services</h2>
 <p class="mt16" style="max-width:620px;">SEO, websites, email, and paid media aren't separate line items. They're one loop that turns strangers into repeat buyers, all pointed at the same thing: your revenue.</p>
-<div class="hub-wrap">
-<svg class="hub" viewBox="0 0 600 560" role="img" aria-label="Diagram: Diagnose, Attract, Convert and Ascend orbiting your revenue">
-<!-- connector lines -->
-<line class="line" style="--d:0s" x1="300" y1="280" x2="300" y2="80" pathLength="1"/>
-<line class="line" style="--d:.12s" x1="300" y1="280" x2="520" y2="280" pathLength="1"/>
-<line class="line" style="--d:.24s" x1="300" y1="280" x2="300" y2="480" pathLength="1"/>
-<line class="line" style="--d:.36s" x1="300" y1="280" x2="80" y2="280" pathLength="1"/>
-<!-- center -->
-<g class="node" style="--d:0s">
-<circle class="pulse" cx="300" cy="280" r="78" fill="none" stroke="var(--amber)" stroke-width="2"/>
-<circle cx="300" cy="280" r="70" fill="#0E0F0C"/>
-<text class="clab" x="300" y="264" text-anchor="middle" font-size="10">THE GOAL</text>
-<text x="300" y="286" text-anchor="middle" fill="#fff" font-family="var(--grotesk)" font-size="18" font-weight="700">Your</text>
-<text x="300" y="308" text-anchor="middle" fill="#fff" font-family="var(--grotesk)" font-size="18" font-weight="700">revenue</text>
-</g>
-<!-- nodes -->
-<g class="node" style="--d:.5s">
-<circle cx="300" cy="80" r="60" fill="#fff" stroke="var(--amber)" stroke-width="2"/>
-<text class="n" x="300" y="72" text-anchor="middle" font-size="12">01</text>
-<text class="ttl" x="300" y="94" text-anchor="middle" font-size="17" font-weight="700">Diagnose</text>
-</g>
-<g class="node" style="--d:.65s">
-<circle cx="520" cy="280" r="60" fill="#fff" stroke="var(--amber)" stroke-width="2"/>
-<text class="n" x="520" y="272" text-anchor="middle" font-size="12">02</text>
-<text class="ttl" x="520" y="294" text-anchor="middle" font-size="17" font-weight="700">Attract</text>
-</g>
-<g class="node" style="--d:.8s">
-<circle cx="300" cy="480" r="60" fill="#fff" stroke="var(--amber)" stroke-width="2"/>
-<text class="n" x="300" y="472" text-anchor="middle" font-size="12">03</text>
-<text class="ttl" x="300" y="494" text-anchor="middle" font-size="17" font-weight="700">Convert</text>
-</g>
-<g class="node" style="--d:.95s">
-<circle cx="80" cy="280" r="60" fill="#fff" stroke="var(--amber)" stroke-width="2"/>
-<text class="n" x="80" y="272" text-anchor="middle" font-size="12">04</text>
-<text class="ttl" x="80" y="294" text-anchor="middle" font-size="17" font-weight="700">Ascend</text>
-</g>
-</svg>
+<!-- 01 DIAGNOSE — scorecard mockup -->
+<div class="grid g2 prow" style="text-align:left;">
+<div>
+<div class="pk">01 · Diagnose</div>
+<h3>Find the leak</h3>
+<p>A full audit of where leads, sales, and repeat revenue slip away. You get a scored map of your whole funnel — what's costing you, what to fix first.</p>
 </div>
-<div class="grid g4 hub-legend" style="text-align:left;">
-<div><div class="n">01 · Diagnose</div><h3>Find the leak</h3><p>A full audit of where leads, sales, and repeat revenue slip away.</p></div>
-<div><div class="n">02 · Attract</div><h3>Bring the right people</h3><p>SEO and paid media built around real buyer intent, not vanity reach.</p></div>
-<div><div class="n">03 · Convert</div><h3>Turn clicks into buyers</h3><p>Websites and pages engineered to make the decision easy.</p></div>
-<div><div class="n">04 · Ascend</div><h3>Grow every customer</h3><p>Email and SMS that turn one-time buyers into repeat, high-value ones.</p></div>
+<div class="mock">
+<div class="gauge-card" data-score="62">
+<svg class="gauge" viewBox="0 0 220 130" aria-hidden="true">
+<path class="track" d="M14 116 A96 96 0 0 1 206 116" pathLength="1"/>
+<path class="fill" d="M14 116 A96 96 0 0 1 206 116" pathLength="1"/>
+</svg>
+<div class="gauge-num"><span class="val">0</span><small>/100</small></div>
+<div class="gauge-label">Sample scorecard · <b>your marketing health</b></div>
+</div>
+</div>
+</div>
+<!-- 02 ATTRACT — search result mockup -->
+<div class="grid g2 prow flip" style="text-align:left;">
+<div>
+<div class="pk">02 · Attract</div>
+<h3>Bring the right people</h3>
+<p>SEO and paid media built around real buyer intent, not vanity reach. The goal isn't traffic — it's showing up exactly where your buyers already search.</p>
+</div>
+<div class="mock">
+<div class="serp">
+<div class="q">best option near me</div>
+<div class="row top"><div class="rank">#1</div><div class="rl"><div class="t">Your business — the obvious choice</div><div class="u">yourbrand.com</div><div class="d">Shows up first, answers the question, wins the click.</div></div></div>
+<div class="row"><div class="rank">#2</div><div class="rl"><div class="t">Competitor A</div><div class="u">competitor-a.com</div></div></div>
+<div class="row"><div class="rank">#3</div><div class="rl"><div class="t">Competitor B</div><div class="u">competitor-b.com</div></div></div>
+</div>
+</div>
+</div>
+<!-- 03 CONVERT — landing page mockup -->
+<div class="grid g2 prow" style="text-align:left;">
+<div>
+<div class="pk">03 · Convert</div>
+<h3>Turn clicks into buyers</h3>
+<p>Websites and pages engineered to make the decision easy: one message, one action, nothing in the way. That pulsing button is the whole point.</p>
+</div>
+<div class="mock">
+<div class="browser">
+<div class="topbar"><span class="dot3"></span><span class="dot3"></span><span class="dot3"></span><span class="url">yourbrand.com</span></div>
+<div class="screen">
+<span class="sk line amber" style="width:24%;height:8px"></span>
+<span class="sk line" style="width:74%;height:22px;margin-top:12px"></span>
+<span class="sk line" style="width:52%;height:22px"></span>
+<span class="sk line" style="width:82%;margin-top:12px"></span>
+<span class="sk btn amber" style="margin-top:14px"></span>
+</div>
+</div>
+</div>
+</div>
+<!-- 04 ASCEND — email flow mockup -->
+<div class="grid g2 prow flip" style="text-align:left;">
+<div>
+<div class="pk">04 · Ascend</div>
+<h3>Grow every customer</h3>
+<p>Email and SMS that turn one-time buyers into repeat, high-value ones. Flows that fire automatically, so every customer keeps compounding.</p>
+</div>
+<div class="mock">
+<div class="flow">
+<div class="fnode"><div class="fk">FLOW 01</div><h4>Welcome</h4><p>first purchase</p></div>
+<div class="farrow">→</div>
+<div class="fnode"><div class="fk">FLOW 02</div><h4>Post-purchase</h4><p>repeat buyer</p></div>
+<div class="farrow">→</div>
+<div class="fnode"><div class="fk">FLOW 03</div><h4>Winback</h4><p>revenue recovered</p></div>
+</div>
 </div>
 </div>
 </section>
@@ -317,6 +343,51 @@
 <h2>Serious businesses, not tire-kickers</h2>
 <p class="mt16">Established businesses that are serious about growth and willing to invest in their marketing the way I invest in it. Ecommerce brands, service businesses, and local companies that want a real strategy, not another vendor on autopilot.</p>
 <p>If you're looking for the cheapest option or someone to just "post more," I'm not your guy, and I'll tell you that on the call instead of selling you something that won't work.</p>
+</div>
+</section>
+
+<!-- SCORE YOUR MARKETING (interactive) -->
+<section class="band-alt">
+<div class="wrap">
+<div class="sec-head center"><span class="eyebrow" style="justify-content:center;">60-second self-diagnosis</span>
+<h2>Score your own marketing</h2>
+<p class="mt16">Five questions, brutally honest answers. See roughly where you stand before we ever talk.</p></div>
+<div class="quiz" id="mkt-quiz">
+<div class="qz-q" data-q="1">
+<div class="qt">Do you know exactly where your last 10 customers came from?</div>
+<div class="qz-chips"><span class="qz-chip" data-v="20">Yes, tracked</span><span class="qz-chip" data-v="10">Roughly</span><span class="qz-chip" data-v="0">No idea</span></div>
+</div>
+<div class="qz-q" data-q="2">
+<div class="qt">Does your website push visitors toward ONE clear action?</div>
+<div class="qz-chips"><span class="qz-chip" data-v="20">One clear CTA</span><span class="qz-chip" data-v="10">Sort of</span><span class="qz-chip" data-v="0">It's a brochure</span></div>
+</div>
+<div class="qz-q" data-q="3">
+<div class="qt">Do leads get automatic follow-up by email or SMS?</div>
+<div class="qz-chips"><span class="qz-chip" data-v="20">Automated flows</span><span class="qz-chip" data-v="10">Manual / sometimes</span><span class="qz-chip" data-v="0">They go cold</span></div>
+</div>
+<div class="qz-q" data-q="4">
+<div class="qt">Do you know what a new customer is worth to you?</div>
+<div class="qz-chips"><span class="qz-chip" data-v="20">To the dollar</span><span class="qz-chip" data-v="10">Ballpark</span><span class="qz-chip" data-v="0">Never calculated</span></div>
+</div>
+<div class="qz-q" data-q="5">
+<div class="qt">Are you actively testing anything right now (ads, pages, offers)?</div>
+<div class="qz-chips"><span class="qz-chip" data-v="20">Always testing</span><span class="qz-chip" data-v="10">Occasionally</span><span class="qz-chip" data-v="0">Set and forget</span></div>
+</div>
+<button class="btn btn-primary qz-reveal">Reveal my score</button>
+<div class="qz-result">
+<div class="gauge-card" style="border:none;box-shadow:none;padding:10px 0 0;">
+<svg class="gauge" viewBox="0 0 220 130" aria-hidden="true">
+<path class="track" d="M14 116 A96 96 0 0 1 206 116" pathLength="1"/>
+<path class="fill" d="M14 116 A96 96 0 0 1 206 116" pathLength="1"/>
+</svg>
+<div class="gauge-num"><span class="val">0</span><small>/100</small></div>
+</div>
+<div class="qz-verdict"></div>
+<p class="qz-sub"></p>
+<a class="btn btn-primary" href="book.html">Get the full diagnosis — free</a>
+<div class="qz-note">Self-assessment only. The real scan on the call goes much deeper.</div>
+</div>
+</div>
 </div>
 </section>
 <div class="fade-up"></div>
