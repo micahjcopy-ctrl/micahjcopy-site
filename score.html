@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Free Retention Score — Micah Jacobi</title>
+<meta name="description" content="Score your email account in 5 minutes. See your leak in dollars and get your #1 fix free — full implementation steps, no call required.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="canonical" href="https://micahjacobi.me/score">
+<meta property="og:title" content="Free Retention Score — find your email revenue leak in 5 minutes">
+<meta property="og:description" content="8 questions. Your leak in dollars. Your #1 fix free.">
+<meta property="og:url" content="https://micahjacobi.me/score">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FZ1C922BZV"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-FZ1C922BZV');</script>
+<style>
+/* page-scoped helpers, built on the site system */
+.lr-field label{display:block;font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:0 0 6px;}
+.lr-field input,.lr-field select{width:100%;background:#fff;border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:12px 13px;font-size:16px;font-family:var(--inter);box-sizing:border-box;}
+.lr-field input:focus,.lr-field select:focus{outline:2px solid var(--amber);border-color:var(--amber);}
+.lr-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.lr-flows{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.lr-flows label{display:flex;align-items:center;gap:9px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:11px 12px;font-size:14px;cursor:pointer;font-family:var(--inter);}
+.lr-kv{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid var(--line);padding:10px 0;font-size:15px;}
+.lr-kv:last-child{border-bottom:none;}
+.lr-leak{color:var(--amber);font-weight:700;}
+.lr-rec{color:var(--gold-on-light);font-weight:700;}
+.lr-fix{border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-top:14px;background:var(--paper);}
+.lr-fix h3{margin-bottom:4px;}
+.lr-fix .meta{font-family:var(--mono);font-size:12px;color:var(--muted);}
+.lr-fix ol{margin:12px 0 0 18px;padding:0;font-size:15px;}
+.lr-fix ol li{margin-bottom:7px;}
+.lr-blur{filter:blur(5px);user-select:none;pointer-events:none;}
+.lr-lockwrap{position:relative;}
+.lr-locknote{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--amber-deep);font-weight:700;}
+.lr-tag{font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:999px;}
+.lr-tag.free{background:#f7efdd;color:var(--gold-on-light);border:1px solid var(--gold-deep);}
+.lr-tag.lock{background:var(--amber-tint);color:var(--amber-deep);border:1px solid var(--amber);}
+.lr-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;}
+button.btn{width:100%;border:none;}
+button.btn + button.btn{margin-top:10px;}
+.btn-ghost2{background:transparent;border:1px solid var(--line)!important;color:var(--muted);font-weight:500;font-size:14px;}
+#step-result,#checkout-note{display:none;}
+</style>
+</head>
+<body>
+
+<header class="site-header"><div class="wrap"><nav class="nav">
+<a class="brand" href="index.html">Micah Jacobi<span class="dot">.</span></a>
+<button class="nav-toggle" aria-label="Menu" onclick="document.getElementById('nav').classList.toggle('open')">☰</button>
+<div class="nav-links" id="nav">
+<a href="leak-report.html">How it works</a>
+<a href="about.html">About</a>
+<a class="btn btn-primary" href="book.html">Book a call</a>
+</div>
+</nav></div></header>
+
+<!-- WIZARD -->
+<section class="page-hero" id="step-form">
+<div class="wrap">
+<span class="eyebrow">Free Retention Score · 5 minutes</span>
+<h1 style="font-size:48px;">Your list isn't burnt.<br>Your flows are <span class="em">off</span>.</h1>
+<p class="lead mt16" style="max-width:640px;">Automated flows should drive <b>35–40% of your email revenue</b>. Most accounts run under 20%. Answer 8 questions — straight off your dashboard — and see your score, your leak in dollars, and your <b>#1 fix, free</b>.</p>
+
+<div class="card mt32" style="max-width:760px;">
+<div class="lr-grid">
+<div class="lr-field"><label>Monthly store revenue ($)</label><input id="rev" type="number" value="400000"></div>
+<div class="lr-field"><label>Email % of total revenue</label><input id="eshare" type="number" value="20"></div>
+<div class="lr-field"><label>Email list size</label><input id="list" type="number" value="120000"></div>
+<div class="lr-field"><label>Average order value ($)</label><input id="aov" type="number" value="85"></div>
+<div class="lr-field"><label>Platform</label><select id="platform"><option>Klaviyo</option><option>Attentive</option><option>Omnisend</option><option>Other</option></select></div>
+<div class="lr-field"><label>Flow % of email revenue</label><input id="flowshare" type="number" value="15"></div>
+<div class="lr-field"><label>% campaigns sent to full list</label><select id="blast"><option value="90">Almost all (no segmentation)</option><option value="50">About half</option><option value="15">Rarely — we segment</option></select></div>
+<div class="lr-field"><label>List trend (90 days)</label><select id="growth"><option value="neg">Shrinking / flat</option><option value="pos">Growing</option></select></div>
+</div>
+<div class="lr-field" style="margin-top:18px;"><label>Which flows are LIVE right now? (not draft, not paused)</label>
+<div class="lr-flows">
+<label><input type="checkbox" id="f_welcome" checked> Welcome series</label>
+<label><input type="checkbox" id="f_cart"> Cart abandon</label>
+<label><input type="checkbox" id="f_checkout"> Checkout abandon</label>
+<label><input type="checkbox" id="f_pp"> Post-purchase</label>
+<label><input type="checkbox" id="f_winback"> Winback / sunset</label>
+<label><input type="checkbox" id="f_browse"> Browse abandon</label>
+</div></div>
+<div class="lr-field" style="margin-top:18px;"><label>Where do we send your score + your #1 fix?</label><input id="email" type="email" placeholder="you@brand.com"></div>
+<button class="btn btn-primary mt24" onclick="runScore()">Show my Retention Score →</button>
+<p class="mt16" style="font-family:var(--mono);font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;">Free. No call, no pitch deck, no "strategy session." Benchmarks footnoted.</p>
+</div>
+</div>
+</section>
+
+<!-- RESULTS -->
+<section class="page-hero" id="step-result">
+<div class="wrap">
+<h1 id="r-head" style="font-size:44px;"></h1>
+
+<div class="card mt32" style="max-width:760px;">
+<span class="eyebrow">Retention Score</span>
+<div class="gauge-card" style="border:none;box-shadow:none;padding:0;">
+<svg class="gauge" viewBox="0 0 220 130" aria-hidden="true">
+<path class="track" d="M14 116 A96 96 0 0 1 206 116" pathLength="1"/>
+<path class="fill" id="g-fill" d="M14 116 A96 96 0 0 1 206 116" pathLength="1" style="stroke-dashoffset:1;transition:stroke-dashoffset 1.2s ease;"/>
+</svg>
+<div class="gauge-num"><span id="g-val">0</span><small>/100</small></div>
+<div class="gauge-label" id="g-verdict"></div>
+</div>
+<div class="mt24">
+<div class="lr-kv"><span>Estimated monthly leak</span><b class="lr-leak" id="r-leak"></b></div>
+<div class="lr-kv"><span>Recoverable in ~30–60 days</span><b class="lr-rec" id="r-rec"></b></div>
+<div class="lr-kv"><span>Flow share of email revenue</span><b id="r-flow"></b></div>
+</div>
+<p class="mt16" style="font-family:var(--mono);font-size:11px;color:var(--muted);">Benchmarks: flows = 35–40% of email revenue (Klaviyo 2025–26 aggregate) · cart-abandon RPR $3.65 avg, $28.89 top decile · CTOR 6.8%. Conservative multipliers throughout.</p>
+</div>
+
+<div class="card mt24" style="max-width:760px;">
+<div class="lr-head"><h3 style="font-family:var(--fr);font-size:26px;">Your #1 fix</h3><span class="lr-tag free">Free — full steps</span></div>
+<div class="lr-fix" id="r-fix1"></div>
+<p class="pull" style="font-size:19px;margin:22px 0 0;padding:16px 0;">This isn't a teaser. Implement this one fix this week and measure it. If the mechanism works on fix #1, you'll know exactly what the rest are worth.</p>
+</div>
+
+<div class="card mt24" style="max-width:760px;">
+<div class="lr-head"><h3 style="font-family:var(--fr);font-size:24px;" id="r-locktitle"></h3><span class="lr-tag lock">Full report — $47</span></div>
+<div class="lr-lockwrap mt16"><div class="lr-blur" id="r-locked"></div><div class="lr-locknote">Unlocked in the full Leak Report</div></div>
+<p class="mt24" style="font-size:15px;color:var(--muted);">Every fix ranked by dollars ÷ effort, implementation steps, 30-day recovery timelines, plain-English founder's summary — plus <b style="color:var(--ink);">Implementation Week</b>: one fix per day in your inbox, and I personally review anything you reply "DONE" to.</p>
+<p style="font-size:15px;"><b>Guarantee:</b> if your report doesn't identify at least $1,000/mo in recoverable flow revenue, full refund — and you keep everything.</p>
+<button class="btn btn-primary" onclick="checkout(false)">Unlock the full Leak Report — $47</button>
+<button class="btn btn-ghost2" onclick="checkout(true)">Report + Fix Templates (copy for every flow) — $74</button>
+<p id="checkout-note" class="mt16" style="font-family:var(--mono);font-size:12px;color:var(--amber-deep);"></p>
+<button class="btn btn-ghost2" onclick="resetForm()" style="margin-top:14px;">← Re-run with different numbers</button>
+</div>
+</div>
+</section>
+
+<footer class="site-footer"><div class="wrap">
+<div class="foot-bottom" style="border:none;margin:0;padding:0;"><span>MRGN Leak Report — built by Micah Jacobi · a MAXMRGN product</span><span>© 2026</span></div>
+</div></footer>
+
+<script>
+const $=id=>document.getElementById(id);
+const num=id=>parseFloat($(id).value)||0;
+const fmt=n=>'$'+Math.round(n).toLocaleString('en-US');
+let state={};
+
+const FLOWS=[
+ ['f_cart','Cart abandon flow',0.30,1,['Build a 3-email + 1-SMS leg: 1hr / 24hr / 48hr after abandon.','Email 1 = plain reminder with the cart contents, no discount. Live-text CTA button, not an image.','Check channel eligibility + quiet hours — most accounts only reach 10–20% of abandoners (send-through), and that setting is why.','Suppress buyers in real time; UTM-tag every link so revenue attributes.'],'day 1–7'],
+ ['f_welcome','Welcome series',0.25,1,['Trigger on signup, first email inside 5 minutes (highest-RPR send you will ever have).','3 emails: deliver the signup promise → founder story + best sellers → social proof + first-purchase nudge.','Split buyer vs non-buyer legs — never send a first-order discount to a customer.','Verify entries vs list growth weekly; under-triggering welcomes silently starve revenue.'],'day 1–7'],
+ ['f_pp','Post-purchase flow',0.15,2,['Ship a 4-email arc: order celebration → how-to-use (consumption drives reorders) → check-in + review ask → cross-sell the logical next product.','Time email 2 to arrival day, not order day.','Reviews harvested here feed every other flow.'],'day 7–14'],
+ ['f_winback','Winback + sunset',0.12,2,['Winback at 45–90 days since last order (30 is too aggressive): reminder → social proof → incentive → last call.','Sunset: 90-day non-openers get a 3-email re-permission arc, then suppress. Deliverability is a list-quality game.','This is also where dead lists get revived before any paid re-acquisition.'],'day 14–21'],
+ ['f_checkout','Checkout abandon flow',0.10,1,['Separate from cart abandon — these buyers got further and convert hotter.','2 emails + 1 SMS inside 24 hours; answer the 3 killers: shipping cost, trust, payment friction.'],'day 7–14'],
+ ['f_browse','Browse abandon flow',0.08,2,['Trigger on product views ≥2 or 30s+ dwell, cap at 2 sends/week/person.','Content = the product + 2 alternatives + one review. Soft tone; they never carted.'],'day 21–30'],
+];
+
+function computeReport(){
+  const rev=num('rev'), eshare=num('eshare')/100, flowshare=num('flowshare')/100;
+  const blast=parseFloat($('blast').value), growth=$('growth').value;
+  const emailRev=rev*eshare;
+  const live=FLOWS.map(f=>$(f[0]).checked);
+  const nLive=live.filter(Boolean).length;
+  let s=0;
+  s+=20*Math.min(flowshare/0.35,1);
+  s+=20*(nLive/6);
+  s+=15*0.5;
+  s+=15*(blast<=15?1:blast<=50?0.5:0);
+  s+=10*0.5;
+  s+=10*(growth==='pos'?1:0);
+  s+=10*(live[2]||live[3]?1:0)*(live[3]?1:0.5);
+  s=Math.round(s);
+  const flowGap=Math.max(0.35-flowshare,0)*emailRev;
+  const campLeak=(blast>=90?0.10:blast>=50?0.05:0)*emailRev*(1-flowshare);
+  const leak=flowGap+campLeak, rec=leak*0.7;
+  const offW=FLOWS.filter((f,i)=>!live[i]).reduce((a,x)=>a+x[2],0)||1;
+  let fixes=FLOWS.filter((f,i)=>!live[i]).map(f=>({name:f[1],dollars:flowGap*(f[2]/offW),effort:f[3],steps:f[4],when:f[5]}));
+  if(blast>=50) fixes.push({name:'Stop blasting the full list',dollars:campLeak,effort:1,when:'day 1–7',steps:['Build 3 engagement segments: 30-day, 60-day, 90-day openers/clickers.','Default campaign audience = 90-day engaged. Full-list sends earn ~2 slots/month (launches, biggest promos).','Expect open rates to jump within 2 weeks — deliverability repairing itself protects every flow you fix after this.']});
+  if(fixes.length===0) fixes.push({name:'Optimize send-through + RPR on live flows',dollars:emailRev*0.05,effort:2,when:'day 1–14',steps:['Audit entry triggers + channel eligibility per flow — most "complete" accounts still only reach a fraction of eligible volume.','A/B one variable per flow per fortnight: timing first, subject second, offer last.']});
+  fixes.sort((a,b)=>(b.dollars/b.effort)-(a.dollars/a.effort));
+  return {score:s,leak,rec,emailRev,flowshare,nLive,fixes,blast,growth,
+    inputs:{email:$('email').value,monthlyRevenue:rev,emailSharePct:num('eshare'),listSize:num('list'),aov:num('aov'),platform:$('platform').value,flowSharePct:num('flowshare'),blastPct:blast,listGrowing:growth==='pos',flowsLive:{welcome:$('f_welcome').checked,cart:$('f_cart').checked,checkout:$('f_checkout').checked,pp:$('f_pp').checked,winback:$('f_winback').checked,browse:$('f_browse').checked}}};
+}
+
+function runScore(){
+  if(!$('email').value.includes('@')){alert('Enter your email to get your score + your #1 fix.');return;}
+  const r=computeReport(); state=r;
+  gtag('event','generate_lead',{currency:'USD',value:47});
+  fetch('/api/lead',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({inputs:r.inputs,report:{score:r.score,leak:r.leak,isICP:r.inputs.monthlyRevenue>=50000}})}).catch(()=>{});
+  $('r-head').innerHTML = r.leak>1000
+    ? 'You\'re leaking <span style="color:var(--amber)">'+fmt(r.leak)+'/mo</span> — and <span class="em">'+fmt(r.rec)+'</span> of it is recoverable.'
+    : 'Tight account. Let\'s find the next gear.';
+  $('g-val').textContent=r.score;
+  $('g-fill').style.strokeDashoffset=String(1-r.score/100);
+  $('g-verdict').innerHTML=r.score>=75?'Operator territory — optimization, not surgery.':r.score>=45?'Fixable, mechanically. <b>This is flows, not fate.</b>':'Big leak, bigger upside. <b>Nothing here is unusual — or permanent.</b>';
+  $('r-leak').textContent=fmt(r.leak)+'/mo';
+  $('r-rec').textContent=fmt(r.rec)+'/mo';
+  $('r-flow').innerHTML=Math.round(r.flowshare*100)+'% <span style="color:var(--muted);font-weight:400;">(benchmark 35–40%)</span>';
+  const f1=r.fixes[0];
+  $('r-fix1').innerHTML='<h3>'+f1.name+'</h3><div class="meta">≈ <b style="color:var(--gold-on-light)">'+fmt(f1.dollars)+'/mo</b> · '+f1.when+' · effort '+'▮'.repeat(f1.effort)+'▯'.repeat(3-f1.effort)+'</div><ol>'+f1.steps.map(x=>'<li>'+x+'</li>').join('')+'</ol>';
+  const lockedTotal=r.fixes.slice(1).reduce((a,f)=>a+f.dollars,0);
+  $('r-locktitle').textContent='Fixes #2–#'+r.fixes.length+' · worth ≈ '+fmt(lockedTotal)+'/mo';
+  $('r-locked').innerHTML=r.fixes.slice(1).map(f=>'<div class="lr-kv"><span>'+f.name+'</span><b>'+fmt(f.dollars)+'/mo</b></div>').join('')||'<div class="lr-kv"><span>Optimization plan</span><b>—</b></div>';
+  $('step-form').style.display='none'; $('step-result').style.display='block'; window.scrollTo(0,0);
+}
+
+async function checkout(withTemplates){
+  gtag('event','begin_checkout',{currency:'USD',value:withTemplates?74:47});
+  try{
+    const res=await fetch('/api/checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({inputs:state.inputs,withTemplates:!!withTemplates})});
+    const data=await res.json();
+    if(data.url){window.location.href=data.url;return;}
+    $('checkout-note').style.display='block';
+    $('checkout-note').textContent=data.error||'Checkout is being switched on — email micahjcopy@gmail.com and I\'ll unlock your report manually today.';
+  }catch(e){
+    $('checkout-note').style.display='block';
+    $('checkout-note').textContent='Checkout is being switched on — email micahjcopy@gmail.com with "LEAK REPORT" and I\'ll unlock your report manually today.';
+  }
+}
+function resetForm(){$('step-result').style.display='none';$('step-form').style.display='block';window.scrollTo(0,0);}
+document.querySelectorAll('.nav-links a').forEach(a=>a.addEventListener('click',()=>document.getElementById('nav').classList.remove('open')));
+</script>
+</body>
+</html>

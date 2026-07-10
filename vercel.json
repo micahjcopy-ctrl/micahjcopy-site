@@ -1,4 +1,7 @@
 {
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "crons": [
+    { "path": "/api/cron-implementation-week", "schedule": "0 15 * * *" }
+  ]
 }

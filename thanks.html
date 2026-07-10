@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your Recovery Plan is unlocked — Micah Jacobi</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FZ1C922BZV"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-FZ1C922BZV');gtag('event','purchase',{currency:'USD',value:47});</script>
+</head>
+<body>
+
+<header class="site-header"><div class="wrap"><nav class="nav">
+<a class="brand" href="index.html">Micah Jacobi<span class="dot">.</span></a>
+<div class="nav-links" id="nav"><a class="btn btn-primary" href="book.html">Book a call</a></div>
+</nav></div></header>
+
+<!-- CONFIRM (dark bun) -->
+<section class="hero hero-dark band-dark" style="padding-bottom:56px;">
+<div class="wrap">
+<span class="eyebrow">Order confirmed</span>
+<h1 class="hl" style="font-size:54px;">Your Recovery Plan is <span class="em">unlocked</span>.</h1>
+<p class="lead mt24" style="max-width:620px;">Email 1 of Implementation Week is on its way — <b>one fix per day for the next 7 days</b>, easiest first, templates included. Reply DONE to any of them and I'll personally sanity-check what you built.</p>
+<div class="btn-row mt24"><a class="btn btn-primary" id="report-link" href="#">Open your Recovery Plan →</a></div>
+</div>
+</section>
+<div class="fade"></div>
+
+<!-- THE ONE UPSELL: the free call -->
+<section>
+<div class="wrap">
+<span class="eyebrow">One more thing — and it's free</span>
+<h2>Want my eyes on your account <span class="em">before</span> you start?</h2>
+<p class="mt16">Your report is ranked by math. But math can't see everything — <b>send-through settings, trigger misconfigurations, and platform quirks are where 80% of "finished" fixes quietly fail</b>, and they're faster for me to spot than for you to hunt.</p>
+<p>So here's the offer: a <b>free 20-minute Implementation Plan call</b>. We walk your report together, I flag the traps specific to your platform, and you leave with the exact order to run the fixes. It's not a sales call — you already bought the thing. If you never spend another dollar with me, the plan is still yours.</p>
+<div class="card mt24" style="max-width:640px;">
+<div class="kick">The Implementation Plan · 20 minutes</div>
+<ul class="tick">
+<li>Your fixes, sequenced for your platform and team</li>
+<li>The send-through / eligibility traps to check first</li>
+<li>What to measure at day 14 and day 30</li>
+</ul>
+<div class="btn-row mt24"><a class="btn btn-primary" href="book.html">Book your Implementation Plan</a></div>
+</div>
+<p class="pull" style="font-size:19px;max-width:640px;margin-left:0;">Prefer async? Fine — I record a 3-minute video walking your specific report for every buyer at $50k/mo+. It'll land in your inbox within a day or two.</p>
+</div>
+</section>
+
+<footer class="site-footer"><div class="wrap">
+<div class="foot-bottom" style="border:none;margin:0;padding:0;"><span>MRGN Leak Report — built by Micah Jacobi · a MAXMRGN product</span><span>© 2026</span></div>
+</div></footer>
+<script>
+// success redirect arrives as thanks.html?rid=<report-id>
+const rid=new URLSearchParams(location.search).get('rid');
+document.getElementById('report-link').href = rid ? '/api/report?id='+rid : 'score.html';
+</script>
+</body>
+</html>
