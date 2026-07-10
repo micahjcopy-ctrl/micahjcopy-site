@@ -53,7 +53,9 @@
         .to(hero.querySelector(".coordstrip"), { opacity: 1, duration: 0.6 }, 1.0)
         .to(hero.querySelector(".hero-portrait"), { opacity: 1, x: 0, duration: 0.9, startAt: { x: 28 }, ease: "power2.out" }, 0.45)
         .add(function () {
-          gsap.set(hero.querySelector(".hl"), { clearProps: "clipPath" });
+          // leave clip-path inline as "none" — clearing it would re-apply the
+          // stylesheet's hidden initial state and blank the headline
+          gsap.set(hero.querySelector(".hl"), { clipPath: "none" });
           gsap.set(hero.querySelectorAll(".lead,.btn-row"), { clearProps: "transform" });
         });
     }
