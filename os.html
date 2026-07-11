@@ -13,6 +13,12 @@
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-FZ1C922BZV"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-FZ1C922BZV');</script>
+<style>
+.lrh .wrap>*{opacity:0;transform:translateY(18px);animation:lrIn .7s cubic-bezier(.22,.61,.36,1) forwards}
+.lrh .wrap>*:nth-child(2){animation-delay:.12s}.lrh .wrap>*:nth-child(3){animation-delay:.24s}.lrh .wrap>*:nth-child(4){animation-delay:.36s}
+@keyframes lrIn{to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.lrh .wrap>*{opacity:1!important;transform:none!important;animation:none!important}}
+</style>
 </head>
 <body>
 
@@ -22,15 +28,28 @@
 </nav></div></header>
 
 <!-- HERO (dark bun) -->
-<section class="hero hero-dark band-dark">
+<section class="hero hero-dark band-dark lrh">
 <div class="wrap">
+<div class="hero-grid">
+<div>
 <span class="eyebrow">Invite-only · for Leak Report operators</span>
-<h1 class="hl" style="font-size:52px;">You did the work of a retention operator.<br>This is where operators <span class="em">run it weekly</span>.</h1>
-<p class="lead mt24" style="max-width:640px;">The fixes you shipped will drift. Triggers break in replatforms. Someone pauses a proven flow and nobody notices — <b>the leak you just fixed was somebody's unwatched dashboard.</b> Retention OS is the watching, systematized.</p>
+<h1 class="hl" style="font-size:50px;">You did the work of a retention operator.<br>This is where operators <span class="em">run it weekly</span>.</h1>
+<p class="lead mt24">The fixes you shipped will drift. Triggers break in replatforms. Someone pauses a proven flow and nobody notices — <b>the leak you just fixed was somebody's unwatched dashboard.</b> Retention OS is the watching, systematized.</p>
 <div class="coordstrip">
 <span>WEEKLY SCORECARD · 90 SECONDS</span>
 <span>MONTHLY LIVE TEARDOWNS</span>
 <span>FOUNDING COHORT · FIRST 50</span>
+</div>
+</div>
+<div>
+<div class="dash reveal">
+<div class="drow"><span class="dk">Email revenue vs pace</span><div class="track"><div class="fillbar" style="--w:84%"></div></div><span class="dv up">84%</span></div>
+<div class="drow"><span class="dk">Flow share (target 35%)</span><div class="track"><div class="fillbar" style="--w:91%"></div></div><span class="dv up">32%</span></div>
+<div class="drow"><span class="dk">Engaged reach</span><div class="track"><div class="fillbar" style="--w:76%"></div></div><span class="dv">76%</span></div>
+<div class="drow"><span class="dk">List net growth</span><div class="track"><div class="fillbar" style="--w:58%"></div></div><span class="dv">+1.2%</span></div>
+<div class="drow"><span class="dk">This Monday's lever</span><span class="dv up">Winback timing</span></div>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -41,7 +60,7 @@
 <div class="wrap">
 <span class="eyebrow">What's inside</span>
 <h2>Four things. All of them <span class="em">compound</span>.</h2>
-<div class="grid g2 mt32">
+<div class="grid g2 mt32 reveal">
 <div class="card"><div class="kick">01 — Software</div><h3>The Economic Calculator</h3><p>Your weekly scorecard: email revenue, flow share, CTOR, list growth — green/yellow/red against targets, weakest link flagged, matching playbook linked. Monday morning, 90 seconds, you know exactly which lever to pull.</p></div>
 <div class="card"><div class="kick">02 — Playbooks</div><h3>Monthly calendar + swipe vault</h3><p>Every month's revenue moments, angles, and send map — plus flow, campaign, and SMS templates with the numbers attached. You never start from a blank page again.</p></div>
 <div class="card"><div class="kick">03 — Access</div><h3>Live teardowns</h3><p>Every month I audit member accounts live, on the same rubric that found your leak. Getting torn down is the fastest win in the membership; watching is the education.</p></div>
@@ -82,5 +101,14 @@
 <footer class="site-footer"><div class="wrap">
 <div class="foot-bottom" style="border:none;margin:0;padding:0;"><span>Retention OS — built by Micah Jacobi · a MAXMRGN product</span><span>© 2026</span></div>
 </div></footer>
+<script>
+if(!matchMedia('(prefers-reduced-motion: reduce)').matches){
+  document.documentElement.classList.add('motion');
+  addEventListener('DOMContentLoaded',function(){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.18});
+    document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+  });
+}
+</script>
 </body>
 </html>

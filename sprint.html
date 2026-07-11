@@ -13,6 +13,12 @@
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-FZ1C922BZV"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-FZ1C922BZV');</script>
+<style>
+.lrh .wrap>*{opacity:0;transform:translateY(18px);animation:lrIn .7s cubic-bezier(.22,.61,.36,1) forwards}
+.lrh .wrap>*:nth-child(2){animation-delay:.12s}.lrh .wrap>*:nth-child(3){animation-delay:.24s}.lrh .wrap>*:nth-child(4){animation-delay:.36s}
+@keyframes lrIn{to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.lrh .wrap>*{opacity:1!important;transform:none!important;animation:none!important}}
+</style>
 </head>
 <body>
 
@@ -22,7 +28,7 @@
 </nav></div></header>
 
 <!-- HERO (dark bun) -->
-<section class="hero hero-dark band-dark">
+<section class="hero hero-dark band-dark lrh">
 <div class="wrap">
 <span class="eyebrow">Flow Rebuild Sprint · 4 brands per month</span>
 <h1 class="hl" style="font-size:56px;">Maybe you wanted the outcome,<br>not the <span class="em">homework</span>.</h1>
@@ -43,7 +49,18 @@
 <span class="eyebrow">Fixed scope · 30 days</span>
 <h2>What gets <span class="em">rebuilt</span></h2>
 <p class="mt16" style="max-width:640px;">The five flows that should carry 35–40% of your email revenue — welcome (buyer + non-buyer legs), cart abandon, checkout abandon, post-purchase, winback + sunset. <b>25–35 messages total</b>, email and SMS legs where the channel exists.</p>
-<div class="grid g2 mt32">
+<div class="flow reveal mt32">
+<div class="fnode"><div class="fk">FLOW 01</div><h4>Welcome</h4><p>buyer + non-buyer legs</p></div>
+<div class="farrow">→</div>
+<div class="fnode"><div class="fk">FLOW 02</div><h4>Cart abandon</h4><p>email + SMS ladder</p></div>
+<div class="farrow">→</div>
+<div class="fnode"><div class="fk">FLOW 03</div><h4>Checkout abandon</h4><p>the hottest intent</p></div>
+<div class="farrow">→</div>
+<div class="fnode"><div class="fk">FLOW 04</div><h4>Post-purchase</h4><p>consumption → reorder</p></div>
+<div class="farrow">→</div>
+<div class="fnode"><div class="fk">FLOW 05</div><h4>Winback + sunset</h4><p>revenue recovered</p></div>
+</div>
+<div class="grid g2 mt32 reveal">
 <div class="card"><div class="kick">Week 0–1</div><h3>Diagnose &amp; strategy</h3><p>Baseline locked in writing (trailing 90 days — the guarantee needs an honest denominator). Voice extracted from your best emails and your customers' own reviews. Flow architecture signed off.</p></div>
 <div class="card"><div class="kick">Week 2</div><h3>Create</h3><p>Copy and mobile-first design, live-text CTAs. Two revision rounds — enough to get it right, structured enough to ship on time.</p></div>
 <div class="card"><div class="kick">Week 3</div><h3>Build &amp; QA</h3><p>Built in your platform with the boring things done right: eligibility, quiet hours, suppression, link tracking, UTMs. This QA layer is where most agencies' flows silently fail.</p></div>
@@ -85,5 +102,14 @@
 <footer class="site-footer"><div class="wrap">
 <div class="foot-bottom" style="border:none;margin:0;padding:0;"><span>Flow Rebuild Sprint — built by Micah Jacobi · a MAXMRGN product</span><span>© 2026</span></div>
 </div></footer>
+<script>
+if(!matchMedia('(prefers-reduced-motion: reduce)').matches){
+  document.documentElement.classList.add('motion');
+  addEventListener('DOMContentLoaded',function(){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.18});
+    document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+  });
+}
+</script>
 </body>
 </html>
