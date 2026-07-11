@@ -59,6 +59,24 @@
 .motion .ownw.in .on-old{transition-delay:.05s;opacity:.85}
 .motion .ownw.in .on-new{transition-delay:.25s}
 @media(max-width:860px){.ownw{position:static;margin-top:26px}}
+/* the chain graphic */
+.chainflow{margin-top:22px}
+.chainflow .fnode .fk{color:var(--amber)}
+.chainflow .fnode.end{background:var(--amber-tint);border-color:var(--amber)}
+.chainflow .fnode.end h4{color:var(--amber-deep)}
+.chainflow .fnode.end p{color:#7a3535}
+.chain-foot{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:16px;text-transform:uppercase;letter-spacing:.05em;text-align:center}
+.chain-foot b{color:var(--amber)}
+.motion .chainflow .fnode,.motion .chainflow .farrow{opacity:0;transform:translateY(10px);transition:opacity .45s ease,transform .45s ease}
+.motion .chainflow.in .fnode,.motion .chainflow.in .farrow{opacity:1;transform:none}
+.motion .chainflow.in>*:nth-child(2){transition-delay:.1s}
+.motion .chainflow.in>*:nth-child(3){transition-delay:.2s}
+.motion .chainflow.in>*:nth-child(4){transition-delay:.3s}
+.motion .chainflow.in>*:nth-child(5){transition-delay:.4s}
+.motion .chainflow.in>*:nth-child(6){transition-delay:.5s}
+.motion .chainflow.in>*:nth-child(7){transition-delay:.6s}
+.motion .chainflow.in>*:nth-child(8){transition-delay:.7s}
+.motion .chainflow.in>*:nth-child(9){transition-delay:.85s}
 .lie{border-left:3px solid var(--amber);background:var(--card);border-radius:0 12px 12px 0;padding:22px 26px;margin-top:18px}
 .lie .l{font-family:var(--fr);font-style:italic;font-size:22px;color:var(--ink)}
 .lie .t{font-size:16px;color:#3f3a33;margin-top:10px}
@@ -151,8 +169,19 @@
 </div>
 <div class="pull" style="font-size:22px;">Dashboards don't announce what <i>isn't</i> sending. That silence is the most expensive sound in DTC email.</div>
 <h3>Follow the chain of what that means.</h3>
-<p>Flow gets paused in a revamp → every new subscriber joins during the silence and never gets the first email → they don't buy, so "the list looks dead" → the team blames the list and spends money on the wrong fix → <b>the leak keeps running while they work on it</b>. Every month, on autopilot, in the wrong direction.</p>
-<p>That pattern is the single most common revenue leak in DTC email. Not bad copy. Not a dead list. Not the algorithm. And here's the part that should actually make you feel better: <b>it's mechanical to find, and mechanical to fix.</b></p>
+<div class="flow chainflow reveal">
+<div class="fnode"><div class="fk">01</div><h4>A "revamp" ships</h4><p>a proven flow gets paused</p></div>
+<div class="farrow">→</div>
+<div class="fnode"><div class="fk">02</div><h4>Subscribers join the silence</h4><p>the first email never sends</p></div>
+<div class="farrow">→</div>
+<div class="fnode"><div class="fk">03</div><h4>They don't buy</h4><p>"the list looks dead"</p></div>
+<div class="farrow">→</div>
+<div class="fnode"><div class="fk">04</div><h4>Wrong fix gets funded</h4><p>the team blames the list</p></div>
+<div class="farrow">→</div>
+<div class="fnode end"><div class="fk">05</div><h4>The leak keeps running</h4><p>while they work on it</p></div>
+</div>
+<div class="chain-foot">Every month · on autopilot · <b>in the wrong direction</b></div>
+<p class="mt24">That pattern is the single most common revenue leak in DTC email. Not bad copy. Not a dead list. Not the algorithm. And here's the part that should actually make you feel better: <b>it's mechanical to find, and mechanical to fix.</b></p>
 </div>
 </section>
 
