@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Retention OS — Member Area | Micah Jacobi</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FZ1C922BZV"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-FZ1C922BZV');</script>
+<style>
+.m-field label{display:block;font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:0 0 5px}
+.m-field input{width:100%;background:#fff;border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:10px 12px;font-size:15px;font-family:var(--inter);box-sizing:border-box}
+.m-field input:focus{outline:2px solid var(--amber)}
+.m-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:720px){.m-grid{grid-template-columns:1fr}}
+.light{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:7px;vertical-align:baseline}
+.light.g{background:#2F7D4F}.light.y{background:var(--gold-deep)}.light.r{background:var(--amber)}
+.sc-row{display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:1px solid var(--line);padding:11px 0;font-size:15px}
+.sc-row:last-child{border-bottom:none}
+.sc-row .v{font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:700}
+.lever{background:var(--amber-tint);border:1px solid var(--amber);border-radius:10px;padding:14px 18px;margin-top:16px;font-size:15px}
+.lever b{color:var(--amber-deep)}
+table.hist{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}
+.hist th{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);text-align:right;padding:7px 8px;border-bottom:1px solid var(--line)}
+.hist th:first-child{text-align:left}
+.hist td{padding:8px;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums}
+.hist td:first-child{text-align:left;font-family:var(--mono);font-size:11px}
+.cal-week{border-left:3px solid var(--amber);padding:4px 0 4px 16px;margin-top:14px}
+.cal-week .wk{font-family:var(--mono);font-size:11px;color:var(--amber-deep);font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.cal-week p{font-size:15px;margin:4px 0 0}
+</style>
+</head>
+<body>
+
+<header class="site-header"><div class="wrap"><nav class="nav">
+<a class="brand" href="index.html">Micah Jacobi<span class="dot">.</span></a>
+<div class="nav-links" id="nav"><span style="font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--amber-deep);">Retention OS · Founding Cohort</span></div>
+</nav></div></header>
+
+<!-- WELCOME -->
+<section class="page-hero" style="padding-bottom:36px;">
+<div class="wrap">
+<span class="eyebrow">Member area · v1</span>
+<h1 style="font-size:44px;">Welcome, <span class="em">operator</span>.</h1>
+<p class="lead mt16" style="max-width:640px;">This is the founding version, and it grows with the cohort. Right now you get the three things that matter: <b>the weekly scorecard, this month's calendar, and me</b>. Everything else ships monthly.</p>
+<p class="mt16" style="font-family:var(--mono);font-size:12px;color:var(--muted);" id="joined-note"></p>
+</div>
+</section>
+
+<!-- SCORECARD -->
+<section class="band-alt">
+<div class="wrap">
+<span class="eyebrow">The Monday ritual · 90 seconds</span>
+<h2>Weekly <span class="em">scorecard</span></h2>
+<p class="mt16" style="max-width:640px;">Every Monday: pull five numbers off your dashboard, enter them, read your lights. The weakest link is your lever for the week. Your history saves in this browser.</p>
+<div class="card mt24" style="max-width:860px;">
+<div class="m-grid">
+<div class="m-field"><label>Email revenue this week ($)</label><input id="w-erev" type="number" placeholder="12500"></div>
+<div class="m-field"><label>Flow revenue this week ($)</label><input id="w-frev" type="number" placeholder="4200"></div>
+<div class="m-field"><label>Weekly email revenue target ($)</label><input id="w-target" type="number" placeholder="15000"></div>
+<div class="m-field"><label>Campaign CTOR this week (%)</label><input id="w-ctor" type="number" step="0.1" placeholder="4.5"></div>
+<div class="m-field"><label>New subscribers</label><input id="w-in" type="number" placeholder="820"></div>
+<div class="m-field"><label>Unsubscribes + spam</label><input id="w-out" type="number" placeholder="240"></div>
+</div>
+<button class="btn btn-primary mt24" style="width:100%;border:none;" onclick="scoreWeek()">Score my week</button>
+<div id="sc-out" style="display:none;">
+<div class="mt24">
+<div class="sc-row"><span><span class="light" id="l-pace"></span>Revenue vs pace</span><span class="v" id="v-pace">—</span></div>
+<div class="sc-row"><span><span class="light" id="l-flow"></span>Flow share (target ≥35%)</span><span class="v" id="v-flow">—</span></div>
+<div class="sc-row"><span><span class="light" id="l-ctor"></span>Campaign CTOR (target ≥5%)</span><span class="v" id="v-ctor">—</span></div>
+<div class="sc-row"><span><span class="light" id="l-growth"></span>List net growth</span><span class="v" id="v-growth">—</span></div>
+</div>
+<div class="lever" id="lever"></div>
+</div>
+</div>
+<div class="card mt24" style="max-width:860px;">
+<div class="kick">History</div>
+<div style="overflow-x:auto;"><table class="hist" id="hist"><thead><tr><th>Week</th><th>Email rev</th><th>vs pace</th><th>Flow %</th><th>CTOR</th><th>Net list</th></tr></thead><tbody></tbody></table></div>
+<p class="mt16" style="font-family:var(--mono);font-size:11px;color:var(--muted);">Saved in this browser only. Cloud accounts + team access ship to the founding cohort first.</p>
+</div>
+</div>
+</section>
+
+<!-- CALENDAR -->
+<section>
+<div class="wrap">
+<span class="eyebrow">This month's send map</span>
+<h2>July → August: the <span class="em">summer slump</span> is a segmentation problem</h2>
+<p class="mt16" style="max-width:660px;">Summer buyers are outdoors, traveling, and allergic to hard pitches. Volume down is fine. Relevance down is not. Every email answers one question: <b>how does this make their summer better?</b></p>
+<div class="cal-week"><span class="wk">July · Week 3</span><p><b>Post-holiday reset.</b> One "reply back" engagement email to your 90-day segment (question, not pitch). Replies repair deliverability while everyone else blasts clearance.</p></div>
+<div class="cal-week"><span class="wk">July · Week 4</span><p><b>Clear summer inventory</b> with bundles framed around use ("the [routine/trip/season] kit"), not discounts. Soft urgency: end-of-month, honest reason attached.</p></div>
+<div class="cal-week"><span class="wk">August · Week 1</span><p><b>Routine-reset angle.</b> Back-to-school energy applies to every category: schedules return, habits restart. "September you will thank August you" positioning for consumables and subscriptions.</p></div>
+<div class="cal-week"><span class="wk">August · Week 2</span><p><b>Proof week.</b> One case-study or customer-story email, zero CTA beyond a soft P.S. This is the give-give-give beat that buys your Labor Day ask.</p></div>
+<div class="cal-week"><span class="wk">August · Weeks 3–4</span><p><b>Labor Day build.</b> Tease early access to your engaged segment first, run the sale to everyone after. Early-access-to-engaged is the highest-ROI move of the month.</p></div>
+<p class="mt24" style="font-size:14px;color:var(--muted);">September's map drops here on the 1st, with templates.</p>
+</div>
+</section>
+
+<!-- ACCESS -->
+<section class="band-alt">
+<div class="wrap">
+<span class="eyebrow">Access</span>
+<h2>The part that's <span class="em">me</span></h2>
+<div class="grid g2 mt24">
+<div class="card"><div class="kick">Live teardown · monthly</div><p>I audit member accounts live on the Leak Report rubric. Founding cohort picks the first date. Want yours on the table? Reply to any OS email with "TEAR ME DOWN" and your platform.</p></div>
+<div class="card"><div class="kick">Direct line</div><p>Reply to any email from me. Scorecard reads, red-week diagnosis, "is this segment right" checks. Founding members get answers within a business day, from me, not a VA.</p></div>
+</div>
+<p class="mt24" style="font-size:14px;color:var(--muted);">The operator room (private community) opens when the cohort hits 15 members, so the room starts alive, not empty.</p>
+</div>
+</section>
+
+<footer class="site-footer"><div class="wrap">
+<div class="foot-bottom" style="border:none;margin:0;padding:0;"><span>Retention OS — built by Micah Jacobi · a MAXMRGN product</span><span>© 2026</span></div>
+</div></footer>
+
+<script>
+if(new URLSearchParams(location.search).get('joined')){document.getElementById('joined-note').textContent='You\'re in. Your welcome email lands within the hour. Bookmark this page.';gtag('event','purchase',{currency:'USD',value:149});}
+const KEY='mrgn_os_scorecard';
+const fmt=n=>'$'+Math.round(n).toLocaleString('en-US');
+function light(id,status){const el=document.getElementById(id);el.className='light '+status;}
+function isoWeek(d){const t=new Date(d.valueOf());t.setDate(t.getDate()+3-((t.getDay()+6)%7));const w1=new Date(t.getFullYear(),0,4);return t.getFullYear()+'-W'+String(1+Math.round(((t-w1)/864e5-3+((w1.getDay()+6)%7))/7)).padStart(2,'0');}
+function scoreWeek(){
+  const erev=+document.getElementById('w-erev').value||0, frev=+document.getElementById('w-frev').value||0;
+  const target=+document.getElementById('w-target').value||0, ctor=+document.getElementById('w-ctor').value||0;
+  const nin=+document.getElementById('w-in').value||0, nout=+document.getElementById('w-out').value||0;
+  if(!erev||!target){alert('Email revenue and target are the minimum.');return;}
+  const pace=erev/target, flow=erev?frev/erev:0, net=nin-nout;
+  const pS=pace>=1?'g':pace>=.85?'y':'r', fS=flow>=.35?'g':flow>=.25?'y':'r';
+  const cS=ctor>=5?'g':ctor>=3?'y':'r', gS=net>0?'g':net>=-50?'y':'r';
+  document.getElementById('sc-out').style.display='block';
+  light('l-pace',pS);document.getElementById('v-pace').textContent=Math.round(pace*100)+'% ('+fmt(erev)+' / '+fmt(target)+')';
+  light('l-flow',fS);document.getElementById('v-flow').textContent=Math.round(flow*100)+'%';
+  light('l-ctor',cS);document.getElementById('v-ctor').textContent=ctor+'%';
+  light('l-growth',gS);document.getElementById('v-growth').textContent=(net>=0?'+':'')+net.toLocaleString();
+  const levers={
+    r_flow:'<b>This week\'s lever: flows.</b> Flow share is your weakest link. Check entries vs eligible volume on your biggest flow first (send-through), then re-run your Leak Report fix list. Reply to any OS email with your flow screenshot and I\'ll point at the culprit.',
+    r_ctor:'<b>This week\'s lever: campaigns.</b> CTOR is dragging. One idea per email, one CTA, live-text button above the fold. Ship one email this week to your 30-day segment only and compare.',
+    r_growth:'<b>This week\'s lever: list.</b> You\'re shrinking. Check unsub source first (which send drove it), then popup conversion. Do not add sends to fix a shrinking list.',
+    r_pace:'<b>This week\'s lever: pace.</b> Revenue behind target with healthy flows and CTOR usually means volume: check calendar density vs the monthly map below.',
+    g:'<b>Green week.</b> Don\'t touch what\'s working. Bank the win, note what you sent, and steal from yourself next month.'};
+  const order=[[fS,'r_flow'],[cS,'r_ctor'],[gS,'r_growth'],[pS,'r_pace']];
+  const worst=order.find(x=>x[0]==='r')||order.find(x=>x[0]==='y');
+  document.getElementById('lever').innerHTML=levers[worst?worst[1]:'g'];
+  const hist=JSON.parse(localStorage.getItem(KEY)||'[]');
+  const wk=isoWeek(new Date());
+  const row={wk,erev,pace:Math.round(pace*100),flow:Math.round(flow*100),ctor,net};
+  const i=hist.findIndex(h=>h.wk===wk); if(i>=0)hist[i]=row; else hist.unshift(row);
+  localStorage.setItem(KEY,JSON.stringify(hist.slice(0,26)));
+  renderHist();
+}
+function renderHist(){
+  const hist=JSON.parse(localStorage.getItem(KEY)||'[]');
+  document.querySelector('#hist tbody').innerHTML=hist.map(h=>'<tr><td>'+h.wk+'</td><td>'+fmt(h.erev)+'</td><td>'+h.pace+'%</td><td>'+h.flow+'%</td><td>'+h.ctor+'%</td><td>'+(h.net>=0?'+':'')+h.net+'</td></tr>').join('')||'<tr><td colspan="6" style="text-align:left;color:var(--muted);">No weeks logged yet. First Monday starts the streak.</td></tr>';
+}
+renderHist();
+</script>
+</body>
+</html>
