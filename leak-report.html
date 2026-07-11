@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The Email Revenue Leak Report — Micah Jacobi</title>
-<meta name="description" content="Your email account is leaking 15–20% of its revenue — silently. Get your free Retention Score, see the leak in dollars, and get your #1 fix free. For DTC brands on Klaviyo & Attentive.">
+<meta name="description" content="See exactly where your email revenue is leaking — in dollars, in 5 minutes, without an agency retainer or a 'strategy call.' For DTC brands on Klaviyo & Attentive.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
@@ -20,24 +20,38 @@
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-FZ1C922BZV"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-FZ1C922BZV');</script>
 <style>
-/* page-local motion: rides the site's own .motion CSS, no dependence on motion.js hero code */
+/* page-local motion — rides the site's .motion CSS, none of the fragile hero JS */
 .lrh .wrap>*{opacity:0;transform:translateY(18px);animation:lrIn .7s cubic-bezier(.22,.61,.36,1) forwards}
-.lrh .wrap>*:nth-child(2){animation-delay:.12s}.lrh .wrap>*:nth-child(3){animation-delay:.24s}.lrh .wrap>*:nth-child(4){animation-delay:.36s}.lrh .wrap>*:nth-child(5){animation-delay:.48s}
+.lrh .wrap>*:nth-child(2){animation-delay:.1s}.lrh .wrap>*:nth-child(3){animation-delay:.2s}.lrh .wrap>*:nth-child(4){animation-delay:.3s}.lrh .wrap>*:nth-child(5){animation-delay:.42s}.lrh .wrap>*:nth-child(6){animation-delay:.54s}
 @keyframes lrIn{to{opacity:1;transform:none}}
-.ticker{background:rgba(255,255,255,.035);border:1px solid var(--line-dark);border-radius:16px;padding:26px 28px;max-width:420px;margin-top:34px}
-.ticker .tk{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#9A9182}
-.ticker .tv{font-family:var(--fr);font-weight:600;font-size:52px;line-height:1.1;color:#d98d85;font-variant-numeric:tabular-nums}
-.ticker .ts{font-family:var(--mono);font-size:11px;color:#9A9182;margin-top:6px}
+/* centered hero */
+.chero{text-align:center;padding-top:84px;padding-bottom:64px}
+.chero .eyebrow{justify-content:center}
+.chero h1{font-size:64px;max-width:19ch;margin-left:auto;margin-right:auto}
+.chero .lead{max-width:640px;margin-left:auto;margin-right:auto}
+.chero .btn-row{justify-content:center}
+.microproof{font-family:var(--mono);font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:#9A9182;margin-top:14px}
+.tickrow{display:flex;gap:0;justify-content:center;align-items:stretch;margin:38px auto 0;max-width:780px;border:1px solid var(--line-dark);border-radius:16px;background:rgba(255,255,255,.03);overflow:hidden}
+.tickrow>div{flex:1;padding:20px 16px;border-right:1px solid var(--line-dark)}
+.tickrow>div:last-child{border-right:none}
+.tickrow .tk{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:#9A9182}
+.tickrow .tv{font-family:var(--fr);font-weight:600;font-size:34px;color:var(--gold);margin-top:4px;font-variant-numeric:tabular-nums}
+.tickrow .tv.bad{color:#d98d85}
+@media(max-width:720px){.chero h1{font-size:38px}.tickrow{flex-direction:column}.tickrow>div{border-right:none;border-bottom:1px solid var(--line-dark)}.tickrow>div:last-child{border-bottom:none}}
 .lie{border-left:3px solid var(--amber);background:var(--card);border-radius:0 12px 12px 0;padding:22px 26px;margin-top:18px}
 .lie .l{font-family:var(--fr);font-style:italic;font-size:22px;color:var(--ink)}
 .lie .t{font-size:16px;color:#3f3a33;margin-top:10px}
-.lie .t b{font-weight:600}
 .vstack .kv{display:flex;justify-content:space-between;gap:14px;padding:13px 0;border-bottom:1px solid var(--line);font-size:15.5px}
 .vstack .kv:last-child{border-bottom:none}
 .vstack .kv b{white-space:nowrap;color:var(--amber-deep)}
-.gbox{background:var(--card);border:2px solid var(--amber);border-radius:16px;padding:30px;max-width:680px;margin:26px auto 0;text-align:center;box-shadow:0 20px 44px rgba(23,20,15,.07)}
-.gbox .gk{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--amber-deep);font-weight:700}
-.gbox h3{font-family:var(--fr);font-size:26px;margin:10px 0 8px}
+.offer{max-width:640px;margin:30px auto 0;background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 24px 54px rgba(23,20,15,.09);text-align:left}
+.offer .top{background:var(--dark);padding:22px 30px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.offer .top .n{font-family:var(--fr);font-size:22px;color:var(--inverse)}
+.offer .top .p{font-family:var(--fr);font-weight:600;font-size:34px;color:var(--gold)}
+.offer .body{padding:26px 30px 30px}
+.offer .tick li{font-size:15.5px}
+.offer .guar{background:var(--amber-tint);border-radius:10px;padding:14px 18px;font-size:14.5px;margin-top:18px;color:#4a2020}
+.offer .guar b{color:var(--amber-deep)}
 @media(prefers-reduced-motion:reduce){.lrh .wrap>*{opacity:1!important;transform:none!important;animation:none!important}}
 </style>
 </head>
@@ -54,50 +68,41 @@
 </div>
 </nav></div></header>
 
-<!-- 1 · HERO (dark bun) — call-out + promise + leak ticker -->
-<section class="hero hero-dark band-dark lrh">
+<!-- 1 · CENTERED HERO (dark bun) -->
+<section class="hero hero-dark band-dark lrh chero">
 <div class="wrap">
-<div class="hero-grid">
-<div>
 <span class="eyebrow">For DTC brands on Klaviyo &amp; Attentive · $50k–$2M/mo</span>
-<h1 class="hl" style="font-size:56px;">Your email account is leaking 15–20% of its revenue. <span class="em">Silently.</span></h1>
-<p class="lead mt24">Not because your list is burnt. Not because email is dying. Because <b>proven flows get paused in "revamps," triggers misfire, and nobody notices</b> — while everyone stares at the ad account. I built a tool that finds the leak in 5 minutes, shows it to you in dollars, and hands you the first fix free.</p>
-<div class="btn-row mt24">
-<a class="btn btn-primary" href="score.html">Get your free Retention Score</a>
-<a class="btn-link" href="#story">Read how this happens →</a>
-</div>
-<div class="coordstrip">
-<span>5 MINUTES · 8 QUESTIONS</span>
-<span>LEAK SHOWN IN DOLLARS</span>
-<span>#1 FIX FREE · NO CALL</span>
-</div>
-</div>
-<div>
-<div class="ticker">
-<div class="tk">Typical leak found · per month</div>
-<div class="tv">$<span data-count="22800">0</span></div>
-<div class="ts">$400k/mo brand · 15% flow share · full-list blasts<br>≈ $15,960/mo recoverable in 30–60 days</div>
-</div>
-</div>
+<h1 class="hl">See exactly where your email revenue is <span class="em">leaking</span>.</h1>
+<p class="lead mt24">In dollars. In 5 minutes. Without an agency retainer, a "strategy call," or a single ad dollar. Most accounts are silently losing <b>15–20% of their email revenue</b> to paused flows, broken triggers, and full-list blasts — and the dashboard never says a word.</p>
+<div class="btn-row mt24"><a class="btn btn-primary" href="score.html">Get your free Retention Score</a></div>
+<div class="microproof">8 questions · leak shown in dollars · #1 fix free, full steps · no call, ever</div>
+<div class="tickrow">
+<div><div class="tk">Typical leak found</div><div class="tv bad">$<span data-count="22800">0</span>/mo</div></div>
+<div><div class="tk">Recoverable in 30–60 days</div><div class="tv">$<span data-count="15960">0</span>/mo</div></div>
+<div><div class="tk">Flow benchmark</div><div class="tv">35–40%</div></div>
+<div><div class="tk">Most accounts run</div><div class="tv bad">&lt;20%</div></div>
 </div>
 </div>
 </section>
 <div class="fade"></div>
 
-<!-- 2 · THE STORY (expanded, consequence-stacked) -->
+<!-- 2 · THE STORY -->
 <section id="story">
 <div class="wrap">
 <span class="eyebrow">The $1,000,000 toggle</span>
 <h2>A true story about how this happens to <span class="em">good</span> brands</h2>
-<p class="mt16">A brand I work with — strong product, six-figure list, real customers who love them — watched email revenue drop <b>42% in one month</b>. Total revenue followed it down 38%.</p>
+<p class="lede mt24">A brand I work with — strong product, six-figure list, customers who love them — watched email revenue drop 42% in one month.</p>
 <p>The team did what every team does. They blamed the list. "It's burnt." "People don't read email anymore." "We need new creative." They were about to spend a quarter rewriting everything.</p>
-<p>Then I pulled the account apart. During a redesign months earlier, someone had paused the welcome flow — the <i>proven</i> one, the flow that had earned <b>over $1,000,000 lifetime</b>. Its replacement was technically "live" but under-triggering, reaching a fraction of new signups. The email cart-abandon flow? Also paused. For months. A flow earning $7.09 per recipient — nearly double the industry average — just… off.</p>
-<p>Follow the chain of what that means: flow gets paused in a revamp → the dashboard shows nothing, because <b>dashboards don't announce what isn't sending</b> → every new subscriber joins during the silence and never gets the first email → they don't buy, so "the list looks dead" → the team blames the list and spends money on the wrong fix → the leak keeps running while they work on it. Every month, on autopilot, in the wrong direction.</p>
+<h3 class="mt24">Then I pulled the account apart.</h3>
+<p>During a redesign months earlier, someone had paused the welcome flow — the <i>proven</i> one, the flow that had earned <b>over $1,000,000 lifetime</b>. Its replacement was technically "live" but under-triggering, reaching a fraction of new signups. The email cart-abandon flow? Also paused. For months. A flow earning $7.09 per recipient — nearly double the industry average — just… off.</p>
+<div class="pull">Dashboards don't announce what <i>isn't</i> sending. That silence is the most expensive sound in DTC email.</div>
+<h3>Follow the chain of what that means.</h3>
+<p>Flow gets paused in a revamp → every new subscriber joins during the silence and never gets the first email → they don't buy, so "the list looks dead" → the team blames the list and spends money on the wrong fix → <b>the leak keeps running while they work on it</b>. Every month, on autopilot, in the wrong direction.</p>
 <p>That pattern — not bad copy, not a dead list, not the algorithm — is the single most common revenue leak in DTC email. And here's the part that should actually make you feel better: <b>it's mechanical to find, and mechanical to fix.</b></p>
 </div>
 </section>
 
-<!-- 3 · THE THREE LIES (belief demolition) -->
+<!-- 3 · THE THREE LIES -->
 <section class="band-alt">
 <div class="wrap">
 <span class="eyebrow">Why you haven't fixed it yet</span>
@@ -105,25 +110,26 @@
 <p class="mt16" style="max-width:640px;">If email is underperforming, someone has probably told you one of these. Each one sounds reasonable. Each one keeps you from looking at the actual problem.</p>
 <div class="lie reveal">
 <div class="l">"Your list is burnt."</div>
-<p class="t">Lists don't burn — they get <b>mis-sent to</b>. When every campaign blasts all 100k+ subscribers regardless of engagement, inbox providers learn that people ignore you, and start filing you in spam <i>even for the people who love you</i>. The list isn't dead; the deliverability is wounded. Fix the sending, and "dead" lists wake up with alarming speed.</p>
+<p class="t">Lists don't burn — they get <b>mis-sent to</b>. When every campaign blasts the full list regardless of engagement, inbox providers learn that people ignore you and start filing you in spam <i>even for the people who love you</i>. Fix the sending, and "dead" lists wake up with alarming speed.</p>
 </div>
 <div class="lie reveal">
 <div class="l">"Email is dying. It's all about [this year's channel]."</div>
-<p class="t">Email returns <b>$36–42 for every $1 spent</b> — the highest of any channel, highest of all in ecommerce — and automated flows return ~30x more per send than one-off blasts. What's actually dying is <i>unmeasured</i> email: accounts nobody audits, flows nobody re-checks after a replatform. The channel is fine. The plumbing is broken.</p>
+<p class="t">Email returns <b>$36–42 for every $1 spent</b> — highest of any channel, highest of all in ecommerce — and automated flows return ~30x more per send than one-off blasts. What's actually dying is <i>unmeasured</i> email: accounts nobody audits, flows nobody re-checks after a replatform.</p>
 </div>
 <div class="lie reveal">
 <div class="l">"You need an agency to sort this out."</div>
-<p class="t">An agency will charge $5,000+ a month, start with a "free audit" that's really a pitch deck, and take 90 days before you know if it worked. But <b>most email leaks are configuration, not creativity</b> — paused flows, broken triggers, eligibility filters set two years ago for reasons nobody remembers. You don't need a retainer to find those. You need the checklist and the math.</p>
+<p class="t">An agency will charge $5,000+ a month and take 90 days before you know if it worked. But <b>most email leaks are configuration, not creativity</b> — paused flows, broken triggers, eligibility filters set two years ago for reasons nobody remembers. You don't need a retainer to find those. You need the checklist and the math.</p>
 </div>
+<div class="btn-row mt32"><a class="btn btn-primary" href="score.html">Check your account — free, 5 minutes</a></div>
 </div>
 </section>
 
-<!-- 4 · THE MECHANISM (scanline diagram — site signature) -->
+<!-- 4 · MECHANISM (scanline) -->
 <section>
 <div class="wrap">
 <span class="eyebrow">The real mechanism</span>
 <h2>Where email revenue actually <span class="em">leaks</span></h2>
-<p class="mt16" style="max-width:660px;">Your email system is four stages. Money leaks at the joints — quietly, in settings screens nobody opens. This is what my rubric scans for, and <b>you can see every leak in dollars</b> before you fix a single thing.</p>
+<p class="mt16" style="max-width:660px;">Your email system is four stages. Money leaks at the joints — quietly, in settings screens nobody opens. This is what my rubric scans for, and <b>you see every leak in dollars</b> before you fix a single thing.</p>
 <div class="scan reveal mt32">
 <div class="scan-flow">
 <div class="snode"><b>Signup</b><span>they raise a hand</span></div>
@@ -148,17 +154,10 @@
 </div>
 </section>
 
-<!-- 5 · COST OF INACTION (bar chart) -->
+<!-- 5 · COST OF INACTION (flipped layout for novelty) -->
 <section class="band-alt">
 <div class="wrap">
 <div class="hero-grid">
-<div>
-<span class="eyebrow">The cost of "we'll get to it"</span>
-<h2>The leak doesn't wait for your <span class="em">roadmap</span></h2>
-<p class="mt16">Take the typical account I score: $400k/mo store, flows at 15% of email revenue instead of 35%, campaigns blasting the full list. That's roughly <b>$22,800 leaking every month</b>.</p>
-<p>Leaks aren't like ad spend, where stopping the budget stops the loss. A leak is <b>structural — it runs whether or not you're paying attention</b>. Every month it stays open is a month of revenue you already earned the traffic for and didn't collect.</p>
-<p>And the compounding is worse than the chart shows: subscribers who join during the silence never form the buying habit, so the list really does weaken over time. <b>The lie becomes true if you wait long enough.</b></p>
-</div>
 <div>
 <div class="chart-card reveal">
 <div class="eyebrow" style="margin-bottom:0;">Cumulative revenue lost · typical account</div>
@@ -169,6 +168,13 @@
 <div class="bar hot" style="--h:96%"><span class="cap">$137k</span><span class="lab">6 months</span></div>
 </div>
 </div>
+</div>
+<div>
+<span class="eyebrow">The cost of "we'll get to it"</span>
+<h2>The leak doesn't wait for your <span class="em">roadmap</span></h2>
+<p class="mt16">Take the typical account I score: $400k/mo store, flows at 15% of email revenue instead of 35%, campaigns blasting the full list. That's roughly <b>$22,800 leaking every month</b>.</p>
+<p>Leaks aren't like ad spend, where stopping the budget stops the loss. A leak is <b>structural — it runs whether or not you're paying attention</b>. Every month it stays open is a month of revenue you already earned the traffic for and didn't collect.</p>
+<p>And the compounding is worse than the chart shows: subscribers who join during the silence never form the buying habit. <b>The "burnt list" lie becomes true if you wait long enough.</b></p>
 </div>
 </div>
 </div>
@@ -185,68 +191,94 @@
 <div class="stat"><div class="num">$50K</div><div class="lbl">/mo recurring — meal-delivery brand</div></div>
 <div class="stat"><div class="num">$300K</div><div class="lbl">/mo run-rate — software company, full-funnel rebuild</div></div>
 </div>
-<p class="lead mt32" style="max-width:640px;">I'm Micah Jacobi. I run retention for 7–8-figure DTC brands with a small team and one rule: <b>every change runs a full business cycle, then the data decides.</b> The $1M-toggle story is my own client work. The Leak Report is that diagnostic method, productized — the same rubric I run by hand at $5k+, in software, for the price of lunch for two.</p>
+<p class="lead mt32" style="max-width:640px;">I'm Micah Jacobi. I run retention for 7–8-figure DTC brands with a small team and one rule: <b>every change runs a full business cycle, then the data decides.</b> The $1M-toggle story is my own client work. The Leak Report is that diagnostic method, productized.</p>
 </div>
 </section>
 <div class="fade"></div>
 
-<!-- 7 · WHAT IT IS / HOW IT WORKS + gauge mockup -->
+<!-- 7 · PRODUCT REVEAL — real UI -->
 <section>
 <div class="wrap">
 <span class="eyebrow">Introducing the Leak Report</span>
-<h2>Your account, scored like a <span class="em">P&amp;L</span></h2>
+<h2>This is the actual product. <span class="em">Not a mockup.</span></h2>
 <div class="grid g2 prow mt32" style="align-items:center;">
-<div>
-<p><b>Step 1 — Answer 8 questions.</b> Revenue, list size, flow share, which flows are actually live. Everything reads straight off your dashboard. Five minutes, no integration, no call.</p>
-<p><b>Step 2 — Get your Retention Score, free.</b> 0–100, built from the seven signals that predict email revenue. With it: your leak in dollars per month, your recoverable number — and <b>your #1 fix, in full</b>. Steps, timeline, expected recovery. Free means free.</p>
-<p><b>Step 3 — Unlock the full Recovery Plan for $47.</b> Every fix on your account ranked by dollars ÷ effort, each with implementation steps and a 30-day recovery timeline. Plus Implementation Week: one fix per day in your inbox, and I personally review anything you reply "DONE" to.</p>
-</div>
 <div class="mock">
-<div class="gauge-card" style="border:none;box-shadow:none;">
+<div class="browser">
+<div class="topbar"><span class="dot3"></span><span class="dot3"></span><span class="dot3"></span><span class="url">micahjacobi.me/score</span></div>
+<div class="screen" style="padding:18px 22px;">
+<div class="gauge-card" style="border:none;box-shadow:none;padding:0;">
 <svg class="gauge" viewBox="0 0 220 130" aria-hidden="true">
 <path class="track" d="M14 116 A96 96 0 0 1 206 116" pathLength="1"/>
 <path class="fill" d="M14 116 A96 96 0 0 1 206 116" pathLength="1" data-gauge="0.24" style="stroke-dashoffset:1;transition:stroke-dashoffset 1.4s cubic-bezier(.2,.7,.3,1);"/>
 </svg>
 <div class="gauge-num"><span data-count="24">0</span><small>/100</small></div>
-<div class="gauge-label">Sample Retention Score · <b>$22,800/mo leak found</b></div>
 </div>
+<div style="border-top:1px solid var(--line);margin-top:8px;padding-top:10px;display:flex;justify-content:space-between;font-size:13px;"><span style="color:var(--muted);">Estimated monthly leak</span><b style="color:var(--amber);">$22,800/mo</b></div>
+<div style="border-top:1px solid var(--line);margin-top:8px;padding-top:10px;display:flex;justify-content:space-between;font-size:13px;"><span style="color:var(--muted);">Recoverable in 30–60 days</span><b style="color:var(--gold-on-light);">$15,960/mo</b></div>
+<div style="border-top:1px solid var(--line);margin-top:8px;padding-top:10px;font-size:12px;font-family:var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.05em;">Fix #1 · Stop blasting the full list · ≈$6,800/mo · FREE</div>
+</div>
+</div>
+</div>
+<div>
+<h3>Step 1 — Answer 8 questions.</h3>
+<p>Revenue, list size, flow share, which flows are actually live. Everything reads straight off your dashboard. <b>Five minutes, no integration, no call.</b></p>
+<h3 class="mt24">Step 2 — Get your Retention Score, free.</h3>
+<p>0–100, from the seven signals that predict email revenue. With it: your leak in dollars, your recoverable number, and <b>your #1 fix in full</b> — steps, timeline, expected recovery. Free means free.</p>
+<h3 class="mt24">Step 3 — Unlock the full Recovery Plan. $47.</h3>
+<p>Every fix ranked by dollars ÷ effort with 30-day timelines, plus Implementation Week: <b>one fix per day in your inbox</b>, and I personally review anything you reply "DONE" to.</p>
 </div>
 </div>
 </div>
 </section>
 
-<!-- 8 · VALUE STACK -->
+<!-- 8 · COMPARISON TABLE -->
 <section class="band-alt">
 <div class="wrap">
-<span class="eyebrow">What $47 actually buys</span>
-<h2>The full Recovery Plan, <span class="em">itemized</span></h2>
-<div class="card mt32 vstack" style="max-width:720px;">
-<div class="kv"><span><b>Flow Forensics</b> — all 6 money flows scored vs benchmark: paused-earner detection, send-through %, revenue per recipient, missing flows</span><b>the $5k audit core</b></div>
-<div class="kv"><span><b>Campaign health</b> — blast detector, engagement vs cadence, projected list shrink, broken-tracking heuristic</span><b>deliverability audit</b></div>
-<div class="kv"><span><b>The ranked fix list</b> — every fix by dollars ÷ effort, with steps and 30-day recovery timelines. No "insights." Instructions.</span><b>the plan itself</b></div>
-<div class="kv"><span><b>Founder's summary</b> — one screen, plain English, forward-to-your-team ready (the report link is shareable by design)</span><b>the exec version</b></div>
-<div class="kv"><span><b>Implementation Week</b> — one fix per day for 7 days, easiest first, templates included. Reply DONE and I personally sanity-check your build</span><b>me, in your corner</b></div>
-<div class="kv"><span><b>Free re-run in 60 days</b> — score yourself again and put a number on what you fixed</span><b>proof it worked</b></div>
+<span class="eyebrow">Your three options</span>
+<h2>The honest <span class="em">comparison</span></h2>
+<div class="compare-wrap">
+<table class="compare">
+<thead><tr><th>What you actually get</th><th class="mecol">Leak Report · $47</th><th>Agency "free audit"</th><th>DIY guessing</th></tr></thead>
+<tbody>
+<tr><td>Leak shown in dollars, benchmarks footnoted</td><td class="mecol yes">✓</td><td class="no">Slide deck</td><td class="no">—</td></tr>
+<tr><td>Ranked fix list with implementation steps</td><td class="mecol yes">✓</td><td class="no">"Book a call"</td><td class="no">Forum threads</td></tr>
+<tr><td>Time to answers</td><td class="mecol yes">5 minutes</td><td class="no">2–3 weeks</td><td class="no">Months</td></tr>
+<tr><td>Real cost</td><td class="mecol yes">$47</td><td class="no">$5k+/mo retainer</td><td class="no">The leak, monthly</td></tr>
+<tr><td>Covers Attentive (not just Klaviyo)</td><td class="mecol yes">✓</td><td class="no">Rarely</td><td class="no">—</td></tr>
+<tr><td>Sales call required</td><td class="mecol yes">Never</td><td class="no">Always</td><td class="yes">—</td></tr>
+<tr><td>Money-back guarantee</td><td class="mecol yes">$1,000/mo found or refund</td><td class="no">—</td><td class="no">—</td></tr>
+</tbody>
+</table>
 </div>
-<p class="mt24" style="max-width:660px;">Why $47 and not $497? Because I don't want a windfall — <b>I want a thousand operators with fixed flows and a reason to trust me</b>. The report funds the benchmark data. Some buyers later want my team to do the work for them. That's the whole business model, on the table.</p>
 </div>
 </section>
 
-<!-- 9 · GUARANTEE -->
+<!-- 9 · OFFER BOX (pricing gets its own section) -->
 <section>
 <div class="wrap center">
-<span class="eyebrow" style="justify-content:center;">The guarantee</span>
-<h2>You risk a coffee order. <span class="em">I risk the receipts.</span></h2>
-<div class="gbox reveal">
-<div class="gk">The $1,000/mo guarantee</div>
-<h3>If your report doesn't identify at least $1,000/month in recoverable flow revenue — full refund. And you keep everything.</h3>
-<p style="font-size:15px;color:var(--muted);margin:8px 0 0;">The report, the fix list, the templates, Implementation Week. All of it. I can offer that because the math is conservative on purpose — real accounts usually leak multiples of it.</p>
+<span class="eyebrow" style="justify-content:center;">The offer, all of it</span>
+<h2>One price. No tiers. No <span class="em">call</span>.</h2>
+<div class="offer reveal">
+<div class="top"><span class="n">The Email Revenue Leak Report</span><span class="p">$47</span></div>
+<div class="body">
+<ul class="tick">
+<li><b>Flow Forensics</b> — all 6 money flows scored vs benchmark: paused earners, send-through %, revenue per recipient, missing flows</li>
+<li><b>Campaign health</b> — blast detector, cadence vs engagement, projected list shrink, broken-tracking heuristic</li>
+<li><b>The ranked fix list</b> — every fix by dollars ÷ effort, with steps and 30-day recovery timelines</li>
+<li><b>Founder's summary</b> — one screen, plain English, shareable with your team or agency</li>
+<li><b>Implementation Week</b> — one fix per day for 7 days; reply DONE and I personally check your build</li>
+<li><b>Free re-run in 60 days</b> — put a number on what you fixed</li>
+</ul>
+<div class="guar"><b>The $1,000/mo guarantee:</b> if your report doesn't identify at least $1,000/month in recoverable flow revenue — full refund, and you keep everything.</div>
+<div class="btn-row mt24" style="justify-content:center;"><a class="btn btn-primary" style="width:100%;text-align:center;" href="score.html">Start with the free score →</a></div>
+<p style="font-family:var(--mono);font-size:11px;color:var(--muted);text-align:center;margin:12px 0 0;">The free score comes first — you'll see your leak and fix #1 before spending anything.</p>
 </div>
-<div class="btn-row mt32" style="justify-content:center;"><a class="btn btn-primary" href="score.html">Start with the free score</a></div>
+</div>
+<p class="mt32" style="max-width:620px;margin-left:auto;margin-right:auto;">Why $47 and not $497? Because I don't want a windfall — <b>I want a thousand operators with fixed flows and a reason to trust me</b>. Some of them will later want my team to do the work. That's the business model, on the table.</p>
 </div>
 </section>
 
-<!-- 10 · IMPLEMENTATION WEEK TIMELINE -->
+<!-- 10 · TIMELINE -->
 <section class="band-alt">
 <div class="wrap">
 <span class="eyebrow">After you unlock</span>
@@ -262,8 +294,28 @@
 </div>
 </section>
 
-<!-- 11 · WHO IT'S FOR -->
+<!-- 11 · FOUNDER LETTER -->
 <section>
+<div class="wrap">
+<div class="sec-head center"><span class="eyebrow" style="justify-content:center;">A note from me</span>
+<h2>Why I built this instead of another <span class="em">retainer</span></h2></div>
+<div class="letter reveal">
+<p>I've spent years inside DTC email accounts — the kind doing $400k a month, the kind everyone assumes are dialed in. Almost none of them are. Not because the founders are careless, but because <b>nobody's job is to notice what stopped sending</b>.</p>
+<p>The agency model doesn't fix this. Agencies get paid to produce new things, not to check old toggles. So the leak survives the retainer. I've been hired after two agencies, found a paused seven-figure flow in the first hour, and watched a founder go quiet on the call.</p>
+<p>The Leak Report is the first hour of my work, in software, at a price that requires no meeting and no trust in me whatsoever. Run the free score. Take fix #1 — genuinely, take it. If the math earns the $47, it's there. If it doesn't, you've lost five minutes and gained certainty.</p>
+<p><b>Either way: stop letting the dashboard's silence cost you money.</b></p>
+<div class="sign">
+<div class="authorcard" style="border:none;padding:0;margin:0;background:none;display:flex;align-items:center;gap:14px;">
+<div class="pic" style="width:54px;height:54px;border-radius:50%;overflow:hidden;border:2px solid var(--amber);"><img src="headshot-bw.jpg" alt="Micah Jacobi" onerror="this.parentNode.style.display='none'"></div>
+<div class="sig">Micah Jacobi<small>Retention · MAXMRGN · every test runs a full cycle</small></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- 12 · WHO IT'S FOR -->
+<section class="band-alt">
 <div class="wrap">
 <span class="eyebrow">Honest qualification</span>
 <h2>Who this is for — and who should <span class="em">skip it</span></h2>
@@ -275,36 +327,36 @@
 <li>You'd rather see math than take a vendor's word for it</li>
 </ul></div>
 <div class="card"><div class="kick">Skip it if</div><ul class="tick">
-<li>You're pre-launch or under ~$20k/mo — fix acquisition first, the leak math barely moves yet</li>
-<li>Your flows were professionally rebuilt in the last 90 days and you're watching entries weekly</li>
-<li>You want someone to blame rather than a checklist to run — the report is instructions, not absolution</li>
+<li>You're pre-launch or under ~$20k/mo — fix acquisition first</li>
+<li>Your flows were professionally rebuilt in the last 90 days and you watch entries weekly</li>
+<li>You want someone to blame rather than a checklist to run</li>
 </ul></div>
 </div>
 </div>
 </section>
 
-<!-- 12 · FAQ -->
-<section class="band-alt">
+<!-- 13 · FAQ -->
+<section>
 <div class="wrap">
 <span class="eyebrow">Fair questions</span>
 <h2>Everything you'd ask on a call — <span class="em">without the call</span></h2>
 <div class="faq mt32">
-<details><summary>"Why isn't this like every agency's free audit?"</summary><p>Because an agency's free audit is a pitch with homework attached — a slide deck and a "strategy call" where the real product is a $5k/mo retainer. <b>This is a tool with math in it.</b> The free tier gives you a real fix with real steps. The $47 tier gives you all of them. No call is required at any point — if you want my eyes on your account, that option exists <i>after</i> you've gotten value, not as the gate to it.</p></details>
-<details><summary>"My agency handles email."</summary><p>Run the score anyway. If it comes back clean, you've verified them for $0. If it doesn't, forward them the report — it's shareable by design, and good agencies appreciate a ranked fix list. Either way you stop operating on trust alone. <b>Verify with data.</b></p></details>
-<details><summary>"What if it finds nothing?"</summary><p>Then the free score cost you five minutes and confirmed your account is tight — genuinely good news. And the paid report carries the guarantee: <b>$1,000/mo in recoverable flow revenue identified, or a full refund and you keep everything.</b></p></details>
-<details><summary>"Is the math real or AI-generated fluff?"</summary><p>The scoring and dollar math are deterministic — same inputs, same numbers, every benchmark footnoted (Klaviyo aggregate data, published RPR averages). No black box, no "our AI thinks." I use AI for speed. I don't outsource arithmetic or judgment to it.</p></details>
-<details><summary>"I'm on Attentive, not Klaviyo."</summary><p>Good — that's rarer coverage and a bigger edge. The score works for both platforms, and the fix library accounts for the differences (Attentive's journey eligibility rules are their own special adventure).</p></details>
-<details><summary>"Can't I just find this stuff myself?"</summary><p>Yes — if you know the seven signals, the benchmark values, where each platform hides send-through, and how to price each gap. That knowledge is exactly what you're buying, pre-assembled, for $47. Your time is worth more than the report costs.</p></details>
+<details><summary>"Why isn't this like every agency's free audit?"</summary><p>Because an agency's free audit is a pitch with homework attached — a slide deck and a "strategy call" where the real product is a $5k/mo retainer. <b>This is a tool with math in it.</b> The free tier gives you a real fix with real steps. The $47 tier gives you all of them. No call is required at any point.</p></details>
+<details><summary>"My agency handles email."</summary><p>Run the score anyway. If it comes back clean, you've verified them for $0. If it doesn't, forward them the report — it's shareable by design. Either way you stop operating on trust alone. <b>Verify with data.</b></p></details>
+<details><summary>"What if it finds nothing?"</summary><p>Then the free score cost you five minutes and confirmed your account is tight — genuinely good news. And the paid report carries the guarantee: <b>$1,000/mo identified or a full refund, and you keep everything.</b></p></details>
+<details><summary>"Is the math real or AI fluff?"</summary><p>Deterministic — same inputs, same numbers, every benchmark footnoted (Klaviyo aggregate data, published RPR averages). No black box. I use AI for speed; I don't outsource arithmetic or judgment to it.</p></details>
+<details><summary>"I'm on Attentive, not Klaviyo."</summary><p>Good — rarer coverage, bigger edge. The score works for both, and the fix library accounts for the differences.</p></details>
+<details><summary>"Can't I find this myself?"</summary><p>Yes — if you know the seven signals, the benchmark values, where each platform hides send-through, and how to price each gap. That knowledge, pre-assembled, is what $47 buys. Your time costs more than the report does.</p></details>
 </div>
 </div>
 </section>
 
-<!-- 13 · FINAL CLOSE (dark bun, permission-based) -->
+<!-- 14 · FINAL CLOSE (centered dark bun) -->
 <div class="fade-up"></div>
 <section class="band-dark center">
 <div class="wrap">
 <span class="eyebrow">The next five minutes</span>
-<h2 style="font-size:44px;">The leak is running <span class="em">right now</span>.<br>The score is free.</h2>
+<h2 style="font-size:46px;">The leak is running <span class="em">right now</span>.<br>The score is free.</h2>
 <p class="lead mt16" style="max-width:560px;">Eight questions. Your number, in dollars. Your first fix, in full. If the score comes back healthy, you've lost five minutes and gained certainty. If it doesn't — wouldn't you rather know today?</p>
 <div class="btn-row mt24" style="justify-content:center;"><a class="btn btn-primary" href="score.html">Get your free Retention Score</a></div>
 <p class="mt24" style="font-family:var(--mono);font-size:12px;color:#9A9182;max-width:520px;margin-left:auto;margin-right:auto;">P.S. The $1M welcome flow from the story? Turning it back on took four clicks. The expensive part was the months nobody looked.</p>
@@ -328,7 +380,6 @@
 
 <script>
 document.querySelectorAll('.nav-links a').forEach(a=>a.addEventListener('click',()=>document.getElementById('nav').classList.remove('open')));
-/* self-contained motion: uses the site's own .motion CSS animations, none of the fragile hero JS */
 if(!matchMedia('(prefers-reduced-motion: reduce)').matches){
   document.documentElement.classList.add('motion');
   addEventListener('DOMContentLoaded',function(){
