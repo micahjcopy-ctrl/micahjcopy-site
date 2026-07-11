@@ -41,6 +41,26 @@ table.dt{width:100%;border-collapse:collapse;font-size:13.5px}
 .tool{font-family:var(--mono);font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;border:1px solid var(--line-dark);border-radius:8px;padding:9px 14px;color:#cfc7b8;text-decoration:none}
 .tool:hover{border-color:var(--gold);color:var(--gold)}
 .banner{background:rgba(199,154,70,.1);border:1px solid rgba(199,154,70,.35);border-radius:10px;padding:12px 16px;font-family:var(--mono);font-size:12px;color:var(--gold);margin-top:20px;display:none}
+/* funnel canvas */
+.fun-scroll{overflow-x:auto;padding:6px 2px 14px}
+.fun-track{display:flex;align-items:stretch;gap:0;min-width:max-content}
+.fun-node{width:150px;flex:0 0 auto;background:rgba(255,255,255,.035);border:1px solid var(--line-dark);border-radius:12px;padding:12px;text-decoration:none;display:block;transition:border-color .15s}
+.fun-node:hover{border-color:var(--gold)}
+.fun-mini{background:#0c0a08;border:1px solid var(--line-dark);border-radius:6px;padding:8px;margin-bottom:10px;height:56px}
+.fun-mini .bar1{height:6px;border-radius:3px;background:var(--gold);width:65%;margin-bottom:5px;opacity:.9}
+.fun-mini .bar2{height:4px;border-radius:2px;background:rgba(237,231,219,.25);width:90%;margin-bottom:4px}
+.fun-mini .bar3{height:4px;border-radius:2px;background:rgba(237,231,219,.25);width:75%;margin-bottom:6px}
+.fun-mini .btn-sk{height:10px;border-radius:3px;background:#7C2A2A;width:55%}
+.fun-mini.email .bar1{background:#9A9182}
+.fun-mini.money .btn-sk{background:var(--gold)}
+.fun-node .nm{font-family:var(--mono);font-size:9.5px;text-transform:uppercase;letter-spacing:.06em;color:#9A9182}
+.fun-node .ttl{font-size:13px;font-weight:600;color:#EDE7DB;margin:2px 0 6px;line-height:1.25}
+.fun-node .val{font-family:var(--fr);font-weight:600;font-size:22px;color:var(--gold);font-variant-numeric:tabular-nums}
+.fun-node .sub{font-family:var(--mono);font-size:9.5px;color:#8a8272;margin-top:2px}
+.fun-join{flex:0 0 auto;display:flex;flex-direction:column;justify-content:center;align-items:center;width:58px}
+.fun-join .arr{color:var(--gold);font-size:17px;line-height:1}
+.fun-join .cv{font-family:var(--mono);font-size:9.5px;color:#9A9182;margin-top:4px;white-space:nowrap}
+.fun-join .cv b{color:var(--gold)}
 </style>
 </head>
 <body>
@@ -59,6 +79,33 @@ table.dt{width:100%;border-collapse:collapse;font-size:13.5px}
 <div class="kpi"><div class="l">Lead → buyer</div><div class="v" id="k-rate">—</div><div class="s">target 8%</div></div>
 <div class="kpi"><div class="l">Revenue (min)</div><div class="v" id="k-rev">—</div><div class="s">reports × $47, excl. bumps</div></div>
 <div class="kpi"><div class="l">Avg leak found</div><div class="v" id="k-leak">—</div><div class="s" id="k-score-s">avg score —</div></div>
+</div>
+
+<!-- FUNNEL CANVAS -->
+<div class="sec">
+<h2>Funnel view</h2>
+<div class="note">The whole machine, left to right. Live numbers from your database; GA4 stages fill in once traffic runs. Click any node to open the page.</div>
+<div class="fun-scroll">
+<div class="fun-track">
+<a class="fun-node" href="https://analytics.google.com/" target="_blank"><div class="fun-mini"><div class="bar1" style="width:40%"></div><div class="bar2"></div><div class="bar3"></div><div class="btn-sk" style="background:rgba(237,231,219,.2)"></div></div><div class="nm">Traffic</div><div class="ttl">Ads · SEO · Social</div><div class="val" id="fn-visitors">—</div><div class="sub">visitors · GA4</div></a>
+<div class="fun-join"><span class="arr">→</span><span class="cv" id="fc-1">view rate · GA4</span></div>
+<a class="fun-node" href="/leak-report" target="_blank"><div class="fun-mini"><div class="bar1"></div><div class="bar2"></div><div class="bar3"></div><div class="btn-sk"></div></div><div class="nm">Sales page</div><div class="ttl">/leak-report</div><div class="val" id="fn-lr">—</div><div class="sub">views · GA4</div></a>
+<div class="fun-join"><span class="arr">→</span><span class="cv" id="fc-2">→ score · GA4</span></div>
+<a class="fun-node" href="/score" target="_blank"><div class="fun-mini"><div class="bar1" style="width:80%"></div><div class="bar2"></div><div class="bar3"></div><div class="btn-sk"></div></div><div class="nm">Opt-in</div><div class="ttl">/score · free score + fix #1</div><div class="val" id="fn-leads">—</div><div class="sub">leads captured</div></a>
+<div class="fun-join"><span class="arr">→</span><span class="cv"><b id="fc-3">—</b> lead→buyer</span></div>
+<a class="fun-node" href="/score" target="_blank"><div class="fun-mini money"><div class="bar1" style="width:50%"></div><div class="bar2"></div><div class="bar3"></div><div class="btn-sk"></div></div><div class="nm">Purchase · $47/$74</div><div class="ttl">Leak Report unlock</div><div class="val" id="fn-buyers">—</div><div class="sub" id="fn-buyers-sub">reports sold</div></a>
+<div class="fun-join"><span class="arr">→</span><span class="cv">100% enter</span></div>
+<a class="fun-node" href="/thanks" target="_blank"><div class="fun-mini email"><div class="bar1" style="width:70%"></div><div class="bar2"></div><div class="bar3"></div><div class="btn-sk" style="background:rgba(237,231,219,.2)"></div></div><div class="nm">Consumption</div><div class="ttl">/thanks + Implementation Week</div><div class="val" id="fn-seq">—</div><div class="sub">emails sent</div></a>
+<div class="fun-join"><span class="arr">→</span><span class="cv">booked · calendar</span></div>
+<a class="fun-node" href="/book" target="_blank"><div class="fun-mini"><div class="bar1" style="width:60%"></div><div class="bar2"></div><div class="bar3"></div><div class="btn-sk"></div></div><div class="nm">Concierge</div><div class="ttl">/book · Implementation Plan</div><div class="val">—</div><div class="sub">calls held · manual</div></a>
+<div class="fun-join"><span class="arr">→</span><span class="cv">invite on action</span></div>
+<a class="fun-node" href="/os" target="_blank"><div class="fun-mini money"><div class="bar1" style="width:55%"></div><div class="bar2"></div><div class="bar3"></div><div class="btn-sk"></div></div><div class="nm">Recurring · $149/mo</div><div class="ttl">/os → /members</div><div class="val" id="fn-os">—</div><div class="sub">members · Stripe</div></a>
+<div class="fun-join"><span class="arr">→</span><span class="cv">triggered offer</span></div>
+<a class="fun-node" href="/sprint" target="_blank"><div class="fun-mini money"><div class="bar1" style="width:45%"></div><div class="bar2"></div><div class="bar3"></div><div class="btn-sk"></div></div><div class="nm">Mid-ticket · $3k</div><div class="ttl">/sprint · cap 4/mo</div><div class="val">—</div><div class="sub">pipeline · manual</div></a>
+<div class="fun-join"><span class="arr">→</span><span class="cv">Day-60 flip-over</span></div>
+<a class="fun-node" href="/dashboard"><div class="fun-mini money"><div class="bar1" style="width:65%"></div><div class="bar2"></div><div class="bar3"></div><div class="btn-sk"></div></div><div class="nm">Back end · $5–8k/mo</div><div class="ttl">Retainer · asked-for</div><div class="val">—</div><div class="sub">clients · manual · cap 5</div></a>
+</div>
+</div>
 </div>
 
 <!-- FUNNEL -->
@@ -130,6 +177,11 @@ async function load(){
     $('k-score-s').textContent='avg score '+s.avgScore+'/100';
     $('r-l2b').textContent=s.rates.leadToBuyer+'%';
     $('r-seq').textContent=s.sequenceEmailsSent+' emails sent';
+    $('fn-leads').textContent=s.leads.total.toLocaleString();
+    $('fn-buyers').textContent=s.buyers.total.toLocaleString();
+    $('fn-buyers-sub').textContent='sold · '+s.rates.checkoutCompletion+'% checkout completion';
+    $('fc-3').textContent=s.rates.leadToBuyer+'%';
+    $('fn-seq').textContent=s.sequenceEmailsSent.toLocaleString();
     $('upd').textContent='updated '+new Date(s.updated).toLocaleTimeString();
   }catch(e){$('demo-banner').style.display='block';$('upd').textContent='stats unavailable';}
 }
