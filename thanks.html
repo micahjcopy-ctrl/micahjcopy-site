@@ -12,42 +12,82 @@
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-FZ1C922BZV"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-FZ1C922BZV');gtag('event','purchase',{currency:'USD',value:47});</script>
+<style>
+.lrh .wrap>*{opacity:0;transform:translateY(18px);animation:lrIn .7s cubic-bezier(.22,.61,.36,1) forwards}
+.lrh .wrap>*:nth-child(2){animation-delay:.12s}.lrh .wrap>*:nth-child(3){animation-delay:.24s}.lrh .wrap>*:nth-child(4){animation-delay:.36s}
+@keyframes lrIn{to{opacity:1;transform:none}}
+.stepnum{font-family:var(--fr);font-weight:600;font-size:40px;color:var(--amber);line-height:1}
+.stepcard{position:relative}
+.stepcard .donow{position:absolute;top:18px;right:18px}
+.tagnow{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:999px;background:var(--amber-tint);color:var(--amber-deep);border:1px solid var(--amber)}
+.taglater{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:999px;background:#f7efdd;color:var(--gold-on-light);border:1px solid var(--gold-deep)}
+@media(prefers-reduced-motion:reduce){.lrh .wrap>*{opacity:1!important;transform:none!important;animation:none!important}}
+</style>
 </head>
 <body>
 
 <header class="site-header"><div class="wrap"><nav class="nav">
 <a class="brand" href="index.html">Micah Jacobi<span class="dot">.</span></a>
-<div class="nav-links" id="nav"><a class="btn btn-primary" href="book.html">Book a call</a></div>
+<div class="nav-links" id="nav"><span style="font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--amber-deep);">Order confirmed ✓</span></div>
 </nav></div></header>
 
-<!-- CONFIRM (dark bun) -->
-<section class="hero hero-dark band-dark" style="padding-bottom:56px;">
+<!-- 1 · CONFIRM + ORIENT (dark bun) -->
+<section class="hero hero-dark band-dark lrh" style="padding-bottom:56px;">
 <div class="wrap">
-<span class="eyebrow">Order confirmed</span>
-<h1 class="hl" style="font-size:54px;">Your Recovery Plan is <span class="em">unlocked</span>.</h1>
-<p class="lead mt24" style="max-width:620px;">Email 1 of Implementation Week is on its way: <b>one fix per day for the next 7 days</b>, easiest first, templates included. Reply DONE to any of them and I'll personally sanity-check what you built.</p>
-<div class="btn-row mt24"><a class="btn btn-primary" id="report-link" href="#">Open your Recovery Plan →</a></div>
+<span class="eyebrow">Payment received · you're in</span>
+<h1 class="hl" style="font-size:52px;">The report found your money.<br>The next 20 minutes decide if you <span class="em">collect it</span>.</h1>
+<p class="lead mt24" style="max-width:620px;">Here's the truth about reports like yours: the ones that recover their number get implemented in the first week. The ones that don't get opened twice and die in a tab. <b>So I've made the next steps stupid-simple. There are three, in order, below.</b></p>
+<div class="btn-row mt24"><a class="btn btn-primary" id="report-link" href="#">Step 1 · Open your Recovery Plan →</a></div>
 </div>
 </section>
 <div class="fade"></div>
 
-<!-- THE ONE UPSELL: the free call -->
-<section>
+<!-- 2 · THE THREE STEPS -->
+<section style="padding-top:20px;">
 <div class="wrap">
-<span class="eyebrow">One more thing, and it's free</span>
-<h2>Want my eyes on your account <span class="em">before</span> you start?</h2>
-<p class="mt16">Your report is ranked by math. But math can't see everything. <b>Send-through settings, trigger misconfigurations, and platform quirks are where 80% of "finished" fixes quietly fail</b>, and they're faster for me to spot than for you to hunt.</p>
-<p>So here's the offer: a <b>free 20-minute Implementation Plan call</b>. We walk your report together, I flag the traps specific to your platform, and you leave with the exact order to run the fixes. It's not a sales call. You already bought the thing. If you never spend another dollar with me, the plan is still yours.</p>
+<span class="eyebrow">Do these in order</span>
+<h2>Your next 20 minutes, <span class="em">sequenced</span></h2>
+<div class="grid g3 mt32">
+<div class="card stepcard"><span class="donow tagnow">Now · 5 min</span><div class="stepnum">1</div><h3 class="mt16">Open the report, read fix #1</h3><p>Just fix #1, nothing else yet. It's your highest dollars-per-effort move and most brands ship it in under an hour. Everything this week builds from it.</p><a class="inline" id="report-link-2" href="#">Open your Recovery Plan →</a></div>
+<div class="card stepcard"><span class="donow tagnow">Now · 2 min</span><div class="stepnum">2</div><h3 class="mt16">Book your Implementation Plan call</h3><p>Free, 20 minutes, and it exists for one reason: <b>most fixes fail in platform settings, not copy</b>. Book it now while you're here. The slot can be next week; booking it today is what matters.</p><a class="inline" href="book.html">Grab a slot →</a></div>
+<div class="card stepcard"><span class="donow taglater">Tomorrow onward</span><div class="stepnum">3</div><h3 class="mt16">One email per day, one fix per day</h3><p>Implementation Week starts in your inbox within the hour. Each day: one fix, the steps, the template. Reply <b>DONE</b> to any of them and I personally check what you built.</p><span style="font-family:var(--mono);font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;">Nothing to click. Watch your inbox.</span></div>
+</div>
+</div>
+</section>
+
+<!-- 3 · WHY THE CALL MATTERS (the upsell, with teeth) -->
+<section class="band-alt">
+<div class="wrap">
+<span class="eyebrow">About step 2, because "free call" usually means "pitch"</span>
+<h2>Why the call is the difference between a report and a <span class="em">result</span></h2>
+<p class="mt16">Your report ranked the fixes by math. What the math can't see from eight questions: <b>your platform's specific traps</b>. The Smart Sending window quietly skipping hot buyers. The eligibility filter someone set two years ago. The quiet-hours rule eating your cart messages. This is where 80% of "implemented" fixes silently fail, and it's why two brands with the same report get different results.</p>
+<p>On the call we walk YOUR account: fixes sequenced for your platform and team, the traps checked against your actual settings, and the exact numbers to look at on day 14 so you can prove what you recovered. <b>You leave with your week planned and your measurement locked.</b></p>
+<p>And to say it plainly: it's not a sales call. You already bought the product. This call is me protecting the recoverable number you just paid to find, because <b>buyers who implement come back, and buyers who stall refund</b>. Your success is the business model.</p>
 <div class="card mt24" style="max-width:640px;">
-<div class="kick">The Implementation Plan · 20 minutes</div>
+<div class="kick">The Implementation Plan · 20 min · free with your report</div>
 <ul class="tick">
-<li>Your fixes, sequenced for your platform and team</li>
-<li>The send-through / eligibility traps to check first</li>
-<li>What to measure at day 14 and day 30</li>
+<li>Your fixes, ordered for your platform (Klaviyo and Attentive have different traps)</li>
+<li>Your settings checked against the failure list, live</li>
+<li>Your day-14 measurement locked, so the win is provable</li>
 </ul>
 <div class="btn-row mt24"><a class="btn btn-primary" href="book.html">Book your Implementation Plan</a></div>
+<p class="mt16" style="font-family:var(--mono);font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;">I hold a handful of these each week, first booked, first served. Can't do calls? Reply to Email 1 with "ASYNC" and I'll record a video walkthrough of your report instead.</p>
 </div>
-<p class="pull" style="font-size:19px;max-width:640px;margin-left:0;">Prefer async? Fine. I record a 3-minute video walking your specific report for every buyer at $50k/mo+. It'll land in your inbox within a day or two.</p>
+</div>
+</section>
+
+<!-- 4 · THE WEEK AHEAD (timeline) -->
+<section>
+<div class="wrap">
+<span class="eyebrow">So you know exactly what's coming</span>
+<h2>The next 7 days, <span class="em">mapped</span></h2>
+<div class="timeline reveal mt24">
+<div class="tl-item"><span class="yr">TODAY</span><h3>Report + book the call</h3><p>Read fix #1. Grab a call slot. That's the whole day.</p></div>
+<div class="tl-item"><span class="yr">DAYS 1–6</span><h3>One fix per day, in your inbox</h3><p>Easiest and highest-dollar first. Templates included. Skip any day that doesn't apply to your account.</p></div>
+<div class="tl-item"><span class="yr">YOUR CALL</span><h3>The Implementation Plan</h3><p>Whenever you booked it: your sequence, your traps, your measurement. 20 minutes.</p></div>
+<div class="tl-item"><span class="yr">DAY 7</span><h3>Re-run your score, free</h3><p>New baseline. In 60 days you re-run again and put a hard number on what you recovered.</p></div>
+</div>
+<p class="mt24" style="max-width:620px;"><b>That's the whole system.</b> No memberships to remember, no dashboard to learn. A report, a week of emails, one call, and a number that goes up.</p>
 </div>
 </section>
 
@@ -57,7 +97,16 @@
 <script>
 // success redirect arrives as thanks.html?rid=<report-id>
 const rid=new URLSearchParams(location.search).get('rid');
-document.getElementById('report-link').href = rid ? '/api/report?id='+rid : 'score.html';
+const href=rid?'/api/report?id='+rid:'score.html';
+document.getElementById('report-link').href=href;
+document.getElementById('report-link-2').href=href;
+if(!matchMedia('(prefers-reduced-motion: reduce)').matches){
+  document.documentElement.classList.add('motion');
+  addEventListener('DOMContentLoaded',function(){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.18});
+    document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+  });
+}
 </script>
 </body>
 </html>
