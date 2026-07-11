@@ -38,6 +38,27 @@
 .tickrow .tv{font-family:var(--fr);font-weight:600;font-size:34px;color:var(--gold);margin-top:4px;font-variant-numeric:tabular-nums}
 .tickrow .tv.bad{color:#d98d85}
 @media(max-width:720px){.chero h1{font-size:38px}.tickrow{flex-direction:column}.tickrow>div{border-right:none;border-bottom:1px solid var(--line-dark)}.tickrow>div:last-child{border-bottom:none}}
+/* old way / new way graphic */
+.ownw{display:grid;grid-template-columns:1fr 1fr;gap:14px;position:sticky;top:92px}
+.on-col{border-radius:14px;padding:18px 16px;border:1px solid var(--line);background:var(--card)}
+.on-old{opacity:.85;background:#F2EDE2}
+.on-tag{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.07em;margin-bottom:12px;font-weight:700}
+.on-old .on-tag{color:var(--amber)}
+.on-new .on-tag{color:var(--gold-on-light)}
+.on-step{font-size:13px;line-height:1.45;border-radius:8px;padding:9px 11px;background:#fff;border:1px solid var(--line);color:#3f3a33}
+.on-old .on-step{border-style:dashed;border-color:rgba(124,42,42,.45)}
+.on-new .on-step{border-color:rgba(176,138,62,.55)}
+.on-arrow{text-align:center;font-size:14px;padding:3px 0;color:var(--muted)}
+.on-old .on-arrow{color:var(--amber)}
+.on-new .on-arrow{color:var(--gold-on-light)}
+.on-end{font-weight:600}
+.on-old .on-end{background:var(--amber-tint);color:var(--amber-deep);border-style:solid;border-color:var(--amber)}
+.on-new .on-end{background:#f7efdd;color:#6e5420;border-color:var(--gold-deep)}
+.motion .ownw .on-col{opacity:0;transform:translateY(14px);transition:opacity .55s ease,transform .55s ease}
+.motion .ownw.in .on-col{opacity:1;transform:none}
+.motion .ownw.in .on-old{transition-delay:.05s;opacity:.85}
+.motion .ownw.in .on-new{transition-delay:.25s}
+@media(max-width:860px){.ownw{position:static;margin-top:26px}}
 .lie{border-left:3px solid var(--amber);background:var(--card);border-radius:0 12px 12px 0;padding:22px 26px;margin-top:18px}
 .lie .l{font-family:var(--fr);font-style:italic;font-size:22px;color:var(--ink)}
 .lie .t{font-size:16px;color:#3f3a33;margin-top:10px}
@@ -86,19 +107,51 @@
 </section>
 <div class="fade"></div>
 
-<!-- 2 · THE STORY -->
+<!-- 2 · THE STORY (text left, old/new way graphic right) -->
 <section id="story">
 <div class="wrap">
 <span class="eyebrow">The $1,000,000 toggle</span>
 <h2>A true story about how this happens to <span class="em">good</span> brands</h2>
-<p class="lede mt24">A brand I work with — strong product, six-figure list, customers who love them — watched email revenue drop 42% in one month.</p>
+<div class="hero-grid mt24" style="align-items:start;">
+<div>
+<p class="lede">A brand I work with — strong product, six-figure list, customers who love them — watched email revenue drop 42% in one month.</p>
 <p>The team did what every team does. They blamed the list. "It's burnt." "People don't read email anymore." "We need new creative." They were about to spend a quarter rewriting everything.</p>
 <h3 class="mt24">Then I pulled the account apart.</h3>
 <p>During a redesign months earlier, someone had paused the welcome flow — the <i>proven</i> one, the flow that had earned <b>over $1,000,000 lifetime</b>. Its replacement was technically "live" but under-triggering, reaching a fraction of new signups. The email cart-abandon flow? Also paused. For months. A flow earning $7.09 per recipient — nearly double the industry average — just… off.</p>
-<div class="pull">Dashboards don't announce what <i>isn't</i> sending. That silence is the most expensive sound in DTC email.</div>
+<div class="pull" style="font-size:22px;">Dashboards don't announce what <i>isn't</i> sending. That silence is the most expensive sound in DTC email.</div>
 <h3>Follow the chain of what that means.</h3>
 <p>Flow gets paused in a revamp → every new subscriber joins during the silence and never gets the first email → they don't buy, so "the list looks dead" → the team blames the list and spends money on the wrong fix → <b>the leak keeps running while they work on it</b>. Every month, on autopilot, in the wrong direction.</p>
 <p>That pattern — not bad copy, not a dead list, not the algorithm — is the single most common revenue leak in DTC email. And here's the part that should actually make you feel better: <b>it's mechanical to find, and mechanical to fix.</b></p>
+</div>
+<div>
+<div class="ownw reveal">
+<div class="on-col on-old">
+<div class="on-tag">✕ The old way</div>
+<div class="on-step">Email revenue drops 42%</div>
+<div class="on-arrow">↓</div>
+<div class="on-step">"The list is burnt"</div>
+<div class="on-arrow">↓</div>
+<div class="on-step">A quarter spent rewriting creative</div>
+<div class="on-arrow">↓</div>
+<div class="on-step">Nobody checks the toggles</div>
+<div class="on-arrow">↓</div>
+<div class="on-step on-end">Leak keeps running · −$22,800/mo</div>
+</div>
+<div class="on-col on-new">
+<div class="on-tag">→ The new way</div>
+<div class="on-step">Run the 5-minute scan</div>
+<div class="on-arrow">↓</div>
+<div class="on-step">Find the paused $1M flow</div>
+<div class="on-arrow">↓</div>
+<div class="on-step">Turn it back on — 4 clicks</div>
+<div class="on-arrow">↓</div>
+<div class="on-step">Fix the next leak on the list</div>
+<div class="on-arrow">↓</div>
+<div class="on-step on-end">Recovered · +$15,960/mo</div>
+</div>
+</div>
+</div>
+</div>
 </div>
 </section>
 
