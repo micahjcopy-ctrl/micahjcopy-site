@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Retention OS — run retention like an operator | Micah Jacobi</title>
-<meta name="description" content="Invite-only for Leak Report operators. The weekly scorecard system, monthly calendar, swipe vault, live teardowns, and the operator room. $149/mo.">
+<meta name="description" content="The weekly operating system for DTC retention: the Monday scorecard, monthly send maps, live teardowns, and a direct line to Micah. Invite-only for Leak Report operators. $149/mo.">
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -17,6 +17,17 @@
 .lrh .wrap>*{opacity:0;transform:translateY(18px);animation:lrIn .7s cubic-bezier(.22,.61,.36,1) forwards}
 .lrh .wrap>*:nth-child(2){animation-delay:.12s}.lrh .wrap>*:nth-child(3){animation-delay:.24s}.lrh .wrap>*:nth-child(4){animation-delay:.36s}
 @keyframes lrIn{to{opacity:1;transform:none}}
+.offer{max-width:640px;margin:30px auto 0;background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 24px 54px rgba(23,20,15,.09);text-align:left}
+.offer .top{background:var(--dark);padding:22px 30px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.offer .top .n{font-family:var(--fr);font-size:22px;color:var(--inverse)}
+.offer .top .p{font-family:var(--fr);font-weight:600;font-size:34px;color:var(--gold)}
+.offer .body{padding:26px 30px 30px}
+.offer .guar{background:var(--amber-tint);border-radius:10px;padding:14px 18px;font-size:14.5px;margin-top:18px;color:#4a2020}
+.offer .guar b{color:var(--amber-deep)}
+.calprev{border-left:3px solid var(--amber);padding:4px 0 4px 16px;margin-top:12px}
+.calprev .wk{font-family:var(--mono);font-size:10.5px;color:var(--amber-deep);font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.calprev p{font-size:14px;margin:3px 0 0;color:#3f3a33}
+.lever-mock{background:var(--amber-tint);border:1px solid var(--amber);border-radius:10px;padding:12px 16px;font-size:13.5px;margin-top:12px;color:#4a2020}
 @media(prefers-reduced-motion:reduce){.lrh .wrap>*{opacity:1!important;transform:none!important;animation:none!important}}
 </style>
 </head>
@@ -24,77 +35,161 @@
 
 <header class="site-header"><div class="wrap"><nav class="nav">
 <a class="brand" href="index.html">Micah Jacobi<span class="dot">.</span></a>
-<div class="nav-links" id="nav"><a class="btn btn-primary" href="book.html">Book a call</a></div>
+<div class="nav-links" id="nav"><a class="btn btn-primary" href="/api/os-checkout">Join the founding cohort</a></div>
 </nav></div></header>
 
-<!-- HERO (dark bun) -->
-<section class="hero hero-dark band-dark lrh">
+<!-- 1 · HERO (dark bun) -->
+<section class="hero hero-dark band-dark lrh" style="position:relative;overflow:hidden;">
+<div class="wrap">
+<span class="eyebrow">Invite-only · for Leak Report operators · founding cohort</span>
+<h1 class="hl" style="font-size:52px;">You fixed the leak.<br>Now meet the thing that <span class="em">reopens it</span>.</h1>
+<p class="lead mt24" style="max-width:640px;">It's called drift. Triggers break in replatforms. A/B tests get left running. Someone pauses a proven flow in a redesign and the dashboard says nothing. <b>The leak you just closed was somebody's unwatched account.</b> Retention OS is the watching, turned into a 90-second Monday ritual.</p>
+<div class="btn-row mt24"><a class="btn btn-primary" href="#offer">See what's inside</a></div>
+<div class="coordstrip">
+<span>WEEKLY SCORECARD · 90 SECONDS</span>
+<span>MONTHLY SEND MAPS + TEARDOWNS</span>
+<span>$149/MO · FIRST 50 LOCK THE PRICE</span>
+</div>
+</div>
+</section>
+<div class="fade"></div>
+
+<!-- 2 · THE DRIFT PROBLEM (chart) -->
+<section>
 <div class="wrap">
 <div class="hero-grid">
 <div>
-<span class="eyebrow">Invite-only · for Leak Report operators</span>
-<h1 class="hl" style="font-size:50px;">You did the work of a retention operator.<br>This is where operators <span class="em">run it weekly</span>.</h1>
-<p class="lead mt24">The fixes you shipped will drift. Triggers break in replatforms. Someone pauses a proven flow and nobody notices. <b>The leak you just fixed was somebody's unwatched dashboard.</b> Retention OS is the watching, systematized.</p>
-<div class="coordstrip">
-<span>WEEKLY SCORECARD · 90 SECONDS</span>
-<span>MONTHLY LIVE TEARDOWNS</span>
-<span>FOUNDING COHORT · FIRST 50</span>
+<span class="eyebrow">The problem nobody budgets for</span>
+<h2>Fixed flows don't <span class="em">stay</span> fixed</h2>
+<p class="mt16">You just spent a week implementing. Here's the uncomfortable pattern I see in every account I audit: <b>the fix decays the moment attention moves on.</b> A platform update resets a filter. A new hire edits a trigger. A promo overrides your segments and never gets switched back.</p>
+<p>None of it announces itself. Drift is silent by design, because dashboards report what sends, not what stopped sending. Which means the question isn't whether your account drifts. It's <b>how many weeks drift runs before someone notices.</b></p>
+<p>For most brands the honest answer is "until the next crisis." The OS answer is: <b>never more than seven days.</b></p>
+</div>
+<div>
+<div class="chart-card reveal">
+<div class="eyebrow" style="margin-bottom:0;">Flow revenue after a fix · with and without a watcher</div>
+<div class="bars">
+<div class="bar hot" style="--h:90%"><span class="cap">100%</span><span class="lab">week 1</span></div>
+<div class="bar" style="--h:80%"><span class="cap">89%</span><span class="lab">week 4</span></div>
+<div class="bar" style="--h:62%"><span class="cap">71%</span><span class="lab">week 8</span></div>
+<div class="bar" style="--h:44%"><span class="cap">52%</span><span class="lab">week 12, unwatched</span></div>
+</div>
+<p style="font-family:var(--mono);font-size:10.5px;color:var(--muted);margin:18px 0 0;text-transform:uppercase;letter-spacing:.05em;">Illustrative decay pattern from audited accounts. The watched line stays flat, because drift gets caught the Monday it starts.</p>
 </div>
 </div>
+</div>
+</div>
+</section>
+
+<!-- 3 · THE MONDAY RITUAL (product tour: scorecard) -->
+<section class="band-alt">
+<div class="wrap">
+<div class="hero-grid">
 <div>
 <div class="dash reveal">
 <div class="drow"><span class="dk">Email revenue vs pace</span><div class="track"><div class="fillbar" style="--w:84%"></div></div><span class="dv up">84%</span></div>
 <div class="drow"><span class="dk">Flow share (target 35%)</span><div class="track"><div class="fillbar" style="--w:91%"></div></div><span class="dv up">32%</span></div>
 <div class="drow"><span class="dk">Engaged reach</span><div class="track"><div class="fillbar" style="--w:76%"></div></div><span class="dv">76%</span></div>
 <div class="drow"><span class="dk">List net growth</span><div class="track"><div class="fillbar" style="--w:58%"></div></div><span class="dv">+1.2%</span></div>
-<div class="drow"><span class="dk">This Monday's lever</span><span class="dv up">Winback timing</span></div>
+</div>
+<div class="lever-mock"><b>This week's lever: flows.</b> Flow share is your weakest link. Check send-through on your biggest flow first. Reply with a screenshot and I'll point at the culprit.</div>
+</div>
+<div>
+<span class="eyebrow">Inside the OS · 01</span>
+<h2>The Monday scorecard: <span class="em">90 seconds</span>, five numbers, one lever</h2>
+<p class="mt16">Every Monday you pull five numbers off your dashboard and the scorecard does the thinking: green, yellow, or red against targets, and <b>one named lever for the week</b>. Not a report to read. A decision, made for you, that you can act on before your coffee's done.</p>
+<p>Your history saves week over week, so drift shows up as a color change, not a quarterly surprise. <b>This is the habit that separates operators from senders.</b></p>
 </div>
 </div>
 </div>
+</section>
+
+<!-- 4 · SEND MAPS + TEARDOWNS -->
+<section>
+<div class="wrap">
+<div class="hero-grid">
+<div>
+<span class="eyebrow">Inside the OS · 02</span>
+<h2>A send map every month, so you never start from a <span class="em">blank page</span></h2>
+<p class="mt16">On the 1st, the month's map drops: the revenue moments, the angle for each week, and the templates to run them. Built from the same seasonal playbook I run for 7-figure clients, sized for a founder-operated account.</p>
+<div class="calprev"><span class="wk">Week 1</span><p>The engagement play that repairs deliverability while competitors blast clearance</p></div>
+<div class="calprev"><span class="wk">Week 2</span><p>Proof week: the give-give-give beat that buys your end-of-month ask</p></div>
+<div class="calprev"><span class="wk">Weeks 3–4</span><p>The revenue push: early access to engaged first, everyone after</p></div>
+</div>
+<div>
+<span class="eyebrow">Inside the OS · 03</span>
+<h2>Live teardowns, on the rubric that found <span class="em">your leak</span></h2>
+<p class="mt16">Once a month I audit member accounts live. Getting torn down is the fastest win in the membership: your account, my screen, the leak found in real time. Watching someone else's is the education you can't get from a course.</p>
+<p>Want yours on the table? Reply to any OS email with <b>"TEAR ME DOWN"</b> and your platform. Founding members go first.</p>
+<p class="mt16"><span class="eyebrow" style="margin-bottom:6px;">Inside the OS · 04</span><br><b>The direct line.</b> Reply to any email from me: scorecard reads, red-week diagnosis, "is this segment right" checks. Founding members get answers within a business day, from me, not a VA.</p>
+</div>
+</div>
+</div>
+</section>
+
+<!-- 5 · THE MATH -->
+<div class="fade-up"></div>
+<section class="band-dark">
+<div class="wrap">
+<span class="eyebrow">The honest math</span>
+<h2>One caught pause pays for <span class="em">years</span> of this</h2>
+<div class="grid g3 mt32">
+<div class="stat"><div class="num">$149</div><div class="lbl">/mo · the OS</div></div>
+<div class="stat"><div class="num">$5k+</div><div class="lbl">/mo · the agency that watches for you</div></div>
+<div class="stat"><div class="num">$22,800</div><div class="lbl">/mo · a typical unwatched leak, running silently</div></div>
+</div>
+<p class="lead mt32" style="max-width:640px;">You already know what an unwatched account costs. It's the number on your Leak Report. The OS exists so that number never gets a chance to rebuild, and it costs about <b>one dinner out per month</b>.</p>
 </div>
 </section>
 <div class="fade"></div>
 
-<!-- WHAT'S INSIDE -->
-<section>
-<div class="wrap">
-<span class="eyebrow">What's inside</span>
-<h2>Four things. All of them <span class="em">compound</span>.</h2>
-<div class="grid g2 mt32 reveal">
-<div class="card"><div class="kick">01 — Software</div><h3>The Economic Calculator</h3><p>Your weekly scorecard: email revenue, flow share, CTOR, list growth, shown green/yellow/red against targets, weakest link flagged, matching playbook linked. Monday morning, 90 seconds, you know exactly which lever to pull.</p></div>
-<div class="card"><div class="kick">02 — Playbooks</div><h3>Monthly calendar + swipe vault</h3><p>Every month's revenue moments, angles, and send map, plus flow, campaign, and SMS templates with the numbers attached. You never start from a blank page again.</p></div>
-<div class="card"><div class="kick">03 — Access</div><h3>Live teardowns</h3><p>Every month I audit member accounts live, on the same rubric that found your leak. Getting torn down is the fastest win in the membership; watching is the education.</p></div>
-<div class="card"><div class="kick">04 — The room</div><h3>Operators only</h3><p>A private community of founders running retention on data. Scorecard shares, wins, office hours. Small on purpose.</p></div>
+<!-- 6 · OFFER BOX -->
+<section id="offer">
+<div class="wrap center">
+<span class="eyebrow" style="justify-content:center;">Founding cohort · first 50</span>
+<h2>$149/mo. No trial. No discount. <span class="em">On purpose.</span></h2>
+<p class="mt16" style="max-width:620px;margin-left:auto;margin-right:auto;">You already experienced the mechanism on your own account. That was Implementation Week. If the fixes didn't move your numbers, don't join. If they did, you know what catching drift every single week is worth.</p>
+<div class="offer reveal">
+<div class="top"><span class="n">Retention OS</span><span class="p">$149<span style="font-size:16px;color:#9A9182;">/mo</span></span></div>
+<div class="body">
+<ul class="tick">
+<li><b>The Monday scorecard</b>: five numbers, colored lights, one named lever per week, history saved</li>
+<li><b>Monthly send map</b> with angles + templates, dropped on the 1st</li>
+<li><b>Live monthly teardowns</b>: your account on my screen, founding members first</li>
+<li><b>Direct line to me</b>: replies answered within a business day</li>
+<li><b>The operator room</b>: opens at 15 members, so it starts alive</li>
+</ul>
+<div class="guar"><b>Founding terms:</b> first 50 members lock $149 for life and shape what gets built next. Cancel anytime. If it stops earning its line on your P&amp;L, leave, and the templates stay yours.</div>
+<div class="btn-row mt24"><a class="btn btn-primary" style="width:100%;text-align:center;" href="/api/os-checkout" onclick="gtag('event','begin_checkout',{currency:'USD',value:149})">Join the founding cohort</a></div>
+<p style="font-family:var(--mono);font-size:11px;color:var(--muted);text-align:center;margin:12px 0 0;">Annual: $1,490 (two months free). Checkout takes a minute; you land in the member area immediately.</p>
+</div>
 </div>
 </div>
 </section>
 
-<!-- PRICING -->
+<!-- 7 · FAQ -->
 <section class="band-alt">
 <div class="wrap">
-<span class="eyebrow">Founding cohort</span>
-<h2>$149/mo. No trial. No discount. <span class="em">On purpose.</span></h2>
-<p class="mt16">You've already experienced the mechanism on your own account. That was the point of Implementation Week. If the fixes didn't move your numbers, don't join. If they did, <b>you already know what a system that catches drift every single week is worth.</b></p>
-<p>The first 50 members lock this price for life and shape what gets built next. After 50, the price goes up and the invite gets slower.</p>
-<div class="card mt24" style="max-width:560px;">
-<div class="kick">Retention OS</div>
-<h3>$149/mo · or $1,490/yr (2 months free)</h3>
-<ul class="tick">
-<li>Cancel anytime. If it stops earning its line on your P&amp;L, leave</li>
-<li>The templates stay yours either way</li>
-<li>Founding price locked for life</li>
-</ul>
-<div class="btn-row mt24"><a class="btn btn-primary" href="/api/os-checkout" onclick="gtag('event','begin_checkout',{currency:'USD',value:149})">Join the founding cohort</a></div>
+<span class="eyebrow">Before you ask</span>
+<h2>Fair questions, <span class="em">straight answers</span></h2>
+<div class="faq mt32">
+<details><summary>"Why no trial?"</summary><p>Because you already had one. Implementation Week WAS the mechanism, running on your account with your money. A trial recruits people who aren't convinced, and an operator room full of the unconvinced helps nobody. Join convinced or don't join yet.</p></details>
+<details><summary>"What if I miss a Monday?"</summary><p>You miss a Monday, not the membership. The scorecard takes 90 seconds whenever you run it. Two missed Mondays in a row and my reply-back email asks if you're stuck. That nudge is a feature, not surveillance.</p></details>
+<details><summary>"I'm on Attentive. Does the scorecard work?"</summary><p>Yes. The scorecard runs on five numbers every platform reports, and the guides cover Klaviyo and Attentive traps separately. Attentive coverage is rare in this space. It's a deliberate specialty here.</p></details>
+<details><summary>"Is this a community or software?"</summary><p>It's an operating system: software (the scorecard), playbooks (the maps and templates), and access (teardowns and the direct line). The community layer opens at 15 members so the room starts alive instead of echoing.</p></details>
+<details><summary>"What happens after the first 50?"</summary><p>Price goes up and the invite slows down. Founding members keep $149 for as long as they stay. That's the whole deal, and it's real, because my reply-time is the constraint that caps this thing.</p></details>
 </div>
 </div>
 </section>
-<div class="fade-up"></div>
 
-<!-- CLOSE (dark bun) -->
+<!-- 8 · CLOSE (dark bun) -->
+<div class="fade-up"></div>
 <section class="band-dark center">
 <div class="wrap">
-<h2 style="font-size:40px;">Fixing the leak was the start.<br>Operating is <span class="em">the identity</span>.</h2>
+<h2 style="font-size:42px;">Fixing the leak was a week.<br>Keeping it closed is a <span class="em">habit</span>.</h2>
+<p class="lead mt16" style="max-width:520px;">90 seconds a Monday, a map on the 1st, and someone watching who's seen a hundred accounts drift.</p>
 <div class="btn-row mt24" style="justify-content:center;"><a class="btn btn-primary" href="/api/os-checkout">Join Retention OS</a></div>
+<p class="mt24" style="font-family:var(--mono);font-size:12px;color:#9A9182;">P.S. Not sure? Don't join. Re-run your score free in 60 days. If your numbers held without a watcher, you didn't need me. If they slipped, you'll know exactly what the $149 is for.</p>
 </div>
 </section>
 
