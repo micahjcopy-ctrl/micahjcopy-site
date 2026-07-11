@@ -11,7 +11,7 @@ module.exports = async (req, res) => {
   const session = await s.checkout.sessions.create({
     mode: "subscription",
     line_items: [{ price, quantity: 1 }],
-    success_url: `${SITE_URL}/os?joined=1`,
+    success_url: `${SITE_URL}/members?joined=1`,
     cancel_url: `${SITE_URL}/os`,
   });
   res.statusCode = 303;

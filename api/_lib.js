@@ -159,8 +159,61 @@ ${sign}` },
   return emails[day] || null;
 }
 
+// ---- Fix Templates pack ($27 bump) — copy skeletons per flow, NHB structures
+const TEMPLATES = [
+  { flow: "Cart abandon", msgs: [
+    { label: "Email 1 · ~1 hour after abandon", subject: "You left something behind (no rush)",
+      body: `Hey [FIRST NAME],\n\nYour cart's still here: [PRODUCT NAME + IMAGE].\n\nNo countdown timer, no pressure. Carts get abandoned for good reasons: the kid yelled, the tab got lost, the card was in the other room. This is just the way back.\n\n[BUTTON: Finish checking out]\n\nQuestion about [PRODUCT]? Reply to this email. A human reads these.` },
+    { label: "Email 2 · ~24 hours · handle the real objection", subject: "The thing people ask before buying [PRODUCT]",
+      body: `The #1 question we get before someone buys [PRODUCT]:\n\n"[TOP OBJECTION, e.g. Will this work if I've tried X?]"\n\nFair question. [2–3 sentence answer with proof: study, guarantee, or spec.]\n\n[CUSTOMER QUOTE that answers the same objection]\n\nYour cart's saved: [BUTTON: Take another look]` },
+    { label: "Email 3 · ~48 hours · close with a reason", subject: "Your cart expires tonight (here's a nudge)",
+      body: `Last note about this, promise.\n\nYour cart with [PRODUCT] clears out tonight. If it wasn't for you, ignore this and we're good.\n\nIf it was: [INCENTIVE: free shipping / small % / bonus item] is applied for the next [X] hours.\n\n[BUTTON: Claim it]\n\nP.S. If something specific stopped you, reply and tell me. Genuinely useful for us, and sometimes we can fix it on the spot.` } ]},
+  { flow: "Welcome series (non-buyer)", msgs: [
+    { label: "Email 1 · within 5 minutes · deliver the promise", subject: "Here's your [SIGNUP PROMISE] (open me)",
+      body: `Welcome in. Here's what you signed up for: [DELIVER THE THING: code / guide / access].\n\n[BUTTON if code: Use my [X]% code]\n\nOne thing worth knowing about us: [ONE-SENTENCE BRAND POV, the belief you hold that competitors don't].\n\nOver the next few days I'll send you the two things new people actually care about: why this works, and proof that it does. That's it.` },
+    { label: "Email 2 · day 2 · founder story + belief shift", subject: "Why [FOUNDER] built this in the first place",
+      body: `Most [CATEGORY] products assume [OLD BELIEF the market holds].\n\nWe started [BRAND] because [WHAT YOU SAW that contradicted it].\n\n[3-4 sentence founder story: the moment it clicked. Specific detail beats polish.]\n\nThat's why [PRODUCT] is built [THE DIFFERENCE]. If you believe [OLD BELIEF], nothing we sell will make sense. If you're open to [NEW BELIEF], start here: [BUTTON: bestseller]` },
+    { label: "Email 3 · day 4 · proof + first-purchase nudge", subject: "[NUMBER] people can't all be being polite",
+      body: `[STRONGEST REVIEW, verbatim, typos and all.]\n\nAnd [2 more short quotes hitting different objections].\n\nYour welcome code [CODE] is still live for [X] days. Most first-timers start with [PRODUCT + WHY].\n\n[BUTTON: Start with the favorite]` } ]},
+  { flow: "Checkout abandon", msgs: [
+    { label: "Email 1 · ~30 min · friction killer", subject: "Did something break? (your order didn't go through)",
+      body: `You were one step from done and the order didn't complete. If our checkout hiccuped, sorry — it happens, and your cart is saved.\n\nThe three usual suspects, answered:\n· Shipping: [POLICY, plainly]\n· Returns: [POLICY, plainly]\n· Security: [TRUST LINE: processor, guarantee]\n\n[BUTTON: Pick up where you left off]` },
+    { label: "SMS · ~3 hours", subject: "(SMS)",
+      body: `[BRAND]: your order's sitting at 99% complete. Cart's saved here: [LINK]. Reply HELP if checkout gave you trouble and a human will sort it.` } ]},
+  { flow: "Post-purchase", msgs: [
+    { label: "Email 1 · immediately · celebrate (not the receipt)", subject: "Good call. Here's what happens next",
+      body: `Order confirmed, and honestly: good pick. [ONE SENTENCE on why PRODUCT is the right call.]\n\nWhat happens now:\n1. Ships in [X days], tracking to this inbox\n2. While you wait: [LINK to how-to-use / prep content]\n3. Questions: reply here, a person answers\n\nNothing to do. Just wanted the first email after your money to be a human one.` },
+    { label: "Email 2 · arrival day · consumption", subject: "It's there. Do this first",
+      body: `Your [PRODUCT] should be in your hands. Before anything else:\n\n[STEP 1 for best first result]\n[STEP 2]\n[WHAT TO EXPECT and when: honest timeline]\n\nMost people notice [FIRST WIN] within [TIMEFRAME]. If you don't, reply. That's usually a usage thing and it's fixable in one message.` },
+    { label: "Email 3 · day ~10 · review ask + next problem", subject: "Quick favor (and a heads-up)",
+      body: `Two things.\n\nFirst: how's the [PRODUCT] going? If it's earned it, a review helps more than you'd think: [REVIEW LINK]. Takes 60 seconds.\n\nSecond, the heads-up: people who like [PRODUCT] usually hit [NEXT PROBLEM] next. That's what [NEXT PRODUCT] is for. Not urgent. Just so you know it exists when you're ready: [LINK]` } ]},
+  { flow: "Winback (lapsed buyers)", msgs: [
+    { label: "Email 1 · day 45–60 · no discount", subject: "Since you've been gone (what's new at [BRAND])",
+      body: `It's been a couple of months since your [LAST PRODUCT]. No guilt, just a genuine update:\n\n[WHAT'S NEW: product, improvement, or result other customers hit]\n\nIf you're due for a restock: [BUTTON: reorder in one click]\n\nIf [PRODUCT] didn't land for you, reply and say so. I'd rather fix it than email you forever.` },
+    { label: "Email 2 · +1 week · incentive close", subject: "This one's just for past customers",
+      body: `Short version: [INCENTIVE] on your next order, because you've bought before and that matters here.\n\nCode: [CODE] · runs through [DATE].\n\n[BUTTON: Use it]\n\nAfter this I'll assume the timing's wrong and quiet down. You can always come back. The door doesn't lock.` } ]},
+  { flow: "Sunset (90-day non-openers)", msgs: [
+    { label: "Email 1 · the honest ask", subject: "Should I stop emailing you?",
+      body: `You haven't opened anything from us in about 3 months. Two possibilities:\n\n1. Wrong timing, keep me around → [LINK: one click, stay subscribed]\n2. Not for you anymore → do nothing and I'll stop after one more note\n\nNo trick. Sending email nobody wants hurts us both.` },
+    { label: "Email 2 · +5 days · last one", subject: "Last email (unless you say otherwise)",
+      body: `This is the last one unless you click: [LINK: keep me subscribed].\n\nIf we don't hear from you, you're off the list in 48 hours. If you ever want back in, [SIGNUP PAGE] works anytime.\n\nThanks for reading as long as you did.` } ]},
+];
+
+function renderTemplatesHtml() {
+  return TEMPLATES.map((t) => `
+    <details style="border:1px solid #DED6C7;border-radius:12px;background:#fff;padding:16px 20px;margin-top:12px;">
+      <summary style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:17px;cursor:pointer;color:#17140F;">${t.flow} · ${t.msgs.length} templates</summary>
+      ${t.msgs.map((m) => `
+        <div style="border-top:1px solid #DED6C7;margin-top:14px;padding-top:14px;">
+          <div style="font-family:'Space Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:#7A736A;">${m.label}</div>
+          <div style="font-size:14px;margin-top:6px;"><b>Subject:</b> ${m.subject}</div>
+          <pre style="white-space:pre-wrap;font-family:'Inter',sans-serif;font-size:14px;color:#3f3a33;background:#F4EFE4;border-radius:8px;padding:14px;margin-top:8px;">${m.body}</pre>
+        </div>`).join("")}
+    </details>`).join("");
+}
+
 // ---- server-rendered report page (paid) — matches Editorial Oxblood
-function renderReportHtml(inputs) {
+function renderReportHtml(inputs, withTemplates) {
   const r = computeReport(inputs);
   const fixes = r.fixes.map((f, i) => `
     <div style="border:1px solid #DED6C7;border-radius:12px;padding:18px 20px;margin-top:14px;background:#F4EFE4;">
@@ -180,6 +233,11 @@ function renderReportHtml(inputs) {
 <div style="font-family:'Space Mono',monospace;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#7A736A;margin-bottom:8px;">Ranked fix list</div>
 ${fixes}
 </div>
+${withTemplates ? `<div style="background:#fff;border:1px solid #DED6C7;border-radius:12px;padding:26px;margin-top:20px;">
+<div style="font-family:'Space Mono',monospace;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#7A736A;margin-bottom:8px;">Fix Templates · included with your order</div>
+<p style="font-size:14px;color:#7A736A;margin:0 0 6px;">Copy skeletons for every flow. Fill the [BRACKETS], keep the structure. One belief per email, soft close, reply invitations on.</p>
+${renderTemplatesHtml()}
+</div>` : ""}
 <div style="background:#fff;border:1px solid #DED6C7;border-radius:12px;padding:26px;margin-top:20px;">
 <div style="font-family:'Space Mono',monospace;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#7A736A;margin-bottom:8px;">Implementation Week</div>
 <p style="font-size:15px;color:#3f3a33;margin:0;">One fix per day is heading to your inbox for the next 7 days. Quick wins first, templates included. Reply <b>DONE</b> to any of them and I'll sanity-check your build personally. Want your fixes sequenced on a free 20-minute call? <a href="${SITE_URL}/book" style="color:#7C2A2A;">Book the Implementation Plan</a>.</p>

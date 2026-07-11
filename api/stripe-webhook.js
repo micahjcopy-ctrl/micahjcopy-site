@@ -20,7 +20,7 @@ module.exports = async (req, res) => {
     const session = event.data.object;
     const reportId = session.metadata && session.metadata.report_id;
     if (reportId) {
-      await db.from("reports").update({ paid: true, paid_at: new Date().toISOString() }).eq("id", reportId);
+      await db.from("reports").update({ paid: true, paid_at: new Date().toISOString(), templates: session.metadata && session.metadata.with_templates === "true" }).eq("id", reportId);
       const { data: rep } = await db.from("reports").select("email, inputs").eq("id", reportId).single();
       const r = resend();
       const to = session.customer_email || (rep && rep.email);

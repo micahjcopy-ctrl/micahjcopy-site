@@ -6,10 +6,10 @@ module.exports = async (req, res) => {
   const db = supabase();
   res.setHeader("Content-Type", "text/html; charset=utf-8");
   if (!db || !id) return res.status(200).send(page("Almost there", "Report system is being switched on. Your unlock link will arrive by email."));
-  const { data } = await db.from("reports").select("inputs, paid").eq("id", id).single();
+  const { data } = await db.from("reports").select("*").eq("id", id).single();
   if (!data) return res.status(404).send(page("Report not found", "Check the link in your email, or re-run your free score at micahjacobi.me/score."));
   if (!data.paid) return res.status(200).send(page("Payment processing…", "If you just checked out, refresh in a few seconds. Otherwise your unlock link is in your email."));
-  return res.status(200).send(renderReportHtml(data.inputs));
+  return res.status(200).send(renderReportHtml(data.inputs, !!data.templates));
 };
 
 function page(h, p) {
