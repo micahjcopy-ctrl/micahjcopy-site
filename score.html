@@ -88,7 +88,7 @@ button.btn + button.btn{margin-top:10px;}
 </div></div>
 <div class="lr-field" style="margin-top:18px;"><label>Where do we send your score + your #1 fix?</label><input id="email" type="email" placeholder="you@brand.com"></div>
 <button class="btn btn-primary mt24" onclick="runScore()">Show my Retention Score →</button>
-<p class="mt16" style="font-family:var(--mono);font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;">Free. No call, no pitch deck, no "strategy session." Benchmarks footnoted.</p>
+<p class="mt16" style="font-family:var(--mono);font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;">Free. No call, no pitch deck, no "strategy session." Benchmarks footnoted. Setup guide included.</p>
 </div>
 </div>
 </section>
@@ -120,6 +120,12 @@ button.btn + button.btn{margin-top:10px;}
 <div class="lr-head"><h3 style="font-family:var(--fr);font-size:26px;">Your #1 fix</h3><span class="lr-tag free">Free · full steps</span></div>
 <div class="lr-fix" id="r-fix1"></div>
 <p class="pull" style="font-size:19px;margin:22px 0 0;padding:16px 0;">This isn't a teaser. Implement this one fix this week and measure it. If the mechanism works on fix #1, you'll know exactly what the rest are worth.</p>
+</div>
+
+<div class="card mt24" style="max-width:760px;">
+<div class="lr-head"><h3 style="font-family:var(--fr);font-size:26px;">Your Fast-Start setup guide</h3><span class="lr-tag free" id="sg-platform-tag">Free</span></div>
+<p class="mt16" style="font-size:15px;color:var(--muted);">Do this before you build anything. Fixes fail in the plumbing, not the copy, and this is the 15-minute pre-flight that makes fix #1 measurable.</p>
+<div id="sg-body"></div>
 </div>
 
 <div class="card mt24" style="max-width:760px;">
@@ -200,6 +206,7 @@ function runScore(){
   const lockedTotal=r.fixes.slice(1).reduce((a,f)=>a+f.dollars,0);
   $('r-locktitle').textContent='Fixes #2–#'+r.fixes.length+' · worth ≈ '+fmt(lockedTotal)+'/mo';
   $('r-locked').innerHTML=r.fixes.slice(1).map(f=>'<div class="lr-kv"><span>'+f.name+'</span><b>'+fmt(f.dollars)+'/mo</b></div>').join('')||'<div class="lr-kv"><span>Optimization plan</span><b>—</b></div>';
+  renderGuide($('platform').value);
   $('step-form').style.display='none'; $('step-result').style.display='block'; window.scrollTo(0,0);
 }
 
@@ -215,6 +222,24 @@ async function checkout(withTemplates){
     $('checkout-note').style.display='block';
     $('checkout-note').textContent='Checkout is being switched on. Email micahjcopy@gmail.com with "LEAK REPORT" and I\'ll unlock your report manually today.';
   }
+}
+const GUIDES={
+ Klaviyo:[
+  {t:'Step 1 · Lock your baseline (2 min)',s:['Analytics → Dashboards: screenshot trailing-30-day flow revenue and campaign revenue.','Note your list size and the date. This is the "before" you measure fix #1 against on day 14. No baseline, no proof.']},
+  {t:'Step 2 · The plumbing pre-flight (10 min)',s:['Flows tab → open your biggest flow → Analytics. Compare Entries to Recipients. Under 80%? Open the flow filters and trigger filters. The culprit is usually one old filter.','Check Smart Sending on cart/checkout flows: a 16-hour Smart Sending window silently skips hot buyers who got any other email that day.','Confirm buyer suppression: cart and checkout flows need a "Placed Order zero times since starting this flow" filter, or you will discount people who already bought.']},
+  {t:'Step 3 · Trust your numbers (3 min)',s:['Send yourself a preview from any flow email. Click every link. Confirm the click registers in Klaviyo and your UTMs show in analytics.','Settings → check your conversion attribution window and write it down. Never compare numbers across a window change.']}],
+ Attentive:[
+  {t:'Step 1 · Lock your baseline (2 min)',s:['Analytics → screenshot trailing-30-day journey revenue and campaign revenue, email and SMS split.','Note list sizes (email + SMS) and the date. This is the "before" for your day-14 read.']},
+  {t:'Step 2 · The plumbing pre-flight (10 min)',s:['Journeys → open your biggest journey. Compare Entered to Sent. Under 80%? Check channel eligibility first: email legs only reach email-subscribed users, and most Attentive lists skew SMS-only.','Check quiet hours in settings: cart and checkout messages queued into quiet hours often expire instead of sending late.','Confirm converted-user exit rules on cart/checkout journeys so buyers stop getting abandon messages.']},
+  {t:'Step 3 · Trust your numbers (3 min)',s:['Test-send from a journey, click every link, confirm clicks record. Attentive click tracking breaks quietly after domain changes.','Note your attribution window setting and keep it fixed while you measure.']}],
+ Other:[
+  {t:'Step 1 · Lock your baseline (2 min)',s:['Screenshot trailing-30-day automation revenue and campaign revenue, plus list size and date.','This is the "before" you measure fix #1 against on day 14.']},
+  {t:'Step 2 · The plumbing pre-flight (10 min)',s:['Open your biggest automation and compare entries to messages sent. Under 80% means eligibility filters, quiet hours, or channel rules are eating your volume.','Confirm buyers are suppressed from abandon flows in real time.']},
+  {t:'Step 3 · Trust your numbers (3 min)',s:['Test-send, click every link, confirm tracking records.','Write down your attribution window and keep it fixed while you measure.']}]};
+function renderGuide(platform){
+  const g=GUIDES[platform]||GUIDES.Other;
+  $('sg-platform-tag').textContent='Free · '+(GUIDES[platform]?platform:'your platform');
+  $('sg-body').innerHTML=g.map(sec=>'<div class="lr-fix"><h3 style="font-size:16px;">'+sec.t+'</h3><ol>'+sec.s.map(x=>'<li>'+x+'</li>').join('')+'</ol></div>').join('');
 }
 function resetForm(){$('step-result').style.display='none';$('step-form').style.display='block';window.scrollTo(0,0);}
 document.querySelectorAll('.nav-links a').forEach(a=>a.addEventListener('click',()=>document.getElementById('nav').classList.remove('open')));
