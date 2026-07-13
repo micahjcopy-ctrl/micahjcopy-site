@@ -1,3 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Leave a review — Micah Jacobi</title>
+<meta name="description" content="Share a few words about working with Micah Jacobi. Answer four short questions and the page turns them into a testimonial you can edit before you send it.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  /* ---- review form specifics (built on the Oxblood system) ---- */
+  .form-card{background:var(--card);border:1px solid var(--line);border-radius:18px;
+    padding:34px;max-width:760px;margin:0 auto;box-shadow:0 24px 54px rgba(23,20,15,.07);}
+  .fieldset{border:none;padding:0;margin:0 0 30px;}
+  .fieldset:last-of-type{margin-bottom:0;}
+  .fieldset > legend{font-family:var(--mono);font-weight:700;font-size:12px;text-transform:uppercase;
+    letter-spacing:.08em;color:var(--amber-deep);padding:0;margin-bottom:4px;display:flex;align-items:center;gap:10px;}
+  .fieldset > legend::before{content:"";width:22px;height:2px;background:var(--amber);display:inline-block;}
+  .legend-sub{font-size:14px;color:var(--muted);margin:0 0 18px;}
+  .field{margin-bottom:18px;}
+  .field:last-child{margin-bottom:0;}
+  .field label{display:block;font-family:var(--grotesk);font-weight:500;font-size:16px;color:var(--ink);margin-bottom:4px;}
+  .field .hint{font-size:13px;color:var(--muted);margin:0 0 8px;line-height:1.45;}
+  .field .req{color:var(--amber);}
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  input[type=text], input[type=email], input[type=url], textarea{
+    width:100%;font-family:var(--inter);font-size:16px;color:var(--ink);background:#FBFAF6;
+    border:1px solid var(--line);border-radius:9px;padding:12px 14px;transition:border-color .15s, box-shadow .15s;}
+  input:focus, textarea:focus{outline:none;border-color:var(--amber);box-shadow:0 0 0 3px rgba(124,42,42,.12);}
+  textarea{resize:vertical;min-height:104px;line-height:1.55;}
+  textarea.tall{min-height:132px;}
+  ::placeholder{color:#B4AEA2;}
+  /* star rating */
+  .stars-input{display:inline-flex;flex-direction:row-reverse;gap:4px;}
+  .stars-input input{position:absolute;opacity:0;width:0;height:0;}
+  .stars-input label{cursor:pointer;font-size:30px;line-height:1;color:#D8D2C5;transition:color .12s;margin:0;padding:0 1px;}
+  .stars-input label:hover, .stars-input label:hover ~ label,
+  .stars-input input:checked ~ label{color:var(--amber);}
+  /* assembled preview */
+  .preview-wrap{margin-top:24px;border-top:1px dashed var(--line);padding-top:24px;display:none;}
+  .preview-wrap.show{display:block;}
+  .preview-wrap .k{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--amber-deep);font-weight:700;margin-bottom:6px;}
+  .preview-wrap .note{font-size:13px;color:var(--muted);margin:8px 0 0;}
+  .consent{display:flex;gap:12px;align-items:flex-start;background:#FBFAF6;border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-top:24px;}
+  .consent input{margin-top:3px;flex:0 0 auto;width:18px;height:18px;accent-color:var(--amber);}
+  .consent label{font-size:14px;color:var(--ink);line-height:1.5;margin:0;font-family:var(--inter);font-weight:400;}
+  .submit-row{margin-top:26px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+  .msg{font-family:var(--mono);font-size:13px;}
+  .msg.err{color:var(--amber-deep);}
+  .btn[disabled]{opacity:.55;cursor:not-allowed;}
+  /* success panel */
+  .thanks{display:none;text-align:center;max-width:640px;margin:0 auto;}
+  .thanks.show{display:block;}
+  .thanks .mark{width:64px;height:64px;border-radius:50%;background:var(--amber-tint);color:var(--amber-deep);
+    display:flex;align-items:center;justify-content:center;font-size:30px;margin:0 auto 22px;}
+  @media(max-width:640px){ .form-card{padding:24px 20px;} .grid-2{grid-template-columns:1fr;} }
+</style>
+<link rel="canonical" href="https://micahjacobi.me/review">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Micah Jacobi">
+<meta property="og:title" content="Leave a review — Micah Jacobi">
+<meta property="og:description" content="Answer four short questions about working with me. You'll see the testimonial before it's sent, and you can edit every word.">
+<meta property="og:url" content="https://micahjacobi.me/review">
+<meta property="og:image" content="https://micahjacobi.me/headshot-bw.jpg">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FZ1C922BZV"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-FZ1C922BZV');</script>
+</head>
+<body>
+
+<header class="site-header"><div class="wrap"><nav class="nav">
+  <a class="brand" href="index.html">Micah Jacobi<span class="dot">.</span></a>
+  <button class="nav-toggle" aria-label="Menu" onclick="document.getElementById('nav').classList.toggle('open')">☰</button>
+  <div class="nav-links" id="nav">
+    <a href="services.html">Services</a>
+    <a href="about.html">About</a>
+    <a href="blog.html">Blog</a>
+    <a class="btn btn-primary" href="book.html">Grab a time</a>
+  </div>
+</nav></div></header>
+
+<!-- HERO (dark bun) -->
+<section class="hero hero-dark band-dark">
+  <div class="wrap">
+    <span class="eyebrow">Leave a review · Takes about two minutes</span>
+    <h1 class="hl">Mind sharing a few <span class="em">words</span>?</h1>
+    <p class="lead mt24">If we've worked together and it went well, a short review helps more than you'd think. Answer four quick questions below and the page will stitch your answers into a clean testimonial. You'll see it before anything is sent, and you can change every word. Nothing goes on the site until you say it can, and I read each one myself.</p>
+    <div class="coordstrip">
+      <span>4 QUESTIONS · ~2 MINUTES</span>
+      <span>YOU APPROVE THE WORDING</span>
+      <span>NOTHING PUBLIC WITHOUT YOUR OK</span>
+    </div>
+  </div>
+</section>
+<div class="fade"></div>
+
+<!-- FORM -->
+<section>
+  <div class="wrap">
+
+    <!-- SUCCESS STATE -->
+    <div class="thanks" id="thanks">
+      <div class="mark">✓</div>
+      <h2>Thank you, honestly.</h2>
+      <p class="lead mt16">That's in front of me now. I appreciate you taking the time to write it, it means a lot and it genuinely helps. If I want to feature it anywhere, I'll only use exactly what you approved.</p>
+      <div class="btn-row center mt24" style="justify-content:center;"><a class="btn btn-primary" href="index.html">Back to the site</a></div>
+    </div>
+
+    <!-- THE FORM -->
+    <form class="form-card" id="reviewForm" novalidate>
+
+      <fieldset class="fieldset">
+        <legend>A little about you</legend>
+        <p class="legend-sub">So I know who to credit. Only your name is required.</p>
+        <div class="grid-2">
+          <div class="field">
+            <label for="name">Your name <span class="req">*</span></label>
+            <input type="text" id="name" name="name" autocomplete="name" placeholder="First and last" required>
+          </div>
+          <div class="field">
+            <label for="title">What you do</label>
+            <input type="text" id="title" name="title" placeholder="e.g. Founder, Marketing Director">
+          </div>
+          <div class="field">
+            <label for="company">Company</label>
+            <input type="text" id="company" name="company" placeholder="e.g. Acme Co.">
+          </div>
+          <div class="field">
+            <label for="website">Website <span style="color:var(--muted);font-weight:400;">(optional)</span></label>
+            <input type="url" id="website" name="website" placeholder="https://">
+          </div>
+        </div>
+        <div class="field" style="margin-top:16px;">
+          <label for="email">Email <span style="color:var(--muted);font-weight:400;">(optional, never published)</span></label>
+          <p class="hint">Just so I can say thanks. It stays private.</p>
+          <input type="email" id="email" name="email" autocomplete="email" placeholder="you@company.com">
+        </div>
+        <div class="field" style="margin-top:16px;">
+          <label>How would you rate the experience?</label>
+          <div class="stars-input" role="radiogroup" aria-label="Star rating">
+            <input type="radio" id="s5" name="rating" value="5"><label for="s5" title="5 stars">★</label>
+            <input type="radio" id="s4" name="rating" value="4"><label for="s4" title="4 stars">★</label>
+            <input type="radio" id="s3" name="rating" value="3"><label for="s3" title="3 stars">★</label>
+            <input type="radio" id="s2" name="rating" value="2"><label for="s2" title="2 stars">★</label>
+            <input type="radio" id="s1" name="rating" value="1"><label for="s1" title="1 star">★</label>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="fieldset">
+        <legend>The questions</legend>
+        <p class="legend-sub">A sentence or two each is plenty. Write like you talk.</p>
+
+        <div class="field">
+          <label for="relationship">1. What was the nature of our working relationship?</label>
+          <p class="hint">How we came to work together, what the project was, and the role I played for you or your team.</p>
+          <textarea id="relationship" name="relationship" placeholder="We started working together when…"></textarea>
+        </div>
+
+        <div class="field">
+          <label for="experience">2. What was your experience like working with me?</label>
+          <p class="hint">Think responsiveness, adaptability, and clarity, how the day-to-day actually felt.</p>
+          <textarea id="experience" name="experience" placeholder="Working with Micah was…"></textarea>
+        </div>
+
+        <div class="field">
+          <label for="quality">3. What was the quality of the work like?</label>
+          <p class="hint">Did it meet your expectations and solve the problem you set out to solve?</p>
+          <textarea id="quality" name="quality" placeholder="The work itself…"></textarea>
+        </div>
+
+        <div class="field">
+          <label for="recommend">4. What would you say to someone considering working with me?</label>
+          <p class="hint">If a friend or colleague asked whether they should hire me, what would you tell them?</p>
+          <textarea id="recommend" name="recommend" placeholder="If you're on the fence…"></textarea>
+        </div>
+
+        <div class="btn-row" style="margin-top:6px;">
+          <button type="button" class="btn btn-ghost" id="assembleBtn">Preview my testimonial →</button>
+        </div>
+
+        <div class="preview-wrap" id="previewWrap">
+          <div class="k">Your testimonial, in your words</div>
+          <textarea id="testimonial" name="testimonial" class="tall" placeholder="Your answers will appear here, stitched together. Edit anything you like."></textarea>
+          <p class="note">Edit this freely. This is exactly what I'd feature, word for word. Trim it, reorder it, or rewrite it however sounds like you.</p>
+        </div>
+      </fieldset>
+
+      <div class="consent">
+        <input type="checkbox" id="consent" name="consent" checked>
+        <label for="consent">You can use my words, first name, title, and company on your website and marketing. Uncheck this if you'd rather I keep it private or check with you first.</label>
+      </div>
+
+      <div class="submit-row">
+        <button type="submit" class="btn btn-primary" id="submitBtn">Send my review</button>
+        <span class="msg" id="msg"></span>
+      </div>
+    </form>
+
+  </div>
+</section>
+
+<footer class="site-footer"><div class="wrap">
+  <div class="foot-grid">
+    <div>
+      <div class="foot-brand">Micah Jacobi<span class="dot">.</span></div>
+      <p style="color:#9A968C;max-width:280px;margin-top:10px;font-size:15px;">Marketing built to make you money. Diagnosis, strategy, and the systems that turn traffic into buyers.</p>
+    </div>
+    <div class="foot-links">
+      <div class="foot-col"><b>Services</b><a href="seo.html">SEO</a><a href="website-design.html">Website Design</a><a href="email-sms.html">Email &amp; SMS</a><a href="media-buying.html">Media Buying</a></div>
+      <div class="foot-col"><b>Company</b><a href="about.html">About</a><a href="blog.html">Blog</a><a href="services.html">Services</a></div>
+      <div class="foot-col"><b>Get in touch</b><a href="book.html">Book a call</a><a href="mailto:micahjcopy@gmail.com">Email</a></div>
+    </div>
+  </div>
+  <div class="foot-bottom"><span>© 2026 Micah Jacobi. All rights reserved.</span><span>Marketing specialist</span></div>
+</div></footer>
+
+<script>
+document.querySelectorAll('.nav-links a').forEach(a=>a.addEventListener('click',()=>document.getElementById('nav').classList.remove('open')));
+
+(function(){
+  var form = document.getElementById('reviewForm');
+  var msg = document.getElementById('msg');
+  var previewWrap = document.getElementById('previewWrap');
+  var testimonial = document.getElementById('testimonial');
+  var assembleBtn = document.getElementById('assembleBtn');
+  var submitBtn = document.getElementById('submitBtn');
+  var edited = false;
+
+  function val(id){ return (document.getElementById(id).value || '').trim(); }
+
+  // Stitch the answers into a first-draft quote. No rewriting — their words, sensibly ordered.
+  function assemble(){
+    var parts = [];
+    ['experience','quality','recommend','relationship'].forEach(function(id){
+      var t = val(id);
+      if(t){ if(!/[.!?]$/.test(t)) t += '.'; parts.push(t); }
+    });
+    return parts.join(' ');
+  }
+
+  function showPreview(){
+    previewWrap.classList.add('show');
+    if(!edited || !testimonial.value.trim()){ testimonial.value = assemble(); }
+    testimonial.focus();
+  }
+
+  assembleBtn.addEventListener('click', showPreview);
+  testimonial.addEventListener('input', function(){ edited = true; });
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    msg.className = 'msg'; msg.textContent = '';
+
+    var name = val('name');
+    if(!name){ msg.className='msg err'; msg.textContent='Please add your name.'; document.getElementById('name').focus(); return; }
+
+    // If they never opened the preview, build it now so we always send a quote.
+    if(!testimonial.value.trim()){ testimonial.value = assemble(); }
+    var anyAnswer = val('relationship')||val('experience')||val('quality')||val('recommend')||testimonial.value.trim();
+    if(!anyAnswer){ msg.className='msg err'; msg.textContent='Add a few words to at least one question.'; return; }
+
+    var rating = (document.querySelector('input[name=rating]:checked')||{}).value || '';
+    var payload = {
+      name:name, title:val('title'), company:val('company'), website:val('website'), email:val('email'),
+      rating:rating, relationship:val('relationship'), experience:val('experience'),
+      quality:val('quality'), recommend:val('recommend'),
+      testimonial:testimonial.value.trim(), consent:document.getElementById('consent').checked
+    };
+
+    submitBtn.disabled = true; submitBtn.textContent = 'Sending…';
+
+    fetch('/api/reviews', {
+      method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)
+    }).then(function(r){ return r.ok ? r.json() : Promise.reject(r); })
+      .then(function(){
+        try{ gtag('event','review_submitted'); }catch(e){}
+        form.style.display='none';
+        document.getElementById('thanks').classList.add('show');
+        window.scrollTo({top:0, behavior:'smooth'});
+      })
+      .catch(function(){
+        submitBtn.disabled=false; submitBtn.textContent='Send my review';
+        var body = encodeURIComponent(
+          'Name: '+payload.name+'\nTitle: '+payload.title+'\nCompany: '+payload.company+
+          '\nWebsite: '+payload.website+'\nRating: '+payload.rating+'\nConsent to publish: '+payload.consent+
+          '\n\nTestimonial:\n'+payload.testimonial+
+          '\n\n--- full answers ---\n1. Relationship: '+payload.relationship+'\n2. Experience: '+payload.experience+
+          '\n3. Quality: '+payload.quality+'\n4. Recommend: '+payload.recommend
+        );
+        msg.className='msg err';
+        msg.innerHTML = 'Something hiccuped on my end. <a class="inline" href="mailto:micahjcopy@gmail.com?subject=Review%20for%20Micah&body='+body+'">Click here to send it by email instead</a> and it\'ll come straight to me.';
+      });
+  });
+})();
+</script>
+</body>
+</html>
 TEST_MARKER_123
 second line<!DOCTYPE html>
 <html lang="en">
