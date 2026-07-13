@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reviews dashboard — Micah Jacobi</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .admin-head{background:var(--dark);color:var(--inverse);padding:26px 0;}
+  .admin-head .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+  .admin-head h1{font-family:var(--fr);font-weight:500;font-size:30px;color:var(--inverse);}
+  .admin-head .sub{font-family:var(--mono);font-size:12px;color:#9A9182;text-transform:uppercase;letter-spacing:.06em;margin-top:4px;}
+  .gate{max-width:440px;margin:70px auto;text-align:center;}
+  .gate input{width:100%;font-family:var(--mono);font-size:15px;padding:13px 15px;border:1px solid var(--line);border-radius:9px;background:#FBFAF6;margin:14px 0;}
+  .gate input:focus{outline:none;border-color:var(--amber);box-shadow:0 0 0 3px rgba(124,42,42,.12);}
+  .toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:26px 0 6px;}
+  .filter{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.05em;border:1px solid var(--line);
+    background:var(--card);color:var(--muted);border-radius:999px;padding:8px 15px;cursor:pointer;transition:.12s;}
+  .filter.active{border-color:var(--amber);background:var(--amber-tint);color:var(--amber-deep);font-weight:700;}
+  .count{font-family:var(--mono);font-size:12px;color:var(--muted);margin-left:auto;}
+  .rev{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px;margin-bottom:18px;}
+  .rev.featured{border-color:var(--amber);box-shadow:0 0 0 2px var(--amber-tint);}
+  .rev.archived{opacity:.55;}
+  .rev-top{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:flex-start;}
+  .rev-who b{font-family:var(--grotesk);font-size:18px;font-weight:600;display:block;}
+  .rev-who .meta{font-family:var(--mono);font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-top:3px;}
+  .rev-who .meta a{color:var(--amber);}
+  .rev-badges{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+  .rev-stars{color:var(--amber);font-size:14px;letter-spacing:2px;}
+  .pill{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.05em;padding:4px 9px;border-radius:999px;font-weight:700;}
+  .pill.new{background:#EEF;color:#3B3BA0;}
+  .pill.approved{background:var(--amber-tint);color:var(--amber-deep);}
+  .pill.featured{background:var(--amber);color:#fff;}
+  .pill.archived{background:#EDEBE4;color:#8A867B;}
+  .quote-box{font-family:var(--grotesk);font-weight:500;font-size:17px;line-height:1.5;color:var(--ink);
+    background:#FBFAF6;border-left:3px solid var(--amber);border-radius:0 10px 10px 0;padding:16px 18px;margin:16px 0;}
+  .raw{margin:10px 0 0;}
+  .raw summary{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);cursor:pointer;}
+  .raw .qa{margin:12px 0 0;}
+  .raw .qa .q{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--amber-deep);margin-top:12px;}
+  .raw .qa .a{font-size:15px;color:#3f3a33;margin-top:2px;white-space:pre-wrap;}
+  .rev-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px;padding-top:16px;border-top:1px solid var(--line);}
+  .abtn{font-family:var(--inter);font-weight:600;font-size:13px;padding:8px 14px;border-radius:7px;border:1.5px solid var(--line);
+    background:var(--card);color:var(--ink);cursor:pointer;transition:.12s;}
+  .abtn:hover{border-color:var(--ink);}
+  .abtn.pri{background:var(--amber);color:#fff;border-color:var(--amber);}
+  .abtn.pri:hover{background:var(--amber-deep);border-color:var(--amber-deep);}
+  .abtn.on{background:var(--amber-tint);border-color:var(--amber);color:var(--amber-deep);}
+  .empty{text-align:center;color:var(--muted);font-family:var(--mono);font-size:13px;padding:60px 0;}
+  .flash{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:var(--dark);color:#fff;
+    font-family:var(--mono);font-size:12px;padding:11px 20px;border-radius:999px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:99;}
+  .flash.show{opacity:1;}
+  .notice{font-family:var(--mono);font-size:12px;color:var(--muted);background:var(--alt);border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin-top:16px;}
+</style>
+</head>
+<body>
+
+<header class="admin-head"><div class="wrap">
+  <div>
+    <h1>Reviews</h1>
+    <div class="sub">micahjacobi.me · admin</div>
+  </div>
+  <a class="btn btn-primary" href="review.html" style="background:var(--gold);color:#17140F;" target="_blank">Open the review form ↗</a>
+</div></header>
+
+<!-- TOKEN GATE -->
+<div class="wrap">
+  <div class="gate" id="gate">
+    <h2>Enter your admin token</h2>
+    <p class="mt8" style="color:var(--muted);font-size:15px;">This is the <code>REVIEWS_ADMIN_TOKEN</code> you set in Vercel. It's checked on the server; it never gets stored in the page.</p>
+    <input type="password" id="token" placeholder="admin token" autocomplete="off">
+    <button class="btn btn-primary" id="unlock" style="width:100%;">Unlock dashboard</button>
+    <p class="msg" id="gateMsg" style="font-family:var(--mono);font-size:12px;color:var(--amber-deep);margin-top:12px;"></p>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="wrap" id="board" style="display:none;padding-bottom:80px;">
+  <div class="toolbar">
+    <button class="filter active" data-f="all">All</button>
+    <button class="filter" data-f="new">New</button>
+    <button class="filter" data-f="approved">Approved</button>
+    <button class="filter" data-f="featured">Featured</button>
+    <button class="filter" data-f="archived">Archived</button>
+    <span class="count" id="count"></span>
+  </div>
+  <div class="notice">Workflow: <b>Approve</b> a review to make it usable, <b>Feature</b> the best ones (both show up on <code>/api/reviews?public=1</code>), <b>Archive</b> to hide. Use <b>Copy quote</b> for plain text or <b>Copy HTML block</b> to paste a ready-made testimonial card straight into the site.</div>
+  <div id="list" style="margin-top:22px;"></div>
+</div>
+
+<div class="flash" id="flash"></div>
+
+<script>
+(function(){
+  var TOKEN = '';
+  var reviews = [];
+  var filter = 'all';
+  var gate = document.getElementById('gate');
+  var board = document.getElementById('board');
+  var list = document.getElementById('list');
+
+  function flash(t){ var f=document.getElementById('flash'); f.textContent=t; f.classList.add('show'); setTimeout(function(){f.classList.remove('show');},1600); }
+  function esc(s){ return (s||'').replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+  function stars(n){ n=parseInt(n,10)||0; return n? '★★★★★'.slice(0,n)+'☆☆☆☆☆'.slice(0,5-n) : ''; }
+  function fmtDate(s){ if(!s) return ''; var d=new Date(s); return isNaN(d)? '' : d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); }
+
+  function api(method, body){
+    return fetch('/api/reviews', {
+      method: method,
+      headers: { 'Content-Type':'application/json', 'Authorization':'Bearer '+TOKEN },
+      body: body ? JSON.stringify(body) : undefined
+    });
+  }
+
+  function load(){
+    api('GET').then(function(r){
+      if(r.status===401){ throw new Error('unauthorized'); }
+      return r.json();
+    }).then(function(d){
+      reviews = (d && d.reviews) || [];
+      gate.style.display='none'; board.style.display='block';
+      render();
+    }).catch(function(e){
+      document.getElementById('gateMsg').textContent = (e.message==='unauthorized') ? 'That token was rejected. Check it in Vercel.' : 'Could not reach the server. Is the function deployed?';
+    });
+  }
+
+  function metaLine(rv){
+    var bits = [];
+    if(rv.title) bits.push(esc(rv.title));
+    if(rv.company) bits.push(esc(rv.company));
+    var s = bits.join(' · ');
+    if(rv.website){ var w=rv.website; if(!/^https?:/i.test(w)) w='https://'+w; s += (s?' · ':'')+'<a href="'+esc(w)+'" target="_blank" rel="noopener">site ↗</a>'; }
+    if(rv.email){ s += (s?' · ':'')+esc(rv.email); }
+    return s;
+  }
+
+  // A paste-ready testimonial card matching the site's .tcard component.
+  function tcardHTML(rv){
+    var who = esc(rv.name);
+    var sub = [rv.title, rv.company].filter(Boolean).map(esc).join(' · ');
+    var st = parseInt(rv.rating,10)||0;
+    var starLine = st ? '  <div class="stars">'+('★'.repeat(st))+'</div>\n' : '';
+    return '<div class="tcard">\n'+starLine+
+      '  <p class="quote">"'+esc(rv.testimonial)+'"</p>\n'+
+      '  <div class="who"><div class="meta"><b>'+who+'</b>'+(sub?'<span>'+sub+'</span>':'')+'</div></div>\n'+
+      '</div>';
+  }
+
+  function copy(text){
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(function(){flash('Copied');},function(){fallbackCopy(text);}); }
+    else fallbackCopy(text);
+  }
+  function fallbackCopy(text){ var ta=document.createElement('textarea'); ta.value=text; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy'); flash('Copied');}catch(e){} document.body.removeChild(ta); }
+
+  function setStatus(id, status){
+    api('PATCH', {id:id, status:status}).then(function(r){ return r.json(); }).then(function(d){
+      if(d && d.ok){ var rv = reviews.filter(function(x){return x.id===id;})[0]; if(rv) rv.status=status; render(); flash('Marked '+status); }
+      else flash('Update failed');
+    }).catch(function(){ flash('Update failed'); });
+  }
+
+  function render(){
+    var shown = reviews.filter(function(rv){ return filter==='all' ? true : (rv.status||'new')===filter; });
+    document.getElementById('count').textContent = shown.length+' of '+reviews.length+' shown';
+    if(!shown.length){ list.innerHTML = '<div class="empty">No reviews here yet.</div>'; return; }
+
+    list.innerHTML = shown.map(function(rv){
+      var status = rv.status||'new';
+      var qa = '';
+      [['Relationship',rv.relationship],['Experience',rv.experience],['Quality',rv.quality],['Recommend',rv.recommend]].forEach(function(p){
+        if(p[1]) qa += '<div class="q">'+p[0]+'</div><div class="a">'+esc(p[1])+'</div>';
+      });
+      return ''+
+      '<div class="rev '+status+'" data-id="'+esc(rv.id)+'">'+
+        '<div class="rev-top">'+
+          '<div class="rev-who"><b>'+esc(rv.name)+'</b><div class="meta">'+metaLine(rv)+'</div></div>'+
+          '<div class="rev-badges">'+
+            (rv.rating?'<span class="rev-stars">'+stars(rv.rating)+'</span>':'')+
+            '<span class="pill '+status+'">'+status+'</span>'+
+            '<span class="pill" style="background:none;color:var(--muted);">'+fmtDate(rv.created_at)+'</span>'+
+            (rv.consent?'':'<span class="pill" style="background:#fbe4e4;color:#a33;">no consent</span>')+
+          '</div>'+
+        '</div>'+
+        '<div class="quote-box">'+esc(rv.testimonial||'(no assembled quote)')+'</div>'+
+        (qa? '<details class="raw"><summary>Full answers</summary><div class="qa">'+qa+'</div></details>' : '')+
+        '<div class="rev-actions">'+
+          '<button class="abtn" data-act="copyq">Copy quote</button>'+
+          '<button class="abtn" data-act="copyh">Copy HTML block</button>'+
+          '<button class="abtn '+(status==='approved'?'on':'')+'" data-act="approved">Approve</button>'+
+          '<button class="abtn '+(status==='featured'?'on':'')+'" data-act="featured">Feature</button>'+
+          '<button class="abtn" data-act="archived">Archive</button>'+
+        '</div>'+
+      '</div>';
+    }).join('');
+  }
+
+  // event delegation
+  list.addEventListener('click', function(e){
+    var btn = e.target.closest('.abtn'); if(!btn) return;
+    var card = e.target.closest('.rev'); var id = card.getAttribute('data-id');
+    var rv = reviews.filter(function(x){return x.id===id;})[0]; if(!rv) return;
+    var act = btn.getAttribute('data-act');
+    if(act==='copyq') return copy(rv.testimonial||'');
+    if(act==='copyh') return copy(tcardHTML(rv));
+    setStatus(id, act);
+  });
+
+  Array.prototype.forEach.call(document.querySelectorAll('.filter'), function(f){
+    f.addEventListener('click', function(){
+      document.querySelectorAll('.filter').forEach(function(x){x.classList.remove('active');});
+      f.classList.add('active'); filter=f.getAttribute('data-f'); render();
+    });
+  });
+
+  function tryUnlock(){
+    TOKEN = document.getElementById('token').value.trim();
+    if(!TOKEN){ document.getElementById('gateMsg').textContent='Enter your token.'; return; }
+    document.getElementById('gateMsg').textContent='Checking…';
+    load();
+  }
+  document.getElementById('unlock').addEventListener('click', tryUnlock);
+  document.getElementById('token').addEventListener('keydown', function(e){ if(e.key==='Enter') tryUnlock(); });
+})();
+</script>
+</body>
+</html>
