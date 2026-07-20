@@ -86,11 +86,11 @@
   <div class="wrap">
     <span class="eyebrow">Leave a review · Takes about two minutes</span>
     <h1 class="hl">Mind sharing a few <span class="em">words</span>?</h1>
-    <p class="lead mt24">If we've worked together and it went well, a short review helps more than you'd think. Answer four quick questions below and the page will stitch your answers into a clean testimonial. You'll see it before anything is sent, and you can change every word. Nothing goes on the site until you say it can, and I read each one myself.</p>
+    <p class="lead mt24">If we've worked together and it went well, a short review helps more than you'd think. Answer four quick questions below and the page will stitch your answers into a clean testimonial. You'll see it before anything is sent, and you can change every word. Whether it ever shows up on the site is your call, there's a consent box at the end you can leave checked or uncheck.</p>
     <div class="coordstrip">
       <span>4 QUESTIONS · ~2 MINUTES</span>
-      <span>YOU APPROVE THE WORDING</span>
-      <span>NOTHING PUBLIC WITHOUT YOUR OK</span>
+      <span>YOU WRITE THE WORDING</span>
+      <span>YOU CHOOSE IF IT'S PUBLIC</span>
     </div>
   </div>
 </section>
@@ -202,6 +202,48 @@
   </div>
 </section>
 
+<!-- RECENT REVIEWS (live from /api/reviews — auto-shows consented reviews) -->
+<style>
+  .reviews-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:22px;margin-top:34px;}
+  .rev-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px 24px;
+    box-shadow:0 14px 34px rgba(23,20,15,.05);display:flex;flex-direction:column;gap:14px;}
+  .rev-stars{color:var(--amber);font-size:17px;letter-spacing:2px;line-height:1;}
+  .rev-stars .off{color:#D8D2C5;}
+  .rev-quote{margin:0;font-family:var(--inter);font-size:17px;line-height:1.62;color:var(--ink);}
+  .rev-quote::before{content:"\201C";}.rev-quote::after{content:"\201D";}
+  .rev-who{display:flex;flex-direction:column;gap:2px;margin-top:2px;}
+  .rev-who b{font-family:var(--grotesk);font-weight:600;font-size:15px;color:var(--ink);}
+  .rev-who span{font-family:var(--mono);font-size:12px;letter-spacing:.03em;color:var(--muted);text-transform:uppercase;}
+</style>
+<section class="band-alt" id="reviews" hidden>
+  <div class="wrap">
+    <span class="eyebrow">Recent reviews</span>
+    <h2>What others have said</h2>
+    <div class="reviews-grid" id="reviewsGrid"></div>
+  </div>
+</section>
+<script>
+(function(){
+  var sec=document.getElementById('reviews'), grid=document.getElementById('reviewsGrid');
+  if(!sec||!grid) return;
+  function esc(s){var d=document.createElement('div');d.textContent=(s==null?'':String(s));return d.innerHTML;}
+  function stars(n){n=parseInt(n,10);if(!(n>=1&&n<=5))return '';var o='';for(var i=1;i<=5;i++){o+=(i<=n?'★':'<span class="off">★</span>');}return '<div class="rev-stars" role="img" aria-label="'+n+' out of 5 stars">'+o+'</div>';}
+  fetch('/api/reviews?public=1').then(function(r){return r.ok?r.json():null;}).then(function(d){
+    if(!d||!d.reviews||!d.reviews.length)return;
+    var html='';
+    d.reviews.forEach(function(rv){
+      var quote=(rv.testimonial||'').trim();if(!quote)return;
+      var meta=[rv.title,rv.company].filter(Boolean).join(', ');
+      html+='<figure class="rev-card">'+stars(rv.rating)+
+        '<blockquote class="rev-quote">'+esc(quote)+'</blockquote>'+
+        '<figcaption class="rev-who"><b>'+esc(rv.name||'Anonymous')+'</b>'+(meta?'<span>'+esc(meta)+'</span>':'')+'</figcaption></figure>';
+    });
+    if(!html)return;
+    grid.innerHTML=html;sec.hidden=false;
+  }).catch(function(){});
+})();
+</script>
+
 <footer class="site-footer"><div class="wrap">
   <div class="foot-grid">
     <div>
@@ -282,6 +324,7 @@ document.querySelectorAll('.nav-links a').forEach(a=>a.addEventListener('click',
         window.scrollTo({top:0, behavior:'smooth'});
       })
       .catch(function(){
+        // Graceful fallback: hand them a pre-filled email so a review is never lost.
         submitBtn.disabled=false; submitBtn.textContent='Send my review';
         var body = encodeURIComponent(
           'Name: '+payload.name+'\nTitle: '+payload.title+'\nCompany: '+payload.company+
