@@ -87,11 +87,15 @@ module.exports = async function handler(req, res) {
       return res.status(200).json({ ok: true });
     }
 
-    // ----- GET ?public=1: approved reviews for the site (public) -----
+    // ----- GET ?public=1: reviews for the site (public) -----
+    // Shows every review the reviewer consented to publish, newest first.
+    // The ONLY thing hidden is anything explicitly archived from the admin
+    // dashboard (the spam/abuse escape hatch). No manual approval step.
+    // Email is never selected here, so reviewers' private emails stay private.
     if (method === 'GET' && req.query && (req.query.public === '1' || req.query.public === 'true')) {
       if (!CONFIGURED) return res.status(200).json({ ok: true, reviews: [] });
-      const q = TABLE + '?select=name,title,company,rating,testimonial,status,created_at'
-              + '&status=in.(approved,featured)&order=created_at.desc';
+      const q = TABLE + '?select=name,title,company,website,rating,testimonial,created_at'
+              + '&consent=is.true&status=neq.archived&order=created_at.desc';
       const r = await sb(q, { method: 'GET' });
       const data = r.ok ? await r.json() : [];
       res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=600');
