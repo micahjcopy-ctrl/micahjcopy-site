@@ -211,9 +211,11 @@
   .rev-stars .off{color:#D8D2C5;}
   .rev-quote{margin:0;font-family:var(--inter);font-size:17px;line-height:1.62;color:var(--ink);}
   .rev-quote::before{content:"\201C";}.rev-quote::after{content:"\201D";}
-  .rev-who{display:flex;flex-direction:column;gap:2px;margin-top:2px;}
-  .rev-who b{font-family:var(--grotesk);font-weight:600;font-size:15px;color:var(--ink);}
-  .rev-who span{font-family:var(--mono);font-size:12px;letter-spacing:.03em;color:var(--muted);text-transform:uppercase;}
+  .rev-who{display:flex;align-items:center;gap:13px;margin-top:2px;}
+  .rev-avatar{width:52px;height:52px;border-radius:50%;object-fit:cover;flex:0 0 auto;border:1px solid var(--line);}
+  .rev-id{display:flex;flex-direction:column;gap:2px;}
+  .rev-id b{font-family:var(--grotesk);font-weight:600;font-size:15px;color:var(--ink);}
+  .rev-id span{font-family:var(--mono);font-size:12px;letter-spacing:.03em;color:var(--muted);text-transform:uppercase;}
 </style>
 <section class="band-alt" id="reviews" hidden>
   <div class="wrap">
@@ -226,6 +228,8 @@
 (function(){
   var sec=document.getElementById('reviews'), grid=document.getElementById('reviewsGrid');
   if(!sec||!grid) return;
+  // Curated reviewer photos, keyed by exact name. Add a line to give any reviewer an avatar.
+  var PHOTOS={"Virgilia Virjoghe":"/reviews/virgilia.jpg"};
   function esc(s){var d=document.createElement('div');d.textContent=(s==null?'':String(s));return d.innerHTML;}
   function stars(n){n=parseInt(n,10);if(!(n>=1&&n<=5))return '';var o='';for(var i=1;i<=5;i++){o+=(i<=n?'★':'<span class="off">★</span>');}return '<div class="rev-stars" role="img" aria-label="'+n+' out of 5 stars">'+o+'</div>';}
   fetch('/api/reviews?public=1').then(function(r){return r.ok?r.json():null;}).then(function(d){
@@ -234,9 +238,11 @@
     d.reviews.forEach(function(rv){
       var quote=(rv.testimonial||'').trim();if(!quote)return;
       var meta=[rv.title,rv.company].filter(Boolean).join(', ');
+      var photo=PHOTOS[rv.name];
+      var avatar=photo?'<img class="rev-avatar" src="'+photo+'" alt="'+esc(rv.name||'')+'" loading="lazy">':'';
       html+='<figure class="rev-card">'+stars(rv.rating)+
         '<blockquote class="rev-quote">'+esc(quote)+'</blockquote>'+
-        '<figcaption class="rev-who"><b>'+esc(rv.name||'Anonymous')+'</b>'+(meta?'<span>'+esc(meta)+'</span>':'')+'</figcaption></figure>';
+        '<figcaption class="rev-who">'+avatar+'<div class="rev-id"><b>'+esc(rv.name||'Anonymous')+'</b>'+(meta?'<span>'+esc(meta)+'</span>':'')+'</div></figcaption></figure>';
     });
     if(!html)return;
     grid.innerHTML=html;sec.hidden=false;
