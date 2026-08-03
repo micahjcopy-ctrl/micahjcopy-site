@@ -667,3 +667,29 @@ a.inline{transition:color .15s ease;}
 .authorcard h3{margin:0 0 6px;font-family:var(--fr);}
 .authorcard p{font-size:15px;color:var(--muted);margin:0;}
 @media(max-width:640px){.statrow{grid-template-columns:1fr;gap:14px;} .article p{font-size:17px;}}
+
+/* ---------- Pull-quote — a testimonial fragment placed inside a section ---------- */
+.pullquote{display:flex;align-items:flex-start;gap:16px;max-width:640px;margin:30px 0 0;padding-left:22px;border-left:3px solid var(--amber);}
+.pullquote .pq-avatar{width:52px;height:52px;border-radius:50%;object-fit:cover;flex:0 0 auto;border:1px solid var(--line);}
+.pullquote .pq-body{display:flex;flex-direction:column;gap:10px;}
+.pullquote .pq-q{margin:0;font-family:var(--fr);font-weight:500;font-style:italic;font-size:21px;line-height:1.42;color:var(--ink);}
+.pullquote .pq-q::before{content:"\201C";}
+.pullquote .pq-q::after{content:"\201D";}
+.pullquote figcaption{font-family:var(--mono);font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);line-height:1.5;}
+.pullquote figcaption b{display:block;margin-bottom:3px;font-family:var(--grotesk);font-weight:600;font-size:14px;letter-spacing:0;text-transform:none;color:var(--ink);}
+.pullquote figcaption a{color:var(--muted);text-decoration:underline;text-underline-offset:2px;}
+.pullquote figcaption a:hover{color:var(--amber);}
+.pullquote.pq-center{flex-direction:column;align-items:center;text-align:center;border-left:0;padding-left:0;margin-left:auto;margin-right:auto;}
+.pullquote.pq-center .pq-body{align-items:center;}
+.pq-dark .pq-q{color:var(--inverse);}
+.pq-dark figcaption{color:#9A968C;}
+.pq-dark figcaption b{color:#FFFFFF;}
+.pq-dark figcaption a{color:#9A968C;}
+.pq-dark figcaption a:hover{color:var(--gold);}
+.pq-dark .pq-avatar{border-color:rgba(237,231,219,.25);}
+.band-dark .pullquote{border-left-color:var(--gold);}
+@media(max-width:600px){
+.pullquote{gap:13px;padding-left:16px;margin-top:24px;}
+.pullquote .pq-q{font-size:18px;}
+.pullquote .pq-avatar{width:44px;height:44px;}
+}
