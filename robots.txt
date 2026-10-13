@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /crm
+Disallow: /reviews-admin
 
 Sitemap: https://micahjacobi.me/sitemap.xml

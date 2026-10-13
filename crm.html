@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Call CRM — Micah Jacobi</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#100E0C">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="crm.css?v=1">
+</head>
+<body>
+
+<header class="topbar"><div class="wrap">
+  <a class="brand" href="/crm">Micah Jacobi<span class="dot">.</span><small>Call CRM</small></a>
+  <nav class="tabs" id="tabs" role="tablist" hidden>
+    <button class="tab" role="tab" data-view="dial" aria-selected="true">Dial <span class="n" id="n-due">0</span></button>
+    <button class="tab" role="tab" data-view="leads">Leads</button>
+    <button class="tab" role="tab" data-view="activity">Activity</button>
+    <button class="tab" role="tab" data-view="settings">Settings</button>
+  </nav>
+  <div class="who" id="who" hidden>Signed in as <b id="who-name"></b></div>
+</div></header>
+
+<main class="wrap">
+
+  <!-- LOGIN GATE -->
+  <section class="gate" id="gate">
+    <h1>Call CRM</h1>
+    <p>Enter your login token. It's checked on the server and only kept on this device.</p>
+    <input type="password" id="token" placeholder="login token" autocomplete="current-password" aria-label="Login token">
+    <button class="btn btn-primary" id="unlock" style="width:100%">Sign in</button>
+    <p class="msg" id="gateMsg"></p>
+  </section>
+
+  <!-- DIAL -->
+  <section class="view" id="view-dial" hidden>
+    <div class="stats" id="stats"></div>
+    <div class="dial">
+      <div id="leadcard"></div>
+      <aside class="rail">
+        <div class="card upnext">
+          <h3>Up next <span class="mono muted" id="upnext-count"></span></h3>
+          <div id="upnext"></div>
+        </div>
+        <div class="card">
+          <h3>Today by caller</h3>
+          <div id="byuser" class="kv"></div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- LEADS -->
+  <section class="view" id="view-leads" hidden>
+    <div class="toolbar">
+      <input type="search" id="q" placeholder="Search business, owner, phone, town…" aria-label="Search leads">
+      <button class="btn btn-ghost btn-sm" id="btn-due">Due now</button>
+      <button class="btn btn-primary btn-sm" id="btn-add">+ Lead</button>
+      <button class="btn btn-ghost btn-sm" id="btn-import">Import CSV</button>
+      <button class="btn btn-ghost btn-sm" id="btn-export">Export</button>
+    </div>
+    <div class="stagechips" id="stagechips"></div>
+    <div class="tablewrap"><table class="leads" id="leadtable"><thead></thead><tbody></tbody></table></div>
+    <div class="pager" id="pager"></div>
+  </section>
+
+  <!-- ACTIVITY -->
+  <section class="view" id="view-activity" hidden>
+    <div class="row" style="margin-bottom:6px">
+      <h2>Call log</h2>
+      <select id="act-user" style="width:auto;margin-left:auto"><option value="">Everyone</option></select>
+    </div>
+    <div id="activity"></div>
+  </section>
+
+  <!-- SETTINGS -->
+  <section class="view" id="view-settings" hidden>
+    <div class="settings">
+      <div class="card">
+        <h3>Pipeline stages</h3>
+        <p class="hint">Leads move through these. Tick "done" on stages that should drop a lead out of the dial queue.</p>
+        <div class="list" id="stages-list"></div>
+        <div class="row" style="margin-top:10px">
+          <input type="text" id="stage-new" placeholder="New stage name" class="grow">
+          <button class="btn btn-sm" id="stage-add">Add stage</button>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Columns</h3>
+        <p class="hint">Add any field you want to track per lead. It shows up in the Leads table, the lead form and CSV import/export.</p>
+        <div class="list" id="fields-list"></div>
+        <div class="grid2" style="margin-top:10px">
+          <input type="text" id="field-new" placeholder="New column name (e.g. Decision maker)">
+          <select id="field-type"><option value="text">Text</option><option value="number">Number</option><option value="date">Date</option><option value="select">Dropdown</option><option value="checkbox">Yes / no</option><option value="url">Link</option></select>
+        </div>
+        <div class="row" style="margin-top:8px"><button class="btn btn-sm" id="field-add">Add column</button></div>
+      </div>
+      <div class="card">
+        <h3>Dial queue</h3>
+        <p class="hint">How long before a missed call comes back around.</p>
+        <div class="grid2">
+          <div class="field"><label class="f" for="retry-na">No answer → retry in (days)</label><input type="number" id="retry-na" min="1" max="30"></div>
+          <div class="field"><label class="f" for="retry-vm">Voicemail → retry in (days)</label><input type="number" id="retry-vm" min="1" max="30"></div>
+        </div>
+        <div class="field"><label class="f" for="booking-url">Booking page link (shown on the Booked step)</label><input type="url" id="booking-url"></div>
+        <div class="field"><label class="f">Table columns</label><div id="columns-pick" class="chips"></div></div>
+        <div class="row"><button class="btn btn-primary" id="settings-save">Save settings</button><span class="mono muted" id="settings-msg"></span></div>
+      </div>
+      <div class="card">
+        <h3>Logins</h3>
+        <p class="hint">Each caller gets their own token so calls are logged under their name. Tokens live in Vercel, not here.</p>
+        <div class="code">Vercel → micahjcopy → Settings → Environment Variables
+CRM_USERS = hayden:&lt;long-random-string&gt;
+(more callers: comma-separated — name:token,name:token)
+Your REVIEWS_ADMIN_TOKEN already signs you in as "micah".</div>
+        <div class="row" style="margin-top:12px"><button class="btn btn-ghost btn-sm" id="logout">Sign out on this device</button></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div id="sheet-root"></div>
+<div class="flash" id="flash"></div>
+
+<script src="crm.js?v=1"></script>
+</body>
+</html>
