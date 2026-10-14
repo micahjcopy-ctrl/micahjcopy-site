@@ -5,25 +5,30 @@
   // ------------------------------------------------------------ state
   const S = {
     token: '', user: null, settings: null, stats: null, outcomes: [],
-    queue: [], current: null, history: [], historyFor: null, view: 'dial',
+    // one-at-a-time dialer
+    queue: [], current: null, history: [], historyFor: null, queueSource: { type: 'global' }, dialerOpen: false,
+    // board (the Dial tab)
+    board: { columns: {}, counts: {}, per: 200, focus: null, q: '', loaded: false },
+    view: 'dial',
     leads: { q: '', stage: '', due: false, sort: 'updated_at', dir: 'desc', offset: 0, limit: 100, rows: [], total: 0 },
     activity: [], actUser: '', draft: null, busy: false
   };
   const OUTCOME_UI = [
-    { key: 'no_answer',      label: 'No answer',      sub: 'retry later',  cls: '' },
-    { key: 'voicemail',      label: 'Voicemail',      sub: 'left message', cls: '' },
-    { key: 'contacted',      label: 'Contacted',      sub: 'spoke, no book', cls: 'good' },
-    { key: 'follow_up',      label: 'Follow-up',      sub: 'pick a time',  cls: 'good' },
-    { key: 'booked',         label: 'Booked',         sub: 'appointment set', cls: 'hot' },
-    { key: 'not_interested', label: 'Not interested', sub: 'said no',      cls: 'bad' },
-    { key: 'dnc',            label: 'Do not call',    sub: 'wrong # / closed', cls: 'bad' }
+    { key: 'no_answer', label: 'No answer',      sub: 'retry later',     cls: '' },
+    { key: 'voicemail', label: 'Voicemail',      sub: 'left message',    cls: '' },
+    { key: 'follow_up', label: 'Follow-up',      sub: 'pick a time',     cls: 'good' },
+    { key: 'booked',    label: 'Booked',         sub: 'appointment set', cls: 'hot' },
+    { key: 'no_show',   label: 'No-show',        sub: 'missed the call', cls: '' },
+    { key: 'dnc',       label: 'Do not contact', sub: 'wrong # / said no', cls: 'bad' }
   ];
+  const LEGACY_OUTCOMES = { contacted: 'Contacted', not_interested: 'Not interested' };
   const BUILTIN_COLS = [
     ['business', 'Business'], ['owner', 'Owner'], ['phone', 'Phone'], ['email', 'Email'], ['town', 'Town'], ['state', 'State'],
-    ['category', 'Category'], ['website', 'Website'], ['reviews', 'Reviews'], ['stage', 'Stage'], ['next_at', 'Next'],
+    ['category', 'Category'], ['website', 'Website'], ['reviews', 'Reviews'], ['stage', 'Section'], ['next_at', 'Next'],
     ['last_called_at', 'Last call'], ['last_outcome', 'Last outcome'], ['call_count', 'Calls'], ['booked_at', 'Booked for'],
     ['source', 'Source'], ['created_at', 'Added']
   ];
+  const PHONE_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.6a2 2 0 0 1-.5 2.1L8 9.7a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.8.3 1.7.5 2.6.7a2 2 0 0 1 1.7 2z"/></svg>';
 
   // ------------------------------------------------------------ helpers
   const $ = (id) => document.getElementById(id);
@@ -69,7 +74,7 @@
   function nextWeekday(dow, hour) { const d = new Date(); d.setHours(hour, 0, 0, 0); do { d.setDate(d.getDate() + 1); } while (d.getDay() !== dow); return d; }
   const stageOf = (k) => (S.settings.stages.find(s => s.key === k)) || { key: k, label: k || '—', color: 'grey' };
   const pill = (k, extra) => { const s = stageOf(k); return '<span class="pill c-' + esc(s.color) + ' ' + (extra || '') + '">' + esc(s.label) + '</span>'; };
-  const outcomeLabel = (k) => (OUTCOME_UI.find(o => o.key === k) || { label: k }).label;
+  const outcomeLabel = (k) => (OUTCOME_UI.find(o => o.key === k) || {}).label || LEGACY_OUTCOMES[k] || k;
   const isDue = (l) => l.next_at && Date.parse(l.next_at) <= Date.now();
   function custVal(l, f) {
     const v = l.custom && l.custom[f.key];
@@ -77,6 +82,10 @@
     if (f.type === 'checkbox') return v ? 'Yes' : 'No';
     if (f.type === 'date') return v;
     return String(v);
+  }
+  function siteLink(l) {
+    if (!l.website) return '';
+    return '<a href="' + esc(/^https?:/i.test(l.website) ? l.website : 'http://' + l.website) + '" target="_blank" rel="noopener">' + esc(l.website.replace(/^https?:\/\/(www\.)?/i, '').replace(/\/$/, '')) + ' ↗</a>';
   }
 
   // ------------------------------------------------------------ api
@@ -126,29 +135,222 @@
     document.querySelectorAll('.tab').forEach(t => t.setAttribute('aria-selected', t.dataset.view === name ? 'true' : 'false'));
     document.querySelectorAll('.view').forEach(v => { v.hidden = v.id !== 'view-' + name; });
     if (location.hash !== '#' + name) history.replaceState(null, '', '#' + name);
-    if (name === 'dial') renderDial();
+    if (name === 'dial') { renderStats(); if (S.dialerOpen) renderDialer(); else loadBoard(); }
     if (name === 'leads') { renderStageChips(); loadLeads(); }
     if (name === 'activity') loadActivity();
     if (name === 'settings') renderSettings();
   }
+  function refreshCurrentView() {
+    if (S.view === 'dial') { if (S.dialerOpen) refreshQueueAndStats(); else loadBoard(); }
+    else if (S.view === 'leads') { loadLeads(); api('stats').then(r => { S.stats = r.stats; renderStageChips(); }).catch(() => {}); }
+    else if (S.view === 'activity') loadActivity();
+  }
 
-  // ------------------------------------------------------------ DIAL
-  function renderDial() { renderStats(); renderLeadCard(); renderUpNext(); renderByUser(); }
-
+  // ------------------------------------------------------------ stats strip
   function renderStats() {
     const st = S.stats || { today: { calls: 0, contacted: 0, booked: 0, follow_ups: 0 }, due_now: 0, total: 0 };
-    const ready = st.due_now > 0 ? st.due_now : S.queue.length;
-    $('n-due').textContent = ready + (S.queue.length >= 25 && st.due_now < 25 ? '+' : '');
+    $('n-due').textContent = st.due_now;
     $('stats').innerHTML = [
       ['Calls<span class="sm-hide"> today</span>', st.today.calls, ''], ['Reached', st.today.contacted, ''], ['Booked', st.today.booked, st.today.booked ? 'hot' : ''],
       ['Due now', st.due_now, st.due_now ? 'hot' : ''], ['Total leads', st.total, 'hide-sm']
     ].map(([k, v, c]) => '<div class="stat ' + c + '"><div class="k">' + k + '</div><div class="v">' + v + '</div></div>').join('');
   }
 
+  // ------------------------------------------------------------ BOARD (Dial tab)
+  async function loadBoard() {
+    $('board-wrap').hidden = false; $('dialer').hidden = true;
+    if (!S.board.loaded) $('board').innerHTML = '<div class="empty sm mono">Loading sections…</div>';
+    try {
+      const r = await api('board', { query: { per: S.board.per } });
+      S.board.columns = r.board.columns; S.board.counts = r.board.counts; S.board.loaded = true;
+      S.stats = r.stats; S.settings = r.settings;
+    } catch (e) { toast('Could not load the board: ' + e.message, true); return; }
+    renderStats(); renderBoard();
+  }
+  function cardMatches(l, q) {
+    if (!q) return true;
+    const hay = [l.business, l.owner, l.phone, l.phone_display, l.town, l.category, l.email, l.notes].join(' ').toLowerCase();
+    return hay.includes(q);
+  }
+  function kcard(l) {
+    return '<div class="kcard" data-id="' + l.id + '">' +
+      '<div class="kc-top"><b>' + esc(l.business || l.owner || fmtPhone(l) || '(no name)') + '</b>' +
+        (isDue(l) ? '<span class="pill due">due</span>' : (l.next_at ? '<span class="pill">' + esc(fmtDT(l.next_at)) + '</span>' : '')) + '</div>' +
+      ((l.owner || l.town) ? '<div class="kc-sub">' + esc([l.business ? l.owner : '', l.town].filter(Boolean).join(' · ')) + '</div>' : '') +
+      '<div class="kc-foot">' + (l.phone ? '<a class="tel" href="' + esc(telHref(l)) + '">' + esc(fmtPhone(l)) + '</a>' : '<span class="kc-meta">no phone</span>') +
+        '<span class="kc-meta">' + (l.call_count ? l.call_count + ' call' + (l.call_count > 1 ? 's' : '') + (l.last_outcome ? ' · ' + esc(outcomeLabel(l.last_outcome)) : '') : 'never called') + '</span>' +
+        '<button class="mv" data-move="' + l.id + '" title="Move to another section">Move ▾</button></div>' +
+      '</div>';
+  }
+  function renderBoard() {
+    const B = S.board, q = B.q.trim().toLowerCase();
+    if (B.focus) return renderFocus();
+    $('board').classList.remove('focus');
+    $('board').innerHTML = S.settings.stages.map(s => {
+      const all = B.columns[s.key] || [];
+      const list = all.filter(l => cardMatches(l, q));
+      const total = B.counts[s.key] || 0;
+      const due = all.filter(isDue).length;
+      return '<div class="col c-' + esc(s.color) + '" data-stage="' + s.key + '">' +
+        '<button class="colhead" data-focus="' + s.key + '" title="Open this section"><b><span class="swatch"></span>' + esc(s.label) + '</b>' +
+          '<span class="n ' + (due ? 'hot' : '') + '">' + (due ? due + ' due · ' : '') + total + '</span><span class="open">Open</span></button>' +
+        '<div class="cards" data-stage="' + s.key + '">' + (list.length ? list.map(kcard).join('') : '<div class="none">' + (q ? 'No matches' : 'Empty') + '</div>') +
+        (all.length < total && !q ? '<div class="none">Showing ' + all.length + ' of ' + total + ' · open the section to see more</div>' : '') + '</div></div>';
+    }).join('');
+    wireBoard();
+  }
+  function renderFocus() {
+    const B = S.board, key = B.focus, s = stageOf(key), q = B.q.trim().toLowerCase();
+    const all = B.columns[key] || [], list = all.filter(l => cardMatches(l, q)), total = B.counts[key] || 0;
+    $('board').classList.add('focus');
+    $('board').innerHTML =
+      '<div class="focushead"><button class="btn btn-sm" id="focus-back">← All sections</button>' +
+        '<h2><span class="swatch c-' + esc(s.color) + '" style="display:inline-block"></span>' + esc(s.label) + ' <span class="mono muted">' + list.length + (all.length < total ? ' of ' + total : '') + '</span></h2>' +
+        '<input type="search" id="focus-q" placeholder="Filter this section…" value="' + esc(B.q) + '">' +
+        (list.some(l => l.phone) ? '<button class="btn btn-primary btn-sm" id="focus-dial">Dial these →</button>' : '') + '</div>' +
+      '<div class="fcards">' + (list.length ? list.map(fcard).join('') : '<div class="empty sm"><b>Nothing here' + (q ? ' matches' : '') + '.</b>Drag a card in from another section or change a lead\'s section from its page.</div>') + '</div>';
+    $('focus-back').onclick = () => { B.focus = null; B.q = ''; $('board-q').value = ''; renderBoard(); };
+    const fq = $('focus-q'); let t;
+    fq.addEventListener('input', () => { clearTimeout(t); t = setTimeout(() => { B.q = fq.value; renderFocus(); $('focus-q').focus(); const v = $('focus-q'); v.setSelectionRange(v.value.length, v.value.length); }, 200); });
+    if ($('focus-dial')) $('focus-dial').onclick = () => startDialer({ type: 'column', key, label: s.label }, list.filter(l => l.phone));
+    document.querySelectorAll('.fcard').forEach(card => {
+      const id = card.dataset.id, lead = all.find(l => l.id === id);
+      card.querySelectorAll('[data-outcome]').forEach(b => { b.onclick = () => outcomeFor(lead, b.dataset.outcome, 'board'); });
+      card.querySelector('[data-open]').onclick = () => openLead(id);
+      card.querySelector('[data-move]').onclick = () => openMove(lead);
+    });
+  }
+  function fcard(l) {
+    const meta = [];
+    if (l.town || l.state) meta.push(esc([l.town, l.state].filter(Boolean).join(', ')));
+    if (l.category) meta.push(esc(l.category));
+    if (l.reviews != null) meta.push(l.reviews + ' reviews');
+    if (l.website) meta.push(siteLink(l));
+    const phone = fmtPhone(l);
+    return '<div class="fcard ' + (isDue(l) ? 'due' : '') + '" data-id="' + l.id + '">' +
+      '<div class="top"><div><div class="biz">' + esc(l.business || '(no business name)') + '</div>' + (l.owner ? '<div class="owner">' + esc(l.owner) + '</div>' : '') + '</div>' +
+        (isDue(l) ? '<span class="pill due">Due ' + esc(fmtDT(l.next_at)) + '</span>' : l.next_at ? '<span class="pill">' + esc(fmtDT(l.next_at)) + '</span>' : l.booked_at ? '<span class="pill c-green">Booked ' + esc(fmtDT(l.booked_at)) + '</span>' : '') + '</div>' +
+      (meta.length ? '<div class="meta">' + meta.join('<span>·</span>') + '</div>' : '') +
+      (l.notes ? '<div class="notes">' + esc(l.notes) + '</div>' : '') +
+      '<div class="last">' + (l.call_count ? l.call_count + ' call' + (l.call_count > 1 ? 's' : '') + ' · last ' + esc(fmtAgo(l.last_called_at)) + (l.last_outcome ? ' · ' + esc(outcomeLabel(l.last_outcome)) : '') : 'Never called') + '</div>' +
+      (phone ? '<a class="callbtn" href="' + esc(telHref(l)) + '">' + PHONE_SVG + esc(phone) + '</a>' : '<div class="callbtn nophone">No phone number</div>') +
+      '<div class="ocs">' + OUTCOME_UI.map(o => '<button class="oc ' + o.cls + '" data-outcome="' + o.key + '">' + o.label + '<small>' + o.sub + '</small></button>').join('') + '</div>' +
+      '<div class="acts"><button class="btn btn-sm" data-move>Move ▾</button><button class="btn btn-sm btn-ghost" data-open>Open</button></div>' +
+      '</div>';
+  }
+  function wireBoard() {
+    document.querySelectorAll('[data-focus]').forEach(h => { h.onclick = () => { S.board.focus = h.dataset.focus; renderFocus(); window.scrollTo({ top: 0 }); }; });
+    document.querySelectorAll('.kcard [data-move]').forEach(b => { b.onclick = (e) => { e.stopPropagation(); const l = findLead(b.dataset.move); if (l) openMove(l); }; });
+  }
+  function findLead(id) { for (const k in S.board.columns) { const l = S.board.columns[k].find(x => x.id === id); if (l) return l; } return null; }
+  // put an updated lead into its column locally (no refetch); fromStage is where it was before
+  function placeLocally(lead, fromStage) {
+    const toStage = lead.stage;
+    for (const k in S.board.columns) S.board.columns[k] = S.board.columns[k].filter(x => x.id !== lead.id);
+    if (!S.board.columns[toStage]) S.board.columns[toStage] = [];
+    S.board.columns[toStage].unshift(lead);
+    if (fromStage && fromStage !== toStage) {
+      S.board.counts[fromStage] = Math.max(0, (S.board.counts[fromStage] || 1) - 1);
+      S.board.counts[toStage] = (S.board.counts[toStage] || 0) + 1;
+    }
+  }
+
+  // move a lead to another section (drag, or the Move button). Follow up / booked ask for a time.
+  function moveLead(lead, toStage) {
+    if (!lead || toStage === lead.stage) return;
+    const label = stageOf(toStage).label;
+    const finish = async (extra) => {
+      try {
+        const r = await api('lead_update', { body: { id: lead.id, patch: Object.assign({ stage: toStage }, extra) } });
+        placeLocally(r.lead, lead.stage);
+        renderBoard(); toast('Moved to ' + label);
+        api('stats').then(x => { S.stats = x.stats; renderStats(); }).catch(() => {});
+      } catch (e) { toast('Could not move: ' + e.message, true); renderBoard(); }
+    };
+    if (toStage === 'follow_up') return openTimeSheet({ title: 'Follow up with ' + (lead.business || lead.owner || 'this lead'), sub: 'When should they come back up?', def: at(9, 1), save: 'Move to Follow up' }, (iso) => finish({ next_at: iso }), () => renderBoard());
+    if (toStage === 'booked') return openTimeSheet({ title: 'Call booked · ' + (lead.business || lead.owner || 'this lead'), sub: 'When is the call?', def: at(9, 1), save: 'Move to Call booked' }, (iso) => finish({ booked_at: iso, next_at: null }), () => renderBoard());
+    if (toStage === 'no_show') return finish({ next_at: at(9, 1).toISOString() });
+    if (toStage === 'dnc') return finish({ next_at: null });
+    finish({});
+  }
+  function openMove(lead) {
+    openSheet('<h2>Move ' + esc(lead.business || lead.owner || 'lead') + '</h2><div class="sub">Pick a section.</div><div class="stagepick">' +
+      S.settings.stages.map(s => '<button data-to="' + s.key + '" class="' + (s.key === lead.stage ? 'cur' : '') + '"><span class="swatch c-' + esc(s.color) + '" style="display:inline-block"></span>' + esc(s.label) + (s.key === lead.stage ? ' <span class="mono muted">(current)</span>' : '') + '</button>').join('') +
+      '</div><div class="actions"><button class="btn" data-close>Cancel</button></div>');
+    document.querySelectorAll('[data-to]').forEach(b => { b.onclick = () => { if (b.dataset.to === lead.stage) return; closeSheet(); moveLead(lead, b.dataset.to); }; });
+  }
+
+  // ---- drag and drop (mouse: drag at once; touch: hold ~350ms, then drag) ----
+  const drag = { active: false, lead: null, ghost: null, startX: 0, startY: 0, timer: null, pointerId: null, srcEl: null, overCol: null, moved: false };
+  function dragStart(e) {
+    const card = e.target.closest('.kcard'); if (!card || e.button > 0) return;
+    if (e.target.closest('a,button')) return;
+    const lead = findLead(card.dataset.id); if (!lead) return;
+    drag.lead = lead; drag.srcEl = card; drag.startX = e.clientX; drag.startY = e.clientY; drag.pointerId = e.pointerId; drag.moved = false; drag.active = false;
+    clearTimeout(drag.timer);
+    if (e.pointerType === 'mouse') { drag.pending = true; }
+    else { drag.pending = false; drag.timer = setTimeout(() => dragBegin(e.clientX, e.clientY), 350); }
+  }
+  function dragBegin(x, y) {
+    if (!drag.lead || drag.active) return;
+    drag.active = true; drag.pending = false;
+    const r = drag.srcEl.getBoundingClientRect();
+    const g = drag.srcEl.cloneNode(true); g.classList.add('drag-ghost'); g.style.width = r.width + 'px'; g.style.left = r.left + 'px'; g.style.top = r.top + 'px';
+    drag.offX = x - r.left; drag.offY = y - r.top; drag.ghost = g; document.body.appendChild(g);
+    drag.srcEl.classList.add('dragging'); document.body.classList.add('is-dragging');
+  }
+  function dragMove(e) {
+    if (!drag.lead) return;
+    const dx = e.clientX - drag.startX, dy = e.clientY - drag.startY;
+    if (!drag.active) {
+      if (Math.abs(dx) + Math.abs(dy) > 10) { clearTimeout(drag.timer); if (drag.pending) dragBegin(e.clientX, e.clientY); else { drag.lead = null; } }
+      return;
+    }
+    drag.moved = true;
+    drag.ghost.style.left = (e.clientX - drag.offX) + 'px'; drag.ghost.style.top = (e.clientY - drag.offY) + 'px';
+    const el = document.elementFromPoint(e.clientX, e.clientY);
+    const col = el && el.closest ? el.closest('.col') : null;
+    if (col !== drag.overCol) { if (drag.overCol) drag.overCol.classList.remove('over'); drag.overCol = col; if (col) col.classList.add('over'); }
+  }
+  function dragEnd(e) {
+    clearTimeout(drag.timer);
+    if (!drag.lead) return;
+    const lead = drag.lead, wasActive = drag.active, col = drag.overCol;
+    if (drag.ghost) drag.ghost.remove();
+    if (drag.srcEl) drag.srcEl.classList.remove('dragging');
+    if (drag.overCol) drag.overCol.classList.remove('over');
+    document.body.classList.remove('is-dragging');
+    drag.lead = null; drag.active = false; drag.ghost = null; drag.overCol = null; drag.pending = false;
+    if (wasActive) { if (col && col.dataset.stage && col.dataset.stage !== lead.stage) moveLead(lead, col.dataset.stage); }
+    else if (e.type === 'pointerup' && Math.abs(e.clientX - drag.startX) + Math.abs(e.clientY - drag.startY) < 6) openLead(lead.id);
+  }
+  $('board').addEventListener('pointerdown', dragStart);
+  document.addEventListener('pointermove', dragMove);
+  document.addEventListener('pointerup', dragEnd);
+  document.addEventListener('pointercancel', dragEnd);
+  document.addEventListener('touchmove', (e) => { if (drag.active) e.preventDefault(); }, { passive: false });
+  document.addEventListener('contextmenu', (e) => { if (drag.active || drag.timer) e.preventDefault(); });
+
+  // ------------------------------------------------------------ DIALER (one lead at a time)
+  function startDialer(source, leads) {
+    S.queueSource = source || { type: 'global' };
+    S.dialerOpen = true; S.history = []; S.historyFor = null;
+    $('board-wrap').hidden = true; $('dialer').hidden = false;
+    $('dial-source').textContent = source && source.type === 'column' ? 'Dialing: ' + source.label : 'Dialing the queue: due follow-ups first, then cold leads';
+    if (source && source.type === 'column') { S.queue = leads.slice(); S.current = S.queue[0] || null; renderDialer(); }
+    else refreshQueueAndStats(true);
+    window.scrollTo({ top: 0 });
+  }
+  function closeDialer() { S.dialerOpen = false; $('dialer').hidden = true; $('board-wrap').hidden = false; loadBoard(); }
+  function renderDialer() { $('board-wrap').hidden = true; $('dialer').hidden = false; renderStats(); renderLeadCard(); renderUpNext(); renderByUser(); }
+
   function renderLeadCard() {
     const l = S.current, box = $('leadcard');
     if (!l) {
-      box.innerHTML = '<div class="card empty"><b>Queue is clear.</b>No leads are due and nothing new is waiting.<br>Add leads or import a CSV under <a href="#leads" data-view="leads">Leads</a>.</div>';
+      const col = S.queueSource.type === 'column';
+      box.innerHTML = '<div class="card empty"><b>' + (col ? 'Done with ' + esc(S.queueSource.label) + '.' : 'Queue is clear.') + '</b>' +
+        (col ? 'Every lead in that section has been handled.' : 'No leads are due and no cold leads are waiting.') + '<br><button class="btn btn-sm" id="empty-back" style="margin-top:14px">← Back to board</button></div>';
+      $('empty-back').onclick = closeDialer;
       return;
     }
     const cf = S.settings.fields.filter(f => f.in_queue && custVal(l, f));
@@ -157,7 +359,7 @@
     if (l.town || l.state) meta.push(esc([l.town, l.state].filter(Boolean).join(', ')));
     if (l.category) meta.push(esc(l.category));
     if (l.reviews != null) meta.push(l.reviews + ' reviews');
-    if (l.website) meta.push('<a href="' + esc(/^https?:/i.test(l.website) ? l.website : 'http://' + l.website) + '" target="_blank" rel="noopener">' + esc(l.website.replace(/^https?:\/\/(www\.)?/i, '').replace(/\/$/, '')) + ' ↗</a>');
+    if (l.website) meta.push(siteLink(l));
     if (l.email) meta.push('<a href="mailto:' + esc(l.email) + '">' + esc(l.email) + '</a>');
     const phone = fmtPhone(l);
     box.innerHTML =
@@ -166,12 +368,11 @@
         '<div class="biz">' + esc(l.business || '(no business name)') + '</div>' +
         (l.owner ? '<div class="owner">' + esc(l.owner) + '</div>' : '') +
         (meta.length ? '<div class="meta">' + meta.join('<span>·</span>') + '</div>' : '') +
-        (phone
-          ? '<a class="callbtn" id="callbtn" href="' + esc(telHref(l)) + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.6a2 2 0 0 1-.5 2.1L8 9.7a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.8.3 1.7.5 2.6.7a2 2 0 0 1 1.7 2z"/></svg>' + esc(phone) + '</a>'
-          : '<div class="callbtn nophone">No phone number on this lead</div>') +
+        (phone ? '<a class="callbtn" id="callbtn" href="' + esc(telHref(l)) + '">' + PHONE_SVG + esc(phone) + '</a>' : '<div class="callbtn nophone">No phone number on this lead</div>') +
         '<div class="callrow">' +
           (phone ? '<button class="btn btn-sm" id="copyphone">Copy number</button>' : '') +
           '<button class="btn btn-sm" id="skip">Skip for now<span class="kbd">S</span></button>' +
+          '<button class="btn btn-sm" id="move-current">Move ▾</button>' +
           (S.settings.booking_url ? '<a class="btn btn-sm" href="' + esc(S.settings.booking_url) + '" target="_blank" rel="noopener">Booking page ↗</a>' : '') +
         '</div>' +
         (cf.length ? '<div class="kv">' + cf.map(f => '<div class="k">' + esc(f.label) + '</div><div>' + esc(custVal(l, f)) + '</div>').join('') + '</div>' : '') +
@@ -182,6 +383,7 @@
       '</div>';
     $('edit-current').onclick = () => openLead(l.id);
     $('skip').onclick = skipCurrent;
+    $('move-current').onclick = () => openMove(l);
     if ($('copyphone')) $('copyphone').onclick = () => copy(phone);
     box.querySelectorAll('[data-outcome]').forEach(b => { b.onclick = () => chooseOutcome(b.dataset.outcome); });
     loadHistory(l.id);
@@ -189,10 +391,8 @@
 
   async function loadHistory(id) {
     if (S.historyFor === id && S.history) return paintHistory(id);
-    try {
-      const r = await api('lead', { query: { id } });
-      S.history = r.calls; S.historyFor = id;
-    } catch (e) { S.history = []; S.historyFor = id; }
+    try { const r = await api('lead', { query: { id } }); S.history = r.calls; S.historyFor = id; }
+    catch (e) { S.history = []; S.historyFor = id; }
     paintHistory(id);
   }
   function paintHistory(id) {
@@ -203,7 +403,6 @@
       (c.next_at ? ' <span class="mono muted">→ ' + esc(fmtDT(c.next_at)) + '</span>' : '') + (c.booked_at ? ' <span class="mono muted">booked ' + esc(fmtDT(c.booked_at)) + '</span>' : '') + '</div>' +
       (c.note ? '<div class="note">' + esc(c.note) + '</div>' : '') + '</div>').join('');
   }
-
   function renderUpNext() {
     const rest = S.queue.filter(l => !S.current || l.id !== S.current.id).slice(0, 10);
     $('upnext-count').textContent = S.queue.length ? (S.queue.length - (S.current ? 1 : 0)) + ' queued' : '';
@@ -223,57 +422,61 @@
     const i = S.queue.findIndex(l => l.id === id); if (i < 0) return;
     const [l] = S.queue.splice(i, 1); S.queue.unshift(l); S.current = l; renderLeadCard(); renderUpNext();
   }
-
-  async function refreshQueueAndStats() {
+  async function refreshQueueAndStats(render) {
     try {
-      const [q, st] = await Promise.all([api('queue', { query: { limit: 25 } }), api('stats')]);
-      const curId = S.current && S.current.id;
-      S.queue = q.queue; S.stats = st.stats;
-      if (curId && !S.queue.some(l => l.id === curId)) S.current = S.queue[0] || null;
-      else if (curId) S.current = S.queue.find(l => l.id === curId);
-      else S.current = S.queue[0] || null;
-      if (S.view === 'dial') renderDial();
-    } catch (e) { /* keep what we have */ }
+      if (S.queueSource.type === 'column') {
+        const st = await api('stats'); S.stats = st.stats;
+      } else {
+        const [q, st] = await Promise.all([api('queue', { query: { limit: 25 } }), api('stats')]);
+        const curId = S.current && S.current.id;
+        S.queue = q.queue; S.stats = st.stats;
+        if (curId && S.queue.some(l => l.id === curId)) S.current = S.queue.find(l => l.id === curId);
+        else S.current = S.queue[0] || null;
+      }
+      if (S.view === 'dial' && S.dialerOpen) renderDialer();
+    } catch (e) { if (render) renderDialer(); }
   }
-
   function advance() {
     S.queue = S.queue.filter(l => !S.current || l.id !== S.current.id);
     S.current = S.queue[0] || null; S.history = []; S.historyFor = null;
     renderLeadCard(); renderUpNext();
-    if (S.queue.length < 5) refreshQueueAndStats(); else api('stats').then(r => { S.stats = r.stats; renderStats(); renderByUser(); }).catch(() => {});
+    if (S.queueSource.type !== 'column' && S.queue.length < 5) refreshQueueAndStats();
+    else api('stats').then(r => { S.stats = r.stats; renderStats(); renderByUser(); }).catch(() => {});
   }
-
   function chooseOutcome(key) {
     if (!S.current) return;
     const note = ($('callnote') && $('callnote').value.trim()) || '';
-    if (key === 'follow_up') return openFollowUp(S.current, note, (iso, n) => submitOutcome(S.current, key, { note: n, next_at: iso }));
-    if (key === 'booked') return openBooked(S.current, note, (iso, n) => submitOutcome(S.current, key, { note: n, booked_at: iso }));
-    submitOutcome(S.current, key, { note });
+    outcomeFor(S.current, key, 'dial', note);
   }
-
-  async function submitOutcome(lead, key, extra, fromDrawer) {
+  // log an outcome for a lead from any screen: 'dial' advances, 'board' / 'drawer' refresh
+  function outcomeFor(lead, key, mode, note) {
+    note = note || '';
+    if (key === 'follow_up') return openFollowUp(lead, note, (iso, n) => submitOutcome(lead, key, { note: n, next_at: iso }, mode));
+    if (key === 'booked') return openBooked(lead, note, (iso, n) => submitOutcome(lead, key, { note: n, booked_at: iso }, mode));
+    submitOutcome(lead, key, { note }, mode);
+  }
+  async function submitOutcome(lead, key, extra, mode) {
     if (S.busy) return; S.busy = true;
     try {
       const r = await api('call', { body: Object.assign({ lead_id: lead.id, outcome: key }, extra) });
       const l = r.lead;
       let msg = outcomeLabel(key) + ' logged';
-      if (key === 'no_answer' || key === 'voicemail') msg += ' · back ' + fmtDT(l.next_at);
+      if (key === 'no_answer' || key === 'voicemail' || key === 'no_show') msg += ' · back ' + fmtDT(l.next_at);
       if (key === 'follow_up') msg += ' · ' + fmtDT(l.next_at);
       if (key === 'booked') msg += ' · ' + fmtDT(l.booked_at);
+      if (l.stage !== lead.stage) msg += ' · → ' + stageOf(l.stage).label;
       toast(msg);
-      if (fromDrawer) { closeSheet(); if (S.view === 'leads') loadLeads(); refreshQueueAndStats(); }
-      else if (S.current && S.current.id === lead.id) advance();
-      else refreshQueueAndStats();
+      if (mode === 'dial') { if (S.current && S.current.id === lead.id) advance(); else refreshQueueAndStats(); }
+      else if (mode === 'drawer') { closeSheet(); refreshCurrentView(); }
+      else { if (S.board.loaded) { placeLocally(l, lead.stage); renderBoard(); } refreshCurrentView(); }
     } catch (e) { toast('Could not save: ' + e.message, true); }
     finally { S.busy = false; }
   }
-
   async function skipCurrent() {
     if (!S.current) return;
     try { await api('skip', { body: { lead_id: S.current.id, hours: 24 } }); toast('Skipped · back tomorrow'); advance(); }
     catch (e) { toast('Could not skip: ' + e.message, true); }
   }
-
   function copy(text) {
     const done = () => toast('Copied ' + text);
     if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, () => fallback());
@@ -285,12 +488,11 @@
   function openSheet(html, wide) {
     const root = $('sheet-root');
     root.innerHTML = '<div class="sheet-bg" id="sheet-bg"><div class="sheet' + (wide ? ' wide' : '') + '" role="dialog" aria-modal="true">' + html + '</div></div>';
-    $('sheet-bg').addEventListener('mousedown', (e) => { if (e.target.id === 'sheet-bg') closeSheet(); });
-    root.querySelectorAll('[data-close]').forEach(b => { b.onclick = closeSheet; });
+    $('sheet-bg').addEventListener('mousedown', (e) => { if (e.target.id === 'sheet-bg') { closeSheet(); if (openSheet.onCancel) { const f = openSheet.onCancel; openSheet.onCancel = null; f(); } } });
+    root.querySelectorAll('[data-close]').forEach(b => { b.onclick = () => { closeSheet(); if (openSheet.onCancel) { const f = openSheet.onCancel; openSheet.onCancel = null; f(); } }; });
     const first = root.querySelector('input,select,textarea,button'); if (first) setTimeout(() => first.focus(), 30);
   }
   function closeSheet() { $('sheet-root').innerHTML = ''; }
-
   function timeChips(id) {
     const opts = [
       ['In 1 hour', new Date(Date.now() + 3600000)], ['Tomorrow 9am', at(9, 1)], ['Tomorrow 2pm', at(14, 1)],
@@ -301,22 +503,23 @@
   function wireChips() {
     document.querySelectorAll('[data-set]').forEach(c => { c.onclick = () => { $(c.dataset.set).value = c.dataset.val; document.querySelectorAll('[data-set="' + c.dataset.set + '"]').forEach(x => x.classList.toggle('on', x === c)); }; });
   }
-  function openFollowUp(lead, note, done) {
-    openSheet('<h2>Follow-up with ' + esc(lead.business || lead.owner || 'this lead') + '</h2><div class="sub">When should they come back up in the queue?</div>' +
-      timeChips('fu-at') + '<div class="field"><label class="f" for="fu-at">Date &amp; time</label><input type="datetime-local" id="fu-at" value="' + toLocalInput(at(9, 1).toISOString()) + '"></div>' +
-      '<div class="field"><label class="f" for="fu-note">Note</label><textarea id="fu-note">' + esc(note) + '</textarea></div>' +
-      '<div class="actions"><button class="btn" data-close>Cancel</button><button class="btn btn-primary" id="fu-save">Save follow-up</button></div>');
+  // generic "pick a date & time" sheet; withNote adds a note box
+  function openTimeSheet(o, done, onCancel) {
+    openSheet('<h2>' + esc(o.title) + '</h2><div class="sub">' + (o.subHtml || esc(o.sub || '')) + '</div>' +
+      timeChips('ts-at') + '<div class="field"><label class="f" for="ts-at">Date &amp; time</label><input type="datetime-local" id="ts-at" value="' + toLocalInput(o.def.toISOString()) + '"></div>' +
+      (o.withNote ? '<div class="field"><label class="f" for="ts-note">Note</label><textarea id="ts-note" placeholder="' + esc(o.notePh || '') + '">' + esc(o.note || '') + '</textarea></div>' : '') +
+      '<div class="actions"><button class="btn" data-close>Cancel</button><button class="btn btn-primary" id="ts-save">' + esc(o.save) + '</button></div>');
+    openSheet.onCancel = onCancel || null;
     wireChips();
-    $('fu-save').onclick = () => { const iso = fromLocalInput($('fu-at').value), n = $('fu-note').value.trim(); if (!iso) return toast('Pick a date and time', true); closeSheet(); done(iso, n); };
+    $('ts-save').onclick = () => { const iso = fromLocalInput($('ts-at').value), n = o.withNote ? $('ts-note').value.trim() : ''; if (!iso) return toast('Pick a date and time', true); openSheet.onCancel = null; closeSheet(); done(iso, n); };
+  }
+  function openFollowUp(lead, note, done) {
+    openTimeSheet({ title: 'Follow-up with ' + (lead.business || lead.owner || 'this lead'), sub: 'When should they come back up in the queue?', def: at(9, 1), save: 'Save follow-up', withNote: true, note }, done);
   }
   function openBooked(lead, note, done) {
-    openSheet('<h2>Booked · ' + esc(lead.business || lead.owner || 'this lead') + '</h2><div class="sub">When is the call? ' +
-      (S.settings.booking_url ? '<a href="' + esc(S.settings.booking_url) + '" target="_blank" rel="noopener">Open the booking page ↗</a> to put it on the calendar.' : '') + '</div>' +
-      timeChips('bk-at') + '<div class="field"><label class="f" for="bk-at">Appointment date &amp; time</label><input type="datetime-local" id="bk-at" value="' + toLocalInput(at(9, 1).toISOString()) + '"></div>' +
-      '<div class="field"><label class="f" for="bk-note">Note</label><textarea id="bk-note" placeholder="What they want looked at, who\'s joining…">' + esc(note) + '</textarea></div>' +
-      '<div class="actions"><button class="btn" data-close>Cancel</button><button class="btn btn-primary" id="bk-save">Mark booked</button></div>');
-    wireChips();
-    $('bk-save').onclick = () => { const iso = fromLocalInput($('bk-at').value), n = $('bk-note').value.trim(); if (!iso) return toast('Pick a date and time', true); closeSheet(); done(iso, n); };
+    openTimeSheet({ title: 'Booked · ' + (lead.business || lead.owner || 'this lead'),
+      subHtml: 'When is the call? ' + (S.settings.booking_url ? '<a href="' + esc(S.settings.booking_url) + '" target="_blank" rel="noopener">Open the booking page ↗</a> to put it on the calendar.' : ''),
+      def: at(9, 1), save: 'Mark booked', withNote: true, note, notePh: 'What they want looked at, who\'s joining…' }, done);
   }
 
   // ------------------------------------------------------------ lead form / drawer
@@ -329,7 +532,7 @@
       f('town', 'Town', 'text', l.town) + f('state', 'State', 'text', l.state) +
       f('category', 'Category', 'text', l.category) + f('website', 'Website', 'url', l.website) +
       f('reviews', 'Google reviews', 'number', l.reviews) +
-      '<div class="field"><label class="f" for="lf-stage">Stage</label><select id="lf-stage">' + S.settings.stages.map(s => '<option value="' + s.key + '"' + ((l.stage || 'new') === s.key ? ' selected' : '') + '>' + esc(s.label) + '</option>').join('') + '</select></div>' +
+      '<div class="field"><label class="f" for="lf-stage">Section</label><select id="lf-stage">' + S.settings.stages.map(s => '<option value="' + s.key + '"' + ((l.stage || 'new') === s.key ? ' selected' : '') + '>' + esc(s.label) + '</option>').join('') + '</select></div>' +
       f('next_at', 'Next call (queue)', 'datetime-local', l.next_at ? toLocalInput(l.next_at) : '') +
       f('booked_at', 'Booked for', 'datetime-local', l.booked_at ? toLocalInput(l.booked_at) : '');
     S.settings.fields.forEach(fd => {
@@ -349,18 +552,16 @@
     S.settings.fields.forEach(fd => { const el = $('lf-c-' + fd.key); if (!el) return; out.custom[fd.key] = fd.type === 'checkbox' ? el.checked : el.value; });
     return out;
   }
-
   function openAddLead() {
     openSheet('<h2>New lead</h2><div class="sub">Business or phone is enough to start.</div>' + leadFormHtml(null) +
       '<div class="actions"><button class="btn" data-close>Cancel</button><button class="btn btn-primary" id="lf-save">Add lead</button></div>', true);
     $('lf-save').onclick = async () => {
       const lead = readLeadForm();
       if (!lead.business && !lead.phone) return toast('Give it a business name or a phone number', true);
-      try { await api('lead_create', { body: { lead } }); toast('Lead added'); closeSheet(); loadLeads(); refreshQueueAndStats(); }
+      try { await api('lead_create', { body: { lead } }); toast('Lead added'); closeSheet(); refreshCurrentView(); }
       catch (e) { toast(e.data && e.data.error === 'duplicate_phone' ? 'That phone number is already on ' + (e.data.existing.business || 'another lead') : 'Could not add: ' + e.message, true); }
     };
   }
-
   async function openLead(id) {
     let r; try { r = await api('lead', { query: { id } }); } catch (e) { return toast('Could not load lead', true); }
     const l = r.lead;
@@ -371,24 +572,18 @@
       leadFormHtml(l) +
       '<div class="actions"><button class="btn btn-danger left" id="lf-del">Delete</button><button class="btn" id="lf-dial">Dial this lead</button><button class="btn btn-primary" id="lf-save">Save changes</button></div>' +
       '<div class="hist"><h3>Call history</h3>' + (r.calls.length ? r.calls.map(c => '<div class="it"><div class="when">' + esc(fmtDT(c.at)) + '</div><div><b>' + esc(outcomeLabel(c.outcome)) + '</b> <span class="mono muted">' + esc(cap(c.by_user)) + '</span></div>' + (c.note ? '<div class="note">' + esc(c.note) + '</div>' : '') + '</div>').join('') : '<div class="mono muted">No calls logged yet.</div>') + '</div></div>', true);
-    document.querySelectorAll('[data-doutcome]').forEach(b => {
-      b.onclick = () => {
-        const key = b.dataset.doutcome, note = $('lf-notes') ? '' : '';
-        if (key === 'follow_up') return openFollowUp(l, note, (iso, n) => submitOutcome(l, key, { note: n, next_at: iso }, true));
-        if (key === 'booked') return openBooked(l, note, (iso, n) => submitOutcome(l, key, { note: n, booked_at: iso }, true));
-        submitOutcome(l, key, { note }, true);
-      };
-    });
+    document.querySelectorAll('[data-doutcome]').forEach(b => { b.onclick = () => outcomeFor(l, b.dataset.doutcome, 'drawer', ''); });
     $('lf-save').onclick = async () => {
       try { const u = await api('lead_update', { body: { id: l.id, patch: readLeadForm() } }); toast('Saved'); closeSheet();
         if (S.current && S.current.id === l.id) { S.current = u.lead; S.queue = S.queue.map(x => x.id === l.id ? u.lead : x); }
-        if (S.view === 'leads') loadLeads(); if (S.view === 'dial') renderDial(); refreshQueueAndStats(); }
+        if (S.board.loaded) placeLocally(u.lead, l.stage);
+        refreshCurrentView(); }
       catch (e) { toast('Could not save: ' + e.message, true); }
     };
-    $('lf-dial').onclick = () => { closeSheet(); if (!S.queue.some(x => x.id === l.id)) S.queue.unshift(l); makeCurrent(l.id); showView('dial'); };
+    $('lf-dial').onclick = () => { closeSheet(); showView('dial'); startDialer({ type: 'column', key: l.stage, label: stageOf(l.stage).label }, [l]); };
     $('lf-del').onclick = () => {
       if ($('lf-del').dataset.armed) {
-        api('lead_delete', { body: { id: l.id } }).then(() => { toast('Deleted'); closeSheet(); if (S.view === 'leads') loadLeads(); refreshQueueAndStats(); }).catch(e => toast('Could not delete: ' + e.message, true));
+        api('lead_delete', { body: { id: l.id } }).then(() => { toast('Deleted'); closeSheet(); for (const k in S.board.columns) S.board.columns[k] = S.board.columns[k].filter(x => x.id !== l.id); refreshCurrentView(); }).catch(e => toast('Could not delete: ' + e.message, true));
       } else { $('lf-del').dataset.armed = '1'; $('lf-del').textContent = 'Really delete? Click again'; }
     };
   }
@@ -409,7 +604,7 @@
       case 'booked_at': case 'created_at': return '<td class="mono">' + esc(l[c] ? fmtDT(l[c]) : '') + '</td>';
       case 'call_count': case 'reviews': return '<td class="num">' + (l[c] == null ? '' : l[c]) + '</td>';
       case 'last_outcome': return '<td>' + esc(l.last_outcome ? outcomeLabel(l.last_outcome) : '') + '</td>';
-      case 'website': return '<td>' + (l.website ? '<a href="' + esc(/^https?:/i.test(l.website) ? l.website : 'http://' + l.website) + '" target="_blank" rel="noopener" onclick="event.stopPropagation()">' + esc(l.website.replace(/^https?:\/\/(www\.)?/i, '').replace(/\/$/, '')) + '</a>' : '') + '</td>';
+      case 'website': return '<td>' + (l.website ? siteLink(l).replace('<a ', '<a onclick="event.stopPropagation()" ') : '') + '</td>';
       case 'owner': case 'town': return '<td class="' + c + '">' + esc(l[c]) + '</td>';
       default: { const f = S.settings.fields.find(x => x.key === c); if (f) return '<td>' + esc(custVal(l, f)) + '</td>'; return '<td>' + esc(l[c] == null ? '' : l[c]) + '</td>'; }
     }
@@ -444,7 +639,6 @@
     $('stagechips').querySelectorAll('.chip').forEach(c => { c.onclick = () => { S.leads.stage = c.dataset.stage; S.leads.offset = 0; renderStageChips(); loadLeads(); }; });
     $('btn-due').classList.toggle('btn-primary', S.leads.due);
   }
-
   async function exportCsv() {
     try {
       const r = await api('export', { raw: true });
@@ -478,7 +672,7 @@
     ['category', /category|type|industry|vertical|trade/i], ['website', /web|site|url|domain/i], ['reviews', /review|rating[ _-]?count/i], ['notes', /note|comment|remark/i]
   ];
   function openImport() {
-    openSheet('<h2>Import leads from CSV</h2><div class="sub">Export from Google Maps scrapers, Sheets, Excel… anything with a header row. Leads with a phone number already in the CRM are skipped.</div>' +
+    openSheet('<h2>Import leads from CSV</h2><div class="sub">Export from Google Maps scrapers, Sheets, Excel… anything with a header row. Leads with a phone number already in the CRM are skipped. New leads land in Cold leads.</div>' +
       '<div class="dropzone" id="drop">Drop a .csv here or click to choose<input type="file" id="csvfile" accept=".csv,text/csv" hidden></div><div id="import-body"></div>', true);
     const drop = $('drop'), file = $('csvfile');
     drop.onclick = () => file.click();
@@ -514,7 +708,7 @@
         }
         if (settings) S.settings = settings;
         toast('Imported ' + inserted + (dupes ? ' · ' + dupes + ' already in CRM' : '') + (empty ? ' · ' + empty + ' blank' : ''));
-        closeSheet(); loadLeads(); refreshQueueAndStats();
+        closeSheet(); S.board.loaded = false; refreshCurrentView();
       } catch (e) { toast('Import failed: ' + e.message, true); $('do-import').disabled = false; $('do-import').textContent = 'Retry import'; }
     };
   }
@@ -528,7 +722,7 @@
   }
   function renderActivity() {
     const list = S.activity.filter(c => !S.actUser || c.by_user === S.actUser);
-    if (!list.length) { $('activity').innerHTML = '<div class="empty"><b>No calls logged yet.</b>Outcomes logged from the Dial screen show up here.</div>'; return; }
+    if (!list.length) { $('activity').innerHTML = '<div class="empty"><b>No calls logged yet.</b>Outcomes logged from the Dial board show up here.</div>'; return; }
     let h = '', lastDay = '';
     list.forEach(c => {
       const d = new Date(c.at), day = d.toDateString();
@@ -548,17 +742,17 @@
     const D = S.draft, counts = (S.stats && S.stats.stages) || {};
     const colors = ['stone', 'blue', 'gold', 'green', 'oxblood', 'grey', 'red'];
     $('stages-list').innerHTML = D.stages.map((s, i) =>
-      '<div class="it c-' + s.color + '"><div class="row" style="gap:6px"><span class="swatch"></span><input type="text" value="' + esc(s.label) + '" data-stage-label="' + i + '" class="grow" style="max-width:200px">' +
+      '<div class="it c-' + s.color + '"><div class="row" style="gap:6px"><span class="swatch"></span><input type="text" value="' + esc(s.label) + '" data-stage-label="' + i + '" class="grow" style="max-width:220px">' +
       '<select data-stage-color="' + i + '">' + colors.map(c => '<option value="' + c + '"' + (c === s.color ? ' selected' : '') + '>' + c + '</option>').join('') + '</select>' +
       '<label class="inl"><input type="checkbox" data-stage-term="' + i + '"' + (D.terminal_stages.includes(s.key) ? ' checked' : '') + '> done</label><span class="sub">' + (counts[s.key] || 0) + ' leads</span></div>' +
-      '<div class="ctl"><button data-stage-up="' + i + '" ' + (i === 0 ? 'disabled' : '') + ' title="Move up">↑</button><button data-stage-down="' + i + '" ' + (i === D.stages.length - 1 ? 'disabled' : '') + ' title="Move down">↓</button><button class="del" data-stage-del="' + i + '" ' + (counts[s.key] ? 'disabled title="Move its leads to another stage first"' : 'title="Remove"') + '>×</button></div></div>').join('');
+      '<div class="ctl"><button data-stage-up="' + i + '" ' + (i === 0 ? 'disabled' : '') + ' title="Move left">↑</button><button data-stage-down="' + i + '" ' + (i === D.stages.length - 1 ? 'disabled' : '') + ' title="Move right">↓</button><button class="del" data-stage-del="' + i + '" ' + (counts[s.key] ? 'disabled title="Move its leads to another section first"' : 'title="Remove"') + '>×</button></div></div>').join('');
     $('fields-list').innerHTML = D.fields.length ? D.fields.map((f, i) =>
       '<div class="it"><div class="row" style="gap:6px"><input type="text" value="' + esc(f.label) + '" data-field-label="' + i + '" class="grow" style="max-width:200px"><span class="sub">' + f.type + '</span>' +
       (f.type === 'select' ? '<input type="text" value="' + esc(f.options.join(', ')) + '" data-field-opts="' + i + '" placeholder="options, comma separated" class="grow" style="max-width:240px">' : '') +
       '<label class="inl"><input type="checkbox" data-field-queue="' + i + '"' + (f.in_queue ? ' checked' : '') + '> show on dial card</label></div>' +
       '<div class="ctl"><button class="del" data-field-del="' + i + '" title="Remove column (data stays on the leads)">×</button></div></div>').join('')
       : '<div class="mono muted">No custom columns yet.</div>';
-    $('retry-na').value = D.retry_days.no_answer; $('retry-vm').value = D.retry_days.voicemail; $('booking-url').value = D.booking_url || '';
+    $('retry-na').value = D.retry_days.no_answer; $('retry-vm').value = D.retry_days.voicemail; $('retry-ns').value = D.retry_days.no_show || 1; $('booking-url').value = D.booking_url || '';
     const allCols = BUILTIN_COLS.map(b => b[0]).concat(D.fields.map(f => f.key));
     $('columns-pick').innerHTML = allCols.map(c => '<button type="button" class="chip ' + (D.columns.includes(c) ? 'on' : '') + '" data-col-toggle="' + c + '">' + esc(colLabelFrom(D, c)) + '</button>').join('');
     wireSettings();
@@ -581,7 +775,7 @@
   function addStage() {
     const label = $('stage-new').value.trim(); if (!label) return;
     const key = label.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '').slice(0, 40);
-    if (!key || S.draft.stages.some(s => s.key === key)) return toast('That stage already exists', true);
+    if (!key || S.draft.stages.some(s => s.key === key)) return toast('That section already exists', true);
     S.draft.stages.push({ key, label, color: 'stone' }); $('stage-new').value = ''; renderSettings();
   }
   function addField() {
@@ -591,8 +785,8 @@
     S.draft.fields.push({ key, label, type, options: [], in_queue: false }); S.draft.columns.push(key); $('field-new').value = ''; renderSettings();
   }
   async function saveSettings() {
-    const D = S.draft; D.retry_days = { no_answer: +$('retry-na').value || 1, voicemail: +$('retry-vm').value || 2 }; D.booking_url = $('booking-url').value.trim();
-    try { const r = await api('settings_save', { body: { settings: D } }); S.settings = r.settings; S.draft = null; $('settings-msg').textContent = 'Saved'; setTimeout(() => { $('settings-msg').textContent = ''; }, 2000); renderSettings(); }
+    const D = S.draft; D.retry_days = { no_answer: +$('retry-na').value || 1, voicemail: +$('retry-vm').value || 2, no_show: +$('retry-ns').value || 1 }; D.booking_url = $('booking-url').value.trim();
+    try { const r = await api('settings_save', { body: { settings: D } }); S.settings = r.settings; S.draft = null; S.board.loaded = false; $('settings-msg').textContent = 'Saved'; setTimeout(() => { $('settings-msg').textContent = ''; }, 2000); renderSettings(); }
     catch (e) { toast('Could not save settings: ' + e.message, true); }
   }
 
@@ -602,6 +796,9 @@
   $('unlock').onclick = () => { const t = $('token').value.trim(); if (!t) { $('gateMsg').textContent = 'Enter your PIN.'; return; } signIn(t); };
   $('token').addEventListener('keydown', (e) => { if (e.key === 'Enter') $('unlock').click(); });
   $('logout').onclick = () => signOut('Signed out.');
+  let bt; $('board-q').addEventListener('input', () => { clearTimeout(bt); bt = setTimeout(() => { S.board.q = $('board-q').value; renderBoard(); }, 200); });
+  $('btn-dial').onclick = () => startDialer({ type: 'global' });
+  $('dial-back').onclick = closeDialer;
   let qt; $('q').addEventListener('input', () => { clearTimeout(qt); qt = setTimeout(() => { S.leads.q = $('q').value.trim(); S.leads.offset = 0; loadLeads(); }, 250); });
   $('btn-due').onclick = () => { S.leads.due = !S.leads.due; S.leads.offset = 0; renderStageChips(); loadLeads(); };
   $('btn-add').onclick = openAddLead; $('btn-import').onclick = openImport; $('btn-export').onclick = exportCsv;
@@ -611,14 +808,14 @@
   $('field-new').addEventListener('keydown', (e) => { if (e.key === 'Enter') addField(); });
   window.addEventListener('hashchange', () => { if (S.user) showView(location.hash.replace('#', '')); });
   document.addEventListener('keydown', (e) => {
-    if (S.view !== 'dial' || !S.current || $('sheet-root').firstChild) return;
+    if (S.view !== 'dial' || !S.dialerOpen || !S.current || $('sheet-root').firstChild) return;
     const tag = (e.target.tagName || '').toLowerCase(); if (tag === 'input' || tag === 'textarea' || tag === 'select') return;
-    if (e.key >= '1' && e.key <= '7') { e.preventDefault(); chooseOutcome(OUTCOME_UI[+e.key - 1].key); }
+    if (e.key >= '1' && e.key <= '6') { e.preventDefault(); chooseOutcome(OUTCOME_UI[+e.key - 1].key); }
     else if (e.key === 's' || e.key === 'S') { e.preventDefault(); skipCurrent(); }
     else if (e.key === 'n' || e.key === 'N') { e.preventDefault(); $('callnote').focus(); }
   });
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && $('sheet-root').firstChild) closeSheet(); });
-  document.addEventListener('visibilitychange', () => { if (!document.hidden && S.user && S.view === 'dial') refreshQueueAndStats(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && $('sheet-root').firstChild) { closeSheet(); if (openSheet.onCancel) { const f = openSheet.onCancel; openSheet.onCancel = null; f(); } } });
+  document.addEventListener('visibilitychange', () => { if (!document.hidden && S.user && S.view === 'dial') { if (S.dialerOpen) refreshQueueAndStats(); else loadBoard(); } });
 
   let saved = ''; try { saved = localStorage.getItem('crm_token') || ''; } catch (e) {}
   if (saved) signIn(saved);
