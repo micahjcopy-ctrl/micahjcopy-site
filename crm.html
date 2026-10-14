@@ -10,7 +10,7 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="crm.css?v=1">
+<link rel="stylesheet" href="crm.css?v=2">
 </head>
 <body>
 
@@ -36,21 +36,37 @@
     <p class="msg" id="gateMsg"></p>
   </section>
 
-  <!-- DIAL -->
+  <!-- DIAL: the six-section board, plus the one-at-a-time dialer -->
   <section class="view" id="view-dial" hidden>
     <div class="stats" id="stats"></div>
-    <div class="dial">
-      <div id="leadcard"></div>
-      <aside class="rail">
-        <div class="card upnext">
-          <h3>Up next <span class="mono muted" id="upnext-count"></span></h3>
-          <div id="upnext"></div>
-        </div>
-        <div class="card">
-          <h3>Today by caller</h3>
-          <div id="byuser" class="kv"></div>
-        </div>
-      </aside>
+
+    <div id="board-wrap">
+      <div class="boardbar">
+        <input type="search" id="board-q" placeholder="Filter cards…" aria-label="Filter board">
+        <span class="mono muted" id="board-hint">Drag cards between sections · tap a section title to open it</span>
+        <button class="btn btn-primary btn-sm" id="btn-dial">Start dialing →</button>
+      </div>
+      <div class="board" id="board"></div>
+    </div>
+
+    <div id="dialer" hidden>
+      <div class="row" style="margin-bottom:10px">
+        <button class="btn btn-ghost btn-sm" id="dial-back">← Back to board</button>
+        <span class="mono muted" id="dial-source"></span>
+      </div>
+      <div class="dial">
+        <div id="leadcard"></div>
+        <aside class="rail">
+          <div class="card upnext">
+            <h3>Up next <span class="mono muted" id="upnext-count"></span></h3>
+            <div id="upnext"></div>
+          </div>
+          <div class="card">
+            <h3>Today by caller</h3>
+            <div id="byuser" class="kv"></div>
+          </div>
+        </aside>
+      </div>
     </div>
   </section>
 
@@ -81,8 +97,8 @@
   <section class="view" id="view-settings" hidden>
     <div class="settings">
       <div class="card">
-        <h3>Pipeline stages</h3>
-        <p class="hint">Leads move through these. Tick "done" on stages that should drop a lead out of the dial queue.</p>
+        <h3>Board sections</h3>
+        <p class="hint">The columns on the Dial board, left to right. Tick "done" on sections whose leads should stay out of the dial queue.</p>
         <div class="list" id="stages-list"></div>
         <div class="row" style="margin-top:10px">
           <input type="text" id="stage-new" placeholder="New stage name" class="grow">
@@ -105,6 +121,7 @@
         <div class="grid2">
           <div class="field"><label class="f" for="retry-na">No answer → retry in (days)</label><input type="number" id="retry-na" min="1" max="30"></div>
           <div class="field"><label class="f" for="retry-vm">Voicemail → retry in (days)</label><input type="number" id="retry-vm" min="1" max="30"></div>
+          <div class="field"><label class="f" for="retry-ns">No-show → retry in (days)</label><input type="number" id="retry-ns" min="1" max="30"></div>
         </div>
         <div class="field"><label class="f" for="booking-url">Booking page link (shown on the Booked step)</label><input type="url" id="booking-url"></div>
         <div class="field"><label class="f">Table columns</label><div id="columns-pick" class="chips"></div></div>
@@ -127,6 +144,6 @@ Your REVIEWS_ADMIN_TOKEN already signs you in as "micah".</div>
 <div id="sheet-root"></div>
 <div class="flash" id="flash"></div>
 
-<script src="crm.js?v=1"></script>
+<script src="crm.js?v=2"></script>
 </body>
 </html>
