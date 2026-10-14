@@ -9,11 +9,11 @@
 //   SUPABASE_URL                 already set for the funnel
 //   SUPABASE_SERVICE_ROLE_KEY    already set for the funnel
 //   REVIEWS_ADMIN_TOKEN          already set — logs you in as "micah"
-//   CRM_USERS                    extra logins, "name:token,name:token"
-//                                e.g.  hayden:9f3kd82mcl02ks8dh2kd
-//                                Any long random string works as a token.
+//   CRM_USERS                    extra logins, "name:pin,name:pin"
+//                                e.g.  hayden:<pin>  (4+ characters; a PIN is fine
+//                                because 5 wrong attempts freeze logins for 15 min)
 //
-// Every request carries  Authorization: Bearer <token>.  The token picks the
+// Every request carries  Authorization: Bearer <pin-or-token>.  It picks the
 // user; the user's name is stamped on every call they log.
 //
 // Routes (all on this one function, picked by ?op=):
@@ -174,17 +174,39 @@ function users() {
     const i = pair.indexOf(':');
     if (i < 1) return;
     const name = slug(pair.slice(0, i)), token = pair.slice(i + 1).trim();
-    if (name && token.length >= 8) list.push({ name, token });
+    if (name && token.length >= 4) list.push({ name, token });
   });
   return list;
 }
 
-function authUser(req) {
+function bearer(req) {
   const h = req.headers['authorization'] || req.headers['Authorization'] || '';
-  const token = h.replace(/^Bearer\s+/i, '').trim();
-  if (!token) return null;
+  return h.replace(/^Bearer\s+/i, '').trim();
+}
+
+function matchUser(token) {
   for (const u of users()) if (safeEqual(token, u.token)) return { name: u.name };
   return null;
+}
+
+// Brute-force lockout: short PINs are allowed as logins, so after LOCK_MAX wrong
+// attempts inside LOCK_WINDOW the whole login is frozen for LOCK_MS. State lives
+// in crm_settings (key auth_lock) because serverless instances share nothing.
+const LOCK_KEY = 'auth_lock', LOCK_MAX = 5, LOCK_WINDOW_MS = 15 * 60000, LOCK_MS = 15 * 60000;
+async function lockState() {
+  try { const { data } = await sbJson('crm_settings?select=value&key=eq.' + LOCK_KEY); return data && data[0] ? data[0].value || {} : {}; }
+  catch (e) { return {}; }
+}
+async function noteFailure() {
+  const now = Date.now(), s = await lockState();
+  const inWindow = s.first && now - s.first < LOCK_WINDOW_MS;
+  const fails = inWindow ? (s.fails || 0) + 1 : 1;
+  const first = inWindow ? s.first : now;
+  const until = fails >= LOCK_MAX ? now + LOCK_MS : 0;
+  const row = { key: LOCK_KEY, value: { fails, first, until }, updated_at: new Date().toISOString() };
+  try { await sbJson('crm_settings?on_conflict=key', { method: 'POST', headers: { Prefer: 'resolution=merge-duplicates,return=minimal' }, body: JSON.stringify(row) }); }
+  catch (e) { console.error('[crm] could not record failed login', e.message); }
+  return until;
 }
 
 // ----------------------------------------------------------------- settings
@@ -426,8 +448,18 @@ module.exports = async function handler(req, res) {
   const op = str((req.query && req.query.op) || (readBody(req).op), 40);
   try {
     if (!CONFIGURED) return res.status(503).json({ ok: false, error: 'not_configured', hint: 'SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY missing' });
-    const user = authUser(req);
-    if (!user) return res.status(401).json({ ok: false, error: 'unauthorized' });
+    const token = bearer(req);
+    if (!token) return res.status(401).json({ ok: false, error: 'unauthorized' });
+    const lock = await lockState();
+    if (lock.until && Date.now() < lock.until) {
+      return res.status(429).json({ ok: false, error: 'locked', retry_after: Math.ceil((lock.until - Date.now()) / 1000) });
+    }
+    const user = matchUser(token);
+    if (!user) {
+      const until = await noteFailure();
+      if (until) return res.status(429).json({ ok: false, error: 'locked', retry_after: Math.ceil((until - Date.now()) / 1000) });
+      return res.status(401).json({ ok: false, error: 'unauthorized' });
+    }
     res.setHeader('Cache-Control', 'no-store');
 
     if (req.method === 'GET') {
