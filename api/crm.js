@@ -19,6 +19,7 @@
 // Routes (all on this one function, picked by ?op=):
 //   GET  op=bootstrap           settings + stats + first page of the queue
 //   GET  op=queue&limit=        the next leads to dial, in order
+//   GET  op=board&per=          every stage's leads (the Dial board) + stats
 //   GET  op=leads&q=&stage=&sort=&dir=&limit=&offset=
 //   GET  op=lead&id=            one lead + its call history
 //   GET  op=activity&limit=     latest logged calls, newest first
@@ -42,34 +43,36 @@ const TZ = 'America/New_York';
 
 // ----------------------------------------------------------------- defaults
 const DEFAULT_SETTINGS = {
+  // the six board columns, left to right
   stages: [
-    { key: 'new',        label: 'New',            color: 'stone' },
-    { key: 'contacted',  label: 'Contacted',      color: 'blue' },
-    { key: 'follow_up',  label: 'Follow-up',      color: 'gold' },
-    { key: 'booked',     label: 'Booked',         color: 'green' },
-    { key: 'client',     label: 'Client',         color: 'oxblood' },
-    { key: 'not_now',    label: 'Not interested', color: 'grey' },
-    { key: 'dnc',        label: 'Do not call',    color: 'red' }
+    { key: 'new',        label: 'Cold leads',            color: 'stone' },
+    { key: 'contacted',  label: 'Contacted no response', color: 'blue' },
+    { key: 'dnc',        label: 'Do not contact again',  color: 'red' },
+    { key: 'follow_up',  label: 'Follow up',             color: 'gold' },
+    { key: 'booked',     label: 'Call booked',           color: 'green' },
+    { key: 'no_show',    label: 'No show appointment',   color: 'oxblood' }
   ],
   // stages that drop a lead out of the dial queue
-  terminal_stages: ['booked', 'client', 'not_now', 'dnc'],
+  terminal_stages: ['booked', 'dnc'],
   // user-added columns: {key, label, type: text|number|date|select|checkbox|url, options:[], in_queue:bool}
   fields: [],
   // built-in columns shown in the Leads table, in order
   columns: ['business', 'owner', 'phone', 'town', 'category', 'stage', 'next_at', 'last_called_at', 'call_count'],
-  // how long before a no-answer / voicemail comes back around (days)
-  retry_days: { no_answer: 1, voicemail: 2 },
+  // how long before a no-answer / voicemail / no-show comes back around (days)
+  retry_days: { no_answer: 1, voicemail: 2, no_show: 1 },
   booking_url: 'https://calendar.google.com/calendar/appointments/schedules/AcZssZ0A_t4giLYdL8SPfgRt-xxpt_SlaOD0WBqVnDwwhwn6r8gs9VZQWhJy169st8PfEg9gOwg9gOc-'
 };
 
-// outcome → what happens to the lead. `stage: null` means "leave it alone".
+// outcome → what happens to the lead. `onlyFrom` limits the stage change to
+// leads currently in those stages (a no-answer on a Follow up stays a Follow up).
 const OUTCOMES = {
-  no_answer:      { stage: null,        retry: 'no_answer' },
-  voicemail:      { stage: null,        retry: 'voicemail' },
-  contacted:      { stage: 'contacted' },
+  no_answer:      { stage: 'contacted', onlyFrom: ['new'], retry: 'no_answer' },
+  voicemail:      { stage: 'contacted', onlyFrom: ['new'], retry: 'voicemail' },
+  contacted:      { stage: 'follow_up', needs: 'next_at' },
   follow_up:      { stage: 'follow_up', needs: 'next_at' },
   booked:         { stage: 'booked',    needs: 'booked_at' },
-  not_interested: { stage: 'not_now' },
+  no_show:        { stage: 'no_show',   retry: 'no_show' },
+  not_interested: { stage: 'dnc' },
   dnc:            { stage: 'dnc' }
 };
 
@@ -238,7 +241,8 @@ function cleanSettings(input) {
   const rd = s.retry_days && typeof s.retry_days === 'object' ? s.retry_days : {};
   const retry_days = {
     no_answer: Math.min(30, Math.max(0, Number(rd.no_answer) || 0)) || DEFAULT_SETTINGS.retry_days.no_answer,
-    voicemail: Math.min(30, Math.max(0, Number(rd.voicemail) || 0)) || DEFAULT_SETTINGS.retry_days.voicemail
+    voicemail: Math.min(30, Math.max(0, Number(rd.voicemail) || 0)) || DEFAULT_SETTINGS.retry_days.voicemail,
+    no_show:   Math.min(30, Math.max(0, Number(rd.no_show) || 0)) || DEFAULT_SETTINGS.retry_days.no_show
   };
   const terminal_stages = (Array.isArray(s.terminal_stages) ? s.terminal_stages : DEFAULT_SETTINGS.terminal_stages)
     .map(slug).filter(k => stageKeys.includes(k));
@@ -305,6 +309,18 @@ async function queue(settings, limit) {
   }
   const seen = new Set();
   return due.concat(fresh).filter(l => !seen.has(l.id) && seen.add(l.id));
+}
+
+// every column of the board at once: up to `per` leads per stage, due ones first
+async function board(settings, per) {
+  const results = await Promise.all(settings.stages.map(s =>
+    sbJson('crm_leads?select=' + COLUMN_SELECT + '&stage=eq.' + encodeURIComponent(s.key)
+      + '&order=next_at.asc.nullslast,updated_at.desc&limit=' + per).then(r => r.data || []).catch(() => [])));
+  const columns = {};
+  settings.stages.forEach((s, i) => { columns[s.key] = results[i]; });
+  const counts = {};
+  ((await sbJson('crm_stage_counts?select=stage,n')).data || []).forEach(r => { counts[r.stage] = r.n; });
+  return { columns, counts, per };
 }
 
 async function stats(settings) {
@@ -376,8 +392,10 @@ async function logCall(settings, user, body) {
   }
   if (outcome === 'booked' && !booked_at) booked_at = now.toISOString();
 
-  if (spec.stage && settings.stages.some(s => s.key === spec.stage)) patch.stage = spec.stage;
-  patch.next_at = spec.retry || spec.needs === 'next_at' || outcome === 'contacted' ? next_at : null;
+  const stageAllowed = spec.stage && settings.stages.some(s => s.key === spec.stage)
+    && (!spec.onlyFrom || spec.onlyFrom.includes(lead.stage));
+  if (stageAllowed) patch.stage = spec.stage;
+  patch.next_at = spec.retry || spec.needs === 'next_at' ? next_at : null;
   if (outcome === 'booked') { patch.booked_at = booked_at; patch.next_at = null; }
 
   const call = { lead_id: lead.id, outcome, note: str(body.note, 4000), by_user: user.name, at: now.toISOString(),
@@ -472,6 +490,11 @@ module.exports = async function handler(req, res) {
       if (op === 'queue') {
         const settings = await loadSettings();
         return res.status(200).json({ ok: true, queue: await queue(settings, Math.min(100, parseInt(q.limit, 10) || 25)) });
+      }
+      if (op === 'board') {
+        const settings = await loadSettings();
+        const [b, st] = await Promise.all([board(settings, Math.min(500, parseInt(q.per, 10) || 200)), stats(settings)]);
+        return res.status(200).json({ ok: true, board: b, stats: st, settings });
       }
       if (op === 'leads') {
         const settings = await loadSettings();
