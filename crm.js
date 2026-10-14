@@ -88,7 +88,8 @@
     const r = await fetch('/api/crm?' + qs, init);
     if (opts.raw) return r;
     let j = null; try { j = await r.json(); } catch (e) { j = null; }
-    if (r.status === 401) { signOut('That token was rejected.'); throw new Error('unauthorized'); }
+    if (r.status === 401) { signOut('That PIN was rejected.'); throw new Error('unauthorized'); }
+    if (r.status === 429) { const mins = Math.max(1, Math.ceil(((j && j.retry_after) || 900) / 60)); signOut('Too many wrong attempts. Logins are frozen for ' + mins + ' min.'); throw new Error('locked'); }
     if (!r.ok || !j || !j.ok) {
       const e = new Error((j && (j.error + (j.detail ? ': ' + j.detail : ''))) || ('HTTP ' + r.status));
       e.data = j; throw e;
@@ -114,7 +115,7 @@
       S.current = S.queue[0] || null;
       showView(location.hash.replace('#', '') || 'dial');
     } catch (e) {
-      if (e.message !== 'unauthorized') $('gateMsg').textContent = /not_configured/.test(e.message) ? 'Server is missing its Supabase settings.' : 'Could not reach the server: ' + e.message;
+      if (e.message !== 'unauthorized' && e.message !== 'locked') $('gateMsg').textContent = /not_configured/.test(e.message) ? 'Server is missing its Supabase settings.' : 'Could not reach the server: ' + e.message;
     } finally { $('unlock').disabled = false; }
   }
 
@@ -598,7 +599,7 @@
   // ------------------------------------------------------------ wiring
   document.querySelectorAll('.tab').forEach(t => { t.onclick = () => showView(t.dataset.view); });
   document.addEventListener('click', (e) => { const a = e.target.closest('a[data-view]'); if (a) { e.preventDefault(); showView(a.dataset.view); } });
-  $('unlock').onclick = () => { const t = $('token').value.trim(); if (!t) { $('gateMsg').textContent = 'Enter your token.'; return; } signIn(t); };
+  $('unlock').onclick = () => { const t = $('token').value.trim(); if (!t) { $('gateMsg').textContent = 'Enter your PIN.'; return; } signIn(t); };
   $('token').addEventListener('keydown', (e) => { if (e.key === 'Enter') $('unlock').click(); });
   $('logout').onclick = () => signOut('Signed out.');
   let qt; $('q').addEventListener('input', () => { clearTimeout(qt); qt = setTimeout(() => { S.leads.q = $('q').value.trim(); S.leads.offset = 0; loadLeads(); }, 250); });

@@ -30,8 +30,8 @@
   <!-- LOGIN GATE -->
   <section class="gate" id="gate">
     <h1>Call CRM</h1>
-    <p>Enter your login token. It's checked on the server and only kept on this device.</p>
-    <input type="password" id="token" placeholder="login token" autocomplete="current-password" aria-label="Login token">
+    <p>Enter your PIN. It's checked on the server and remembered only on this device.</p>
+    <input type="password" id="token" placeholder="PIN" autocomplete="current-password" aria-label="PIN">
     <button class="btn btn-primary" id="unlock" style="width:100%">Sign in</button>
     <p class="msg" id="gateMsg"></p>
   </section>
@@ -112,10 +112,10 @@
       </div>
       <div class="card">
         <h3>Logins</h3>
-        <p class="hint">Each caller gets their own token so calls are logged under their name. Tokens live in Vercel, not here.</p>
+        <p class="hint">Each caller gets their own PIN so calls are logged under their name. PINs live in Vercel, not here. Five wrong attempts freeze logins for 15 minutes.</p>
         <div class="code">Vercel → micahjcopy → Settings → Environment Variables
-CRM_USERS = hayden:&lt;long-random-string&gt;
-(more callers: comma-separated — name:token,name:token)
+CRM_USERS = hayden:&lt;pin&gt;
+(more callers: comma-separated — name:pin,name:pin)
 Your REVIEWS_ADMIN_TOKEN already signs you in as "micah".</div>
         <div class="row" style="margin-top:12px"><button class="btn btn-ghost btn-sm" id="logout">Sign out on this device</button></div>
       </div>
