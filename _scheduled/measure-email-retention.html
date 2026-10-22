@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Measure Retention, Not Dashboard Revenue — Micah Jacobi</title>
+<meta name="description" content="Your email platform says email made $X. Your bank disagrees. How to measure email marketing retention: repeat rate, time between orders, month-six LTV.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="canonical" href="https://micahjacobi.me/measure-email-retention">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Micah Jacobi">
+<meta property="og:title" content="Measure Retention, Not Dashboard Revenue">
+<meta property="og:description" content="Much of dashboard email revenue is attribution. Measure the real job: repeat rate, time between orders, month-six LTV.">
+<meta property="og:url" content="https://micahjacobi.me/measure-email-retention">
+<meta property="og:image" content="https://micahjacobi.me/headshot-bw.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Measure Retention, Not Dashboard Revenue">
+<meta name="twitter:description" content="How to measure email marketing retention when the dashboard number and the bank account disagree.">
+<meta name="twitter:image" content="https://micahjacobi.me/headshot-bw.jpg">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://micahjacobi.me/#micah","name":"Micah Jacobi","url":"https://micahjacobi.me/","image":"https://micahjacobi.me/headshot-bw.jpg","jobTitle":"Marketing Specialist","knowsAbout":["Email attribution","Retention metrics","Customer lifetime value","Email marketing","Ecommerce analytics"]},{"@type":"Article","headline":"Measure Retention, Not Dashboard Revenue","description":"Your email platform says email made $X. Your bank disagrees. How to measure email marketing retention: repeat rate, time between orders, month-six LTV.","image":"https://micahjacobi.me/headshot-bw.jpg","datePublished":"2026-12-17","dateModified":"2026-12-17","author":{"@id":"https://micahjacobi.me/#micah"},"publisher":{"@id":"https://micahjacobi.me/#micah"},"mainEntityOfPage":"https://micahjacobi.me/measure-email-retention"},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Why does my email platform show more revenue than I can see in the store?","acceptedAnswer":{"@type":"Answer","text":"Default attribution credits email for purchases that follow an open, and it counts day-zero first orders that came from ads and only took the welcome code by email. Switch to click-only with a short window and exclude day zero to see what email actually added."}},{"@type":"Question","name":"What's the most important retention metric for an ecommerce email program?","acceptedAnswer":{"@type":"Answer","text":"Repeat-purchase rate, because it's the plainest measure of whether customers come back. Then time between orders, lifetime value at month six and incremental email revenue. Fix whichever is lowest first, let it settle, then move to the next."}},{"@type":"Question","name":"Should I care about open rates at all?","acceptedAnswer":{"@type":"Answer","text":"As a deliverability signal, yes. As a measure of the program, no. High opens with low clicks and no repeat orders means the emails are being seen and doing nothing, and the dashboard will still report that as success."}}]}]}</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FZ1C922BZV"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-FZ1C922BZV');</script>
+</head>
+<body>
+
+<header class="site-header"><div class="wrap"><nav class="nav">
+  <a class="brand" href="index.html">Micah Jacobi<span class="dot">.</span></a>
+  <button class="nav-toggle" aria-label="Menu" onclick="document.getElementById('nav').classList.toggle('open')">☰</button>
+  <div class="nav-links" id="nav">
+    <a href="services.html">Services</a>
+    <a href="about.html">About</a>
+    <a href="blog.html">Blog</a>
+    <a class="btn btn-primary" href="book.html">Book a call</a>
+  </div>
+</nav></div></header>
+
+<section class="hero hero-dark band-dark">
+  <div class="wrap">
+    <span class="eyebrow">Email &amp; SMS · Measurement</span>
+    <h1 class="hl">Measure retention, not dashboard <span class="em">revenue</span>.</h1>
+    <p class="lead mt24">The tile at the top of your email platform says email made a number last month. Your bank statement says something smaller happened. You asked whoever runs your email about it and got a screenshot of the tile. Both of you are right about something, and neither number is the one that tells you whether retention is working.</p>
+    <div class="coordstrip">
+      <span>THE DASHBOARD FLATTERS</span>
+      <span>FOUR RETENTION NUMBERS</span>
+      <span>FIX THE LOWEST FIRST</span>
+    </div>
+  </div>
+</section>
+<div class="fade"></div>
+
+<section>
+  <div class="wrap">
+    <div class="article">
+      <p class="lede">An email dashboard counts what it was told to count, and by default it was told to be generous. It credits email for purchases that followed an open, and it credits email for first orders that were already on their way from an ad. Neither is a lie exactly. They're just not retention. Email's job in a store is the second order and the ones after it, and if the only number you watch is attributed revenue, you can run a program that looks great on the tile while the customers you paid for buy once and leave. Here's how to measure email marketing retention with four numbers your platform doesn't put on the home screen.</p>
+
+      <h2>Where the dashboard number comes from</h2>
+      <p>Two things inflate it. The first is open-based attribution. Out of the box, most platforms give email the credit for any purchase that happens within several days of someone opening an email. Not clicking. Opening. A customer who was going to buy anyway opens your Tuesday send, buys on Thursday from a search result, and the platform books the sale to email. Change the setting to click-only with a one-day window and watch the number fall. Expect it to fall a long way. What's left is closer to what email actually caused.</p>
+      <p>The second is day zero. Look at where first purchases land relative to signup and you'll usually find most of them happen the same day: someone came from an ad, hit the pop-up, took the welcome code, and bought. That purchase shows up in email revenue because the code was delivered by email. The ad did the work. If you want to know what email added, take day-zero first purchases out of the number. What remains, the people who left without buying and came back because an email brought them, plus every repeat order, is your real incremental email revenue. It's smaller. It's also the only part that's yours.</p>
+      <p>This matters because of what the flattering number hides. An account with a big open rate and a tiny click rate looks healthy on opens and is doing nothing: high open, low conversion, equals nothing. A list that gets blasted every week shows attributed revenue on every send while deliverability erodes underneath, which is the damage I walked through in <a class="inline" href="stop-blasting-your-list.html">why batch-and-blast is killing your list</a>. The tile can't show you either problem. It wasn't built to.</p>
+
+      <div class="keybox"><div class="k">The reframe</div><p>Email revenue isn't the goal of an email program. It's the receipt. The goal is that customers buy again, sooner, and keep buying into month six. Measure those, and the dashboard becomes something you check instead of something you believe.</p></div>
+
+      <h2>How to measure email marketing retention: four numbers</h2>
+      <p>Four numbers, and all four come from your store rather than your email platform, which is the point.</p>
+      <ul>
+        <li>Repeat-purchase rate. Of the customers who bought in a given month, the share who bought again inside a set window, sixty or ninety days depending on how fast your product gets used up. Export orders by customer and count. It's the plainest measure there is of whether the post-purchase program works.</li>
+        <li>Time between orders. For customers with two or more orders, the average days from the first to the second. Shorter is better, because it shortens how long it takes to earn back what you spent acquiring them.</li>
+        <li>Lifetime value at month six. What a customer acquired in a given month has spent by the end of their sixth month. Six months is long enough for retention work to show up in the number and short enough that you can still act on it.</li>
+        <li>Incremental email revenue. Click-attributed, short window, day-zero first purchases excluded. The part of the tile you can defend.</li>
+      </ul>
+      <p>An example, to show how lifetime value moves without the dashboard noticing. Say a subscribe-and-save customer pays $10 on day zero and $40 at days thirty, sixty and ninety, so they're worth $130. Lose the day-ninety cycle, because nobody set expectations, nobody reminded them, and the save path was a cancel button, and the same customer is worth $90. Nothing on the dashboard changed. A third of the customer's value did.</p>
+
+      <h2>Fix the lowest one first</h2>
+      <p>Each number points at a specific part of the program, so the lowest one tells you where to work. Low repeat rate: the post-purchase flow isn't getting people to use the product, so nobody gets the result that sends them back. Long time between orders: the reorder reminder fires late or not at all. Weak month-six value: there's no subscription path, or no save path when they go to cancel. Low incremental revenue under a fat dashboard number: the flows that should be doing the work are under-triggering or paused, which is usually mechanical rather than creative, and the checks for it are in <a class="inline" href="email-revenue-dropped.html">your email revenue dropped, your flows are off</a>.</p>
+      <p>Fix one. Let it stabilize. Then move to the next lowest. Don't touch all four at once, because then you can't tell which change moved the number, and you'll keep whatever happened to be running the week things improved. It's the same discipline I apply to marketing generally, the version in <a class="inline" href="is-your-marketing-working.html">how to actually tell if your marketing is working</a>, pointed at the one channel whose whole purpose is making customers worth more over time.</p>
+
+      <h2>The line between retention marketing and an email team</h2>
+      <p>Ask whoever runs your email what they report on and you'll know which one you've hired. An email team reports sends, opens and attributed revenue, and every month the tile goes up. A retention operation reports repeat rate, time between orders, month-six value and incremental revenue, and tells you which one is lowest and what's being done about it this week. The first is easy to produce and tells you nothing. The second is harder to produce and is the business. If you ever pay anyone a share of email revenue, fix the attribution window in writing before they start, because a number that moves when you change a setting isn't a number worth paying on.</p>
+      <p>None of the four numbers holds still on its own. A flow that was fixed in March can be under-triggering by June, and nobody notices until the repeat rate has already slipped. What keeps the four up is someone reading them every week and pulling the lever the lowest one points at. If you don't have a baseline yet, the <a class="inline" href="leak-report.html">free Retention Score inside the Leak Report</a> gives you one in about five minutes from numbers you can read off your own dashboard, and hands you the first fix in full. That's a starting line, not a scorecard. The scorecard is the weekly habit.</p>
+
+      <p>Setting up the four numbers, fixing the attribution so you can trust the fifth, and running the weekly scorecard is what the retention side of the <a class="inline" href="email-sms.html">email &amp; SMS work</a> is built on. If your dashboard and your bank disagree, book a call and I'll pull your real numbers with you and tell you which one to fix first.</p>
+      <div class="btn-row mt24"><a class="btn btn-primary" href="book.html">Get my real email numbers, free</a> <a class="btn-link" href="is-your-marketing-working.html">Read: how to tell if marketing is working →</a></div>
+
+      <h2>Common questions</h2>
+      <h3>Why does my email platform show more revenue than I can see in the store?</h3>
+      <p>Default attribution credits email for purchases that follow an open, and it counts day-zero first orders that came from ads and only took the welcome code by email. Switch to click-only with a short window and exclude day zero to see what email actually added.</p>
+      <h3>What's the most important retention metric for an ecommerce email program?</h3>
+      <p>Repeat-purchase rate, because it's the plainest measure of whether customers come back. Then time between orders, lifetime value at month six and incremental email revenue. Fix whichever is lowest first, let it settle, then move to the next.</p>
+      <h3>Should I care about open rates at all?</h3>
+      <p>As a deliverability signal, yes. As a measure of the program, no. High opens with low clicks and no repeat orders means the emails are being seen and doing nothing, and the dashboard will still report that as success.</p>
+
+      <div class="authorcard">
+        <div class="pic"><img src="headshot-bw.jpg" alt="Micah Jacobi" onerror="this.parentNode.style.display='none';"></div>
+        <div>
+          <h3>Micah Jacobi</h3>
+          <p>Marketing specialist focused on the systems that turn traffic into revenue, SEO, websites, email &amp; SMS, and paid media. <a class="inline" href="micah-jacobi.html">More about me →</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="fade-up"></div>
+
+<section class="band-dark hero-dark center">
+  <div class="wrap center">
+    <span class="eyebrow" style="justify-content:center;">Let's talk</span>
+    <h2>Does your email revenue match the <span class="em">bank</span>?</h2>
+    <p class="lead mt16" style="max-width:600px;margin-left:auto;margin-right:auto;">Book a free 20-minute diagnosis and I'll switch your attribution to a window you can trust, pull your repeat rate and time between orders from the store, and tell you which of the four numbers to fix first.</p>
+    <div class="btn-row center mt24" style="justify-content:center;"><a class="btn btn-primary" href="book.html">Book your free diagnosis</a></div>
+  </div>
+</section>
+
+<footer class="site-footer"><div class="wrap">
+  <div class="foot-grid">
+    <div><div class="foot-brand">Micah Jacobi<span class="dot">.</span></div>
+      <p style="color:#9A968C;max-width:280px;margin-top:10px;font-size:15px;">Marketing built to make you money. Diagnosis, strategy, and the systems that turn traffic into buyers.</p></div>
+    <div class="foot-links">
+      <div class="foot-col"><b>Services</b><a href="seo.html">SEO</a><a href="website-design.html">Website Design</a><a href="email-sms.html">Email &amp; SMS</a><a href="media-buying.html">Media Buying</a></div>
+      <div class="foot-col"><b>Company</b><a href="about.html">About</a><a href="blog.html">Blog</a><a href="services.html">Services</a></div>
+      <div class="foot-col"><b>Get in touch</b><a href="book.html">Book a call</a><a href="mailto:micahjcopy@gmail.com">Email</a></div>
+    </div>
+  </div>
+  <div class="foot-bottom"><span>© 2026 Micah Jacobi. All rights reserved.</span><span>Marketing specialist</span></div>
+</div></footer>
+<script>document.querySelectorAll('.nav-links a').forEach(a=>a.addEventListener('click',()=>document.getElementById('nav').classList.remove('open')));</script>
+<script src="motion.js" defer></script>
+</body>
+</html>

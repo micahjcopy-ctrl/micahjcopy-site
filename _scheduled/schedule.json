@@ -1,0 +1,242 @@
+[
+  {
+    "order": 1,
+    "date": "2026-10-22",
+    "slug": "do-i-need-a-new-website",
+    "title": "Do You Need a New Website, or a Better One?",
+    "category": "Website &amp; Conversion",
+    "blurb": "Sales are slow and the redesign quote is in. Find where visitors drop off first; it's usually one element, sometimes the whole site"
+  },
+  {
+    "order": 2,
+    "date": "2026-10-24",
+    "slug": "email-revenue-dropped",
+    "title": "Your Email Revenue Dropped. Your List Isn't Burnt, Your Flows Are Off.",
+    "category": "Email &amp; SMS",
+    "blurb": "A sudden email revenue drop is almost never a burnt list. Two flow numbers find the real cause in ten minutes"
+  },
+  {
+    "order": 3,
+    "date": "2026-10-26",
+    "slug": "meta-ads-targeting-problem",
+    "title": "Your Meta Ads Don't Have a Targeting Problem. They Have a Creative Problem.",
+    "category": "Paid Media",
+    "blurb": "Meta reads your ad before it picks the audience. If targeting changes do nothing, the creative is the lever you haven't pulled"
+  },
+  {
+    "order": 4,
+    "date": "2026-10-28",
+    "slug": "website-not-getting-leads",
+    "title": "Why Your Website Isn't Getting Leads: The 5-Second Test",
+    "category": "Website &amp; Conversion",
+    "blurb": "Traffic but no leads? Visitors don't look around. Run the five-second test on your homepage today, with one stranger and three questions"
+  },
+  {
+    "order": 5,
+    "date": "2026-10-30",
+    "slug": "customers-dont-reorder",
+    "title": "Customers Don't Reorder What They Never Used",
+    "category": "Email &amp; SMS",
+    "blurb": "Weak second orders aren't a discount problem. Get the first order used, tie it to a moment in their day, then ask"
+  },
+  {
+    "order": 6,
+    "date": "2026-11-01",
+    "slug": "math-before-meta-ads",
+    "title": "Do This Math Before You Spend a Dollar on Meta Ads",
+    "category": "Paid Media",
+    "blurb": "Meta asks for a budget. It never asks what a customer is worth to you. The ceiling, the target and the chain down to the click"
+  },
+  {
+    "order": 7,
+    "date": "2026-11-03",
+    "slug": "above-the-fold-website",
+    "title": "Your Logo Is Taking Up the Most Valuable Spot on Your Website",
+    "category": "Website &amp; Conversion",
+    "blurb": "The first screen is the only part of your site every visitor sees. Spend it on the promise, the proof and the next step, not the logo"
+  },
+  {
+    "order": 8,
+    "date": "2026-11-05",
+    "slug": "reorder-email-timing",
+    "title": "Send the Reorder Email Before They Run Out",
+    "category": "Email &amp; SMS",
+    "blurb": "The day-30 reminder lands on an empty bottle and a broken routine. Time it to your reorder curve, while it still works"
+  },
+  {
+    "order": 9,
+    "date": "2026-11-07",
+    "slug": "facebook-ads-clicks-no-sales",
+    "title": "Your Facebook Ads Get Clicks. Nobody Buys. It's the Page, Not the Ad.",
+    "category": "Paid Media",
+    "blurb": "A high CTR with no sales isn't an ad problem. Check the clicks are landing, then read the ad against the page"
+  },
+  {
+    "order": 10,
+    "date": "2026-11-09",
+    "slug": "homepage-headline",
+    "title": "Your Best Homepage Headline Is Already Written, by Your Customers",
+    "category": "Website &amp; Conversion",
+    "blurb": "Stop hunting for a clever tagline. Your reviews, sales calls and support emails already hold the headline that sells"
+  },
+  {
+    "order": 11,
+    "date": "2026-11-11",
+    "slug": "email-first-time-vs-repeat-buyers",
+    "title": "First-Time, Repeat and VIP Buyers Need Different Emails",
+    "category": "Email &amp; SMS",
+    "blurb": "One \"customers\" list sends the ninth-order buyer the same email as the first-timer. Order count decides what each hears next"
+  },
+  {
+    "order": 12,
+    "date": "2026-11-13",
+    "slug": "facebook-ads-learning-limited",
+    "title": "\"Learning Limited\" Is a Check-Engine Light, Not a Failure",
+    "category": "Paid Media",
+    "blurb": "Learning Limited asks you to look, not to rebuild. Judge the ad set on cost per result, then consolidate without resetting a thing"
+  },
+  {
+    "order": 13,
+    "date": "2026-11-15",
+    "slug": "website-looks-good-doesnt-convert",
+    "title": "Your Website Looks Great. That's Not Why People Buy.",
+    "category": "Website &amp; Conversion",
+    "blurb": "Everyone says it looks great and nobody books. Polish buys trust; the site that feels native to your buyer and explains the last failure sells"
+  },
+  {
+    "order": 14,
+    "date": "2026-11-17",
+    "slug": "cross-sell-next-problem",
+    "title": "Your Next Product Is Your Customer's Next Problem",
+    "category": "Email &amp; SMS",
+    "blurb": "Customers also bought\" is a guess about strangers. Map before, during and after, and sell the problem that comes next"
+  },
+  {
+    "order": 15,
+    "date": "2026-11-19",
+    "slug": "facebook-ads-conversion-event",
+    "title": "Meta Gives You Exactly What You Ask For",
+    "category": "Paid Media",
+    "blurb": "Ask Meta for cheap leads and it finds form-fillers. The optimization event is the instruction; set it as close to revenue as you can"
+  },
+  {
+    "order": 16,
+    "date": "2026-11-21",
+    "slug": "website-testimonials-that-work",
+    "title": "Reviews People Actually Believe (and What to Do If You Don't Have Any Yet)",
+    "category": "Website &amp; Conversion",
+    "blurb": "A row of five-star quotes gets tuned out. What proof people believe looks like, where it goes, and how to start with none"
+  },
+  {
+    "order": 17,
+    "date": "2026-11-23",
+    "slug": "what-to-email-between-sales",
+    "title": "What to Email Your Customers When You're Not Running a Sale",
+    "category": "Email &amp; SMS",
+    "blurb": "Only emailing when there's a sale? Non-promo emails are the deposits, the sale is the withdrawal. Three emails that earn the next order"
+  },
+  {
+    "order": 18,
+    "date": "2026-11-25",
+    "slug": "facebook-ad-first-two-lines",
+    "title": "The First Two Lines Are the Whole Ad",
+    "category": "Paid Media",
+    "blurb": "On a phone your ad is two lines and a \"see more\". When it stalls, swap the intro, not the ad: the recipe and the test"
+  },
+  {
+    "order": 19,
+    "date": "2026-11-27",
+    "slug": "simplify-your-website",
+    "title": "Cut Before You Add: The Website Fix That Beats a Redesign",
+    "category": "Website &amp; Conversion",
+    "blurb": "More sections make a weaker case. What to cut, what to rewrite instead, and how long your page should really be"
+  },
+  {
+    "order": 20,
+    "date": "2026-11-29",
+    "slug": "upsell-timing",
+    "title": "Make the Next Offer at the Win, Not on a Timer",
+    "category": "Email &amp; SMS",
+    "blurb": "The day-14 upsell hits three different buyers with one message. Send the next offer when a signal says the first product worked"
+  },
+  {
+    "order": 21,
+    "date": "2026-12-01",
+    "slug": "when-to-kill-or-scale-facebook-ads",
+    "title": "When to Kill a Meta Ad, and When to Scale It",
+    "category": "Paid Media",
+    "blurb": "Killing an ad after a day and tripling budget after a lucky night both lose money. The spend rule, three windows, and how to scale"
+  },
+  {
+    "order": 22,
+    "date": "2026-12-03",
+    "slug": "website-one-argument",
+    "title": "A Good Website Reads Like One Argument, Not a Stack of Sections",
+    "category": "Website &amp; Conversion",
+    "blurb": "Hero, about, services, testimonials, FAQ. If you can pull a section out and the page reads the same, it shouldn't be there"
+  },
+  {
+    "order": 23,
+    "date": "2026-12-05",
+    "slug": "subscription-churn-email",
+    "title": "Subscribers Are Your Most Valuable Customers, and Your Most Fragile",
+    "category": "Email &amp; SMS",
+    "blurb": "Subscribers decide to stay every cycle. Fit, routine and a save path in front of the cancel button cut churn without a discount"
+  },
+  {
+    "order": 24,
+    "date": "2026-12-07",
+    "slug": "remix-winning-facebook-ad",
+    "title": "Don't Make a New Ad. Remix the Winner.",
+    "category": "Paid Media",
+    "blurb": "Your best ad is tiring and every new one loses to it. Keep what it knows, swap one ingredient, change the format completely"
+  },
+  {
+    "order": 25,
+    "date": "2026-12-09",
+    "slug": "website-on-a-phone",
+    "title": "Your Website Gets Judged on a Phone, in a Hurry, on a Bad Connection",
+    "category": "Website &amp; Conversion",
+    "blurb": "You approved it on a big monitor. Your customer meets it on an old phone with one bar of signal. Two checks before you sign off"
+  },
+  {
+    "order": 26,
+    "date": "2026-12-11",
+    "slug": "tell-customers-when-it-works",
+    "title": "Tell Them When It'll Start Working",
+    "category": "Email &amp; SMS",
+    "blurb": "People quit before the result shows up unless you tell them when to expect it. The week-by-week email that stops early refunds"
+  },
+  {
+    "order": 27,
+    "date": "2026-12-13",
+    "slug": "do-you-need-retargeting",
+    "title": "Do You Actually Need Retargeting?",
+    "category": "Paid Media",
+    "blurb": "Meta already re-serves warm people in your broad campaign. When a separate retargeting budget earns its keep, and when it pays twice"
+  },
+  {
+    "order": 28,
+    "date": "2026-12-15",
+    "slug": "contact-form-fields",
+    "title": "Every Form Field Costs You Customers",
+    "category": "Website &amp; Conversion",
+    "blurb": "Count the fields on your contact form. Each one is a toll on a person who was about to say yes. Which ones earn their place"
+  },
+  {
+    "order": 29,
+    "date": "2026-12-17",
+    "slug": "measure-email-retention",
+    "title": "Measure Retention, Not Dashboard Revenue",
+    "category": "Email &amp; SMS",
+    "blurb": "Much of your dashboard's email revenue is attribution. Four store numbers that measure retention, and which one to fix first"
+  },
+  {
+    "order": 30,
+    "date": "2026-12-19",
+    "slug": "facebook-ad-comments",
+    "title": "Your Ad's Comments Are Part of Your Ad",
+    "category": "Paid Media",
+    "blurb": "Buyers read your ad's comments as proof and Meta reads them as targeting. Steer the thread, hide don't delete, and never duplicate a proofed ad"
+  }
+]
