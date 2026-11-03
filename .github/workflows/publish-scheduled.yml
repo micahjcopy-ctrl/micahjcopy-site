@@ -7,10 +7,15 @@ name: Publish scheduled blog posts
 
 on:
   schedule:
-    # GitHub runs scheduled jobs late under load (observed 3-4h behind on this repo), so run twice
-    # a day on off-peak minutes. Publishing is idempotent: the second run is a no-op if the first ran.
-    - cron: '37 12 * * *'   # 12:37 UTC = 8:37am EDT / 7:37am EST
-    - cron: '7 17 * * *'    # 17:07 UTC = 1:07pm EDT / 12:07pm EST (catch-up)
+    # GitHub's scheduler runs these 4-9 hours late on this repo (observed Oct 26 - Nov 2), so the
+    # job is scheduled six times a day on off-peak minutes. The first one to actually run after
+    # midnight Eastern publishes that day's post; every later run is an idempotent no-op.
+    - cron: '7 5 * * *'     # 05:07 UTC = 00:07 EST
+    - cron: '7 8 * * *'     # 08:07 UTC = 03:07 EST
+    - cron: '7 11 * * *'    # 11:07 UTC = 06:07 EST
+    - cron: '7 14 * * *'    # 14:07 UTC = 09:07 EST
+    - cron: '7 17 * * *'    # 17:07 UTC = 12:07 EST
+    - cron: '7 20 * * *'    # 20:07 UTC = 15:07 EST
   workflow_dispatch:
 
 permissions:
