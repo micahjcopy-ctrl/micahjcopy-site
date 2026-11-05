@@ -68,7 +68,8 @@
     "slug": "reorder-email-timing",
     "title": "Send the Reorder Email Before They Run Out",
     "category": "Email &amp; SMS",
-    "blurb": "The day-30 reminder lands on an empty bottle and a broken routine. Time it to your reorder curve, while it still works"
+    "blurb": "The day-30 reminder lands on an empty bottle and a broken routine. Time it to your reorder curve, while it still works",
+    "published": "2026-11-05"
   },
   {
     "order": 9,
