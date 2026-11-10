@@ -16,6 +16,14 @@
 // Every request carries  Authorization: Bearer <pin-or-token>.  It picks the
 // user; the user's name is stamped on every call they log.
 //
+// One CRM per caller (2026-11-10). Every lead carries `assigned_to` (the caller
+// who imported or added it) and every read and write below is filtered by it,
+// so Hayden and Charles each see only their own pipeline. Settings (board
+// sections, columns, retry days) are per caller too: crm_settings key
+// "schema:<name>", falling back to the shared "schema". The owner login
+// (REVIEWS_ADMIN_TOKEN) is the only unscoped view: it sees every caller's leads.
+// Phone de-dupe stays global on purpose: two callers never dial the same business.
+//
 // Routes (all on this one function, picked by ?op=):
 //   GET  op=bootstrap           settings + stats + first page of the queue
 //   GET  op=queue&limit=        the next leads to dial, in order
@@ -81,7 +89,7 @@ const LEAD_FIELDS = ['business', 'owner', 'phone', 'phone_display', 'email', 'to
 const SORTABLE = ['business', 'owner', 'town', 'category', 'stage', 'next_at', 'last_called_at', 'call_count',
   'created_at', 'updated_at', 'reviews', 'booked_at'];
 const COLUMN_SELECT = 'id,business,owner,phone,phone_display,email,town,state,category,website,reviews,stage,notes,custom,'
-  + 'next_at,last_called_at,last_outcome,call_count,booked_at,source,created_by,created_at,updated_at';
+  + 'next_at,last_called_at,last_outcome,call_count,booked_at,source,created_by,assigned_to,created_at,updated_at';
 
 // ----------------------------------------------------------------- helpers
 function sb(path, init) {
@@ -172,7 +180,7 @@ function safeEqual(a, b) {
 
 function users() {
   const list = [];
-  if (process.env.REVIEWS_ADMIN_TOKEN) list.push({ name: process.env.CRM_OWNER_NAME || 'micah', token: process.env.REVIEWS_ADMIN_TOKEN });
+  if (process.env.REVIEWS_ADMIN_TOKEN) list.push({ name: process.env.CRM_OWNER_NAME || 'micah', token: process.env.REVIEWS_ADMIN_TOKEN, admin: true });
   (process.env.CRM_USERS || '').split(',').forEach(pair => {
     const i = pair.indexOf(':');
     if (i < 1) return;
@@ -188,9 +196,14 @@ function bearer(req) {
 }
 
 function matchUser(token) {
-  for (const u of users()) if (safeEqual(token, u.token)) return { name: u.name };
+  for (const u of users()) if (safeEqual(token, u.token)) return { name: u.name, admin: !!u.admin };
   return null;
 }
+
+// Whose CRM a request is looking at: a caller's own name, or null for the
+// owner login (everything). own() is the PostgREST filter that enforces it.
+function scopeOf(user) { return user.admin ? null : user.name; }
+function own(scope) { return scope ? '&assigned_to=eq.' + encodeURIComponent(scope) : ''; }
 
 // Brute-force lockout: short PINs are allowed as logins, so after LOCK_MAX wrong
 // attempts inside LOCK_WINDOW the whole login is frozen for LOCK_MS. State lives
@@ -249,13 +262,18 @@ function cleanSettings(input) {
   return { stages, terminal_stages, fields, columns, retry_days, booking_url: str(s.booking_url, 500) };
 }
 
-async function loadSettings() {
-  const { data } = await sbJson('crm_settings?select=value&key=eq.schema');
-  return cleanSettings(data && data[0] ? data[0].value : null);
+function settingsKey(scope) { return scope ? 'schema:' + scope : 'schema'; }
+
+async function loadSettings(scope) {
+  const keys = scope ? [settingsKey(scope), 'schema'] : ['schema'];
+  const { data } = await sbJson('crm_settings?select=key,value&key=in.' + inList(keys));
+  const rows = data || [];
+  const mine = rows.find(r => r.key === settingsKey(scope)) || rows.find(r => r.key === 'schema');
+  return cleanSettings(mine ? mine.value : null);
 }
 
-async function saveSettings(settings) {
-  const row = { key: 'schema', value: settings, updated_at: new Date().toISOString() };
+async function saveSettings(settings, scope) {
+  const row = { key: settingsKey(scope), value: settings, updated_at: new Date().toISOString() };
   await sbJson('crm_settings?on_conflict=key', { method: 'POST', headers: { Prefer: 'resolution=merge-duplicates,return=minimal' }, body: JSON.stringify(row) });
   return settings;
 }
@@ -292,19 +310,19 @@ function cleanLead(input, settings, forCreate) {
   return out;
 }
 
-async function getLead(id) {
-  const { data } = await sbJson('crm_leads?select=' + COLUMN_SELECT + '&id=eq.' + encodeURIComponent(id) + '&limit=1');
+async function getLead(id, scope) {
+  const { data } = await sbJson('crm_leads?select=' + COLUMN_SELECT + '&id=eq.' + encodeURIComponent(id) + own(scope) + '&limit=1');
   return data && data[0] ? data[0] : null;
 }
 
-async function queue(settings, limit) {
+async function queue(settings, limit, scope) {
   const now = new Date().toISOString();
   const notTerminal = settings.terminal_stages.length ? '&stage=not.in.' + inList(settings.terminal_stages) : '';
-  const due = (await sbJson('crm_leads?select=' + COLUMN_SELECT + notTerminal + '&next_at=lte.' + now
+  const due = (await sbJson('crm_leads?select=' + COLUMN_SELECT + own(scope) + notTerminal + '&next_at=lte.' + now
     + '&order=next_at.asc&limit=' + limit)).data || [];
   let fresh = [];
   if (due.length < limit) {
-    fresh = (await sbJson('crm_leads?select=' + COLUMN_SELECT + '&stage=eq.new&next_at=is.null'
+    fresh = (await sbJson('crm_leads?select=' + COLUMN_SELECT + own(scope) + '&stage=eq.new&next_at=is.null'
       + '&order=created_at.asc&limit=' + (limit - due.length))).data || [];
   }
   const seen = new Set();
@@ -312,25 +330,31 @@ async function queue(settings, limit) {
 }
 
 // every column of the board at once: up to `per` leads per stage, due ones first
-async function board(settings, per) {
+// stage counts for one caller (or everyone, for the owner login)
+function stageCountsPath(scope) {
+  return scope ? 'crm_stage_counts_by_user?select=stage,n&assigned_to=eq.' + encodeURIComponent(scope)
+    : 'crm_stage_counts?select=stage,n';
+}
+
+async function board(settings, per, scope) {
   const results = await Promise.all(settings.stages.map(s =>
-    sbJson('crm_leads?select=' + COLUMN_SELECT + '&stage=eq.' + encodeURIComponent(s.key)
+    sbJson('crm_leads?select=' + COLUMN_SELECT + own(scope) + '&stage=eq.' + encodeURIComponent(s.key)
       + '&order=next_at.asc.nullslast,updated_at.desc&limit=' + per).then(r => r.data || []).catch(() => [])));
   const columns = {};
   settings.stages.forEach((s, i) => { columns[s.key] = results[i]; });
   const counts = {};
-  ((await sbJson('crm_stage_counts?select=stage,n')).data || []).forEach(r => { counts[r.stage] = r.n; });
+  ((await sbJson(stageCountsPath(scope))).data || []).forEach(r => { counts[r.stage] = r.n; });
   return { columns, counts, per };
 }
 
-async function stats(settings) {
+async function stats(settings, scope) {
   const start = todayStartIso(TZ);
   const [calls, stageCounts, dueR, totalR] = await Promise.all([
-    sbJson('crm_calls?select=outcome,by_user&at=gte.' + start),
-    sbJson('crm_stage_counts?select=stage,n'),
-    sb('crm_leads?select=id' + (settings.terminal_stages.length ? '&stage=not.in.' + inList(settings.terminal_stages) : '')
+    sbJson('crm_calls?select=outcome,by_user&at=gte.' + start + (scope ? '&by_user=eq.' + encodeURIComponent(scope) : '')),
+    sbJson(stageCountsPath(scope)),
+    sb('crm_leads?select=id' + own(scope) + (settings.terminal_stages.length ? '&stage=not.in.' + inList(settings.terminal_stages) : '')
       + '&next_at=lte.' + new Date().toISOString() + '&limit=1', { headers: { Prefer: 'count=exact' } }),
-    sb('crm_leads?select=id&limit=1', { headers: { Prefer: 'count=exact' } })
+    sb('crm_leads?select=id' + own(scope) + '&limit=1', { headers: { Prefer: 'count=exact' } })
   ]);
   const today = { calls: 0, contacted: 0, follow_ups: 0, booked: 0, by_user: {} };
   (calls.data || []).forEach(c => {
@@ -349,8 +373,9 @@ async function stats(settings) {
   return { today, stages, due_now: contentRangeTotal(dueR.headers) || 0, total: contentRangeTotal(totalR.headers) || 0, day_start: start };
 }
 
-async function listLeads(settings, q) {
+async function listLeads(settings, q, scope) {
   const parts = ['select=' + COLUMN_SELECT];
+  if (scope) parts.push('assigned_to=eq.' + encodeURIComponent(scope));
   const search = str(q.q, 80).replace(/["\\]/g, '');
   if (search) {
     const pat = '"*' + search.replace(/\*/g, '') + '*"';
@@ -375,8 +400,8 @@ async function listLeads(settings, q) {
   return { leads, total: contentRangeTotal(r.headers), limit, offset };
 }
 
-async function logCall(settings, user, body) {
-  const lead = await getLead(str(body.lead_id, 64));
+async function logCall(settings, user, body, scope) {
+  const lead = await getLead(str(body.lead_id, 64), scope);
   if (!lead) return { error: 'not_found', status: 404 };
   const outcome = str(body.outcome, 30);
   const spec = OUTCOMES[outcome];
@@ -401,12 +426,12 @@ async function logCall(settings, user, body) {
   const call = { lead_id: lead.id, outcome, note: str(body.note, 4000), by_user: user.name, at: now.toISOString(),
     next_at: patch.next_at || null, booked_at: outcome === 'booked' ? booked_at : null };
   await sbJson('crm_calls', { method: 'POST', headers: { Prefer: 'return=minimal' }, body: JSON.stringify(call) });
-  const { data } = await sbJson('crm_leads?id=eq.' + encodeURIComponent(lead.id) + '&select=' + COLUMN_SELECT,
+  const { data } = await sbJson('crm_leads?id=eq.' + encodeURIComponent(lead.id) + own(scope) + '&select=' + COLUMN_SELECT,
     { method: 'PATCH', headers: { Prefer: 'return=representation' }, body: JSON.stringify(patch) });
   return { lead: data && data[0], call };
 }
 
-async function importRows(settings, user, body) {
+async function importRows(settings, user, body, scope) {
   const rows = Array.isArray(body.rows) ? body.rows.slice(0, 5000) : [];
   // optional: new custom columns discovered in the file
   let settingsOut = settings;
@@ -414,7 +439,7 @@ async function importRows(settings, user, body) {
     const merged = cleanSettings(Object.assign({}, settings, { fields: settings.fields.concat(body.new_fields) }));
     // new columns should show up in the Leads table right away
     merged.columns = merged.columns.concat(merged.fields.map(f => f.key).filter(k => !merged.columns.includes(k) && !settings.fields.some(f => f.key === k)));
-    settingsOut = await saveSettings(merged);
+    settingsOut = await saveSettings(merged, scope);
   }
   const cleaned = [];
   let skipped_empty = 0, skipped_dupes = 0;
@@ -425,10 +450,12 @@ async function importRows(settings, user, body) {
     if (!l.stage) l.stage = 'new';
     if (l.phone) { if (seenPhones.has(l.phone)) { skipped_dupes++; return; } seenPhones.add(l.phone); }
     l.created_by = user.name;
+    l.assigned_to = user.name;   // lands in the importer's own CRM
     if (!l.source) l.source = str(body.source, 120) || 'import';
     cleaned.push(l);
   });
-  // de-dupe against what's already in the table (by phone)
+  // de-dupe against what's already in the table (by phone), across every
+  // caller, so a business already in Hayden's list never lands in Charles's
   const phones = Array.from(seenPhones);
   const existing = new Set();
   for (let i = 0; i < phones.length; i += 150) {
@@ -443,14 +470,14 @@ async function importRows(settings, user, body) {
   return { inserted: toInsert.length, skipped_dupes, skipped_empty, settings: settingsOut };
 }
 
-async function exportCsv(settings) {
+async function exportCsv(settings, scope) {
   const cols = ['business', 'owner', 'phone_display', 'phone', 'email', 'town', 'state', 'category', 'website', 'reviews',
     'stage', 'notes', 'next_at', 'last_called_at', 'last_outcome', 'call_count', 'booked_at', 'source', 'created_at'];
   const custom = settings.fields.map(f => f.key);
   const lines = [cols.concat(custom).map(csvCell).join(',')];
   let offset = 0;
   for (;;) {
-    const { data } = await sbJson('crm_leads?select=' + COLUMN_SELECT + '&order=created_at.asc&limit=1000&offset=' + offset);
+    const { data } = await sbJson('crm_leads?select=' + COLUMN_SELECT + own(scope) + '&order=created_at.asc&limit=1000&offset=' + offset);
     (data || []).forEach(l => {
       const c = l.custom || {};
       lines.push(cols.map(k => csvCell(l[k])).concat(custom.map(k => csvCell(c[k]))).join(','));
@@ -479,46 +506,48 @@ module.exports = async function handler(req, res) {
       return res.status(401).json({ ok: false, error: 'unauthorized' });
     }
     res.setHeader('Cache-Control', 'no-store');
+    const scope = scopeOf(user);
 
     if (req.method === 'GET') {
       const q = req.query || {};
       if (op === 'bootstrap') {
-        const settings = await loadSettings();
-        const [st, qu] = await Promise.all([stats(settings), queue(settings, 25)]);
+        const settings = await loadSettings(scope);
+        const [st, qu] = await Promise.all([stats(settings, scope), queue(settings, 25, scope)]);
         return res.status(200).json({ ok: true, user, settings, stats: st, queue: qu, outcomes: Object.keys(OUTCOMES), now: new Date().toISOString() });
       }
       if (op === 'queue') {
-        const settings = await loadSettings();
-        return res.status(200).json({ ok: true, queue: await queue(settings, Math.min(100, parseInt(q.limit, 10) || 25)) });
+        const settings = await loadSettings(scope);
+        return res.status(200).json({ ok: true, queue: await queue(settings, Math.min(100, parseInt(q.limit, 10) || 25), scope) });
       }
       if (op === 'board') {
-        const settings = await loadSettings();
-        const [b, st] = await Promise.all([board(settings, Math.min(500, parseInt(q.per, 10) || 200)), stats(settings)]);
+        const settings = await loadSettings(scope);
+        const [b, st] = await Promise.all([board(settings, Math.min(500, parseInt(q.per, 10) || 200), scope), stats(settings, scope)]);
         return res.status(200).json({ ok: true, board: b, stats: st, settings });
       }
       if (op === 'leads') {
-        const settings = await loadSettings();
-        return res.status(200).json(Object.assign({ ok: true }, await listLeads(settings, q)));
+        const settings = await loadSettings(scope);
+        return res.status(200).json(Object.assign({ ok: true }, await listLeads(settings, q, scope)));
       }
       if (op === 'lead') {
-        const lead = await getLead(str(q.id, 64));
+        const lead = await getLead(str(q.id, 64), scope);
         if (!lead) return res.status(404).json({ ok: false, error: 'not_found' });
         const { data } = await sbJson('crm_calls?select=*&lead_id=eq.' + encodeURIComponent(lead.id) + '&order=at.desc&limit=200');
         return res.status(200).json({ ok: true, lead, calls: data || [] });
       }
       if (op === 'activity') {
         const limit = Math.min(300, parseInt(q.limit, 10) || 60);
-        const { data } = await sbJson('crm_calls?select=*,lead:crm_leads(id,business,owner,phone,phone_display,stage)&order=at.desc&limit=' + limit);
+        const { data } = await sbJson('crm_calls?select=*,lead:crm_leads(id,business,owner,phone,phone_display,stage)'
+          + (scope ? '&by_user=eq.' + encodeURIComponent(scope) : '') + '&order=at.desc&limit=' + limit);
         return res.status(200).json({ ok: true, calls: data || [] });
       }
       if (op === 'stats') {
-        return res.status(200).json({ ok: true, stats: await stats(await loadSettings()) });
+        return res.status(200).json({ ok: true, stats: await stats(await loadSettings(scope), scope) });
       }
       if (op === 'settings') {
-        return res.status(200).json({ ok: true, settings: await loadSettings() });
+        return res.status(200).json({ ok: true, settings: await loadSettings(scope) });
       }
       if (op === 'export') {
-        const csv = await exportCsv(await loadSettings());
+        const csv = await exportCsv(await loadSettings(scope), scope);
         res.setHeader('Content-Type', 'text/csv; charset=utf-8');
         res.setHeader('Content-Disposition', 'attachment; filename="leads-' + new Date().toISOString().slice(0, 10) + '.csv"');
         return res.status(200).send(csv);
@@ -529,25 +558,33 @@ module.exports = async function handler(req, res) {
     if (req.method === 'POST') {
       const body = readBody(req);
       if (op === 'lead_create') {
-        const settings = await loadSettings();
+        const settings = await loadSettings(scope);
         const lead = cleanLead(body.lead, settings, true);
         if (!lead.business && !lead.phone) return res.status(400).json({ ok: false, error: 'need_business_or_phone' });
         if (!lead.stage) lead.stage = 'new';
         lead.created_by = user.name;
+        lead.assigned_to = user.name;
         if (!lead.source) lead.source = 'manual';
         if (lead.phone) {
-          const { data } = await sbJson('crm_leads?select=id,business&phone=eq.' + lead.phone + '&limit=1');
-          if (data && data[0]) return res.status(409).json({ ok: false, error: 'duplicate_phone', existing: data[0] });
+          const { data } = await sbJson('crm_leads?select=id,business,assigned_to&phone=eq.' + lead.phone + '&limit=1');
+          const ex = data && data[0];
+          if (ex) {
+            // Someone else's lead: say whose, but don't hand over its id.
+            const mine = !scope || ex.assigned_to === scope;
+            const who = ex.assigned_to ? ex.assigned_to.charAt(0).toUpperCase() + ex.assigned_to.slice(1) : 'another caller';
+            return res.status(409).json({ ok: false, error: 'duplicate_phone',
+              existing: mine ? ex : { business: (ex.business || 'a lead') + ' (in ' + who + "'s list)" } });
+          }
         }
         const { data } = await sbJson('crm_leads?select=' + COLUMN_SELECT, { method: 'POST', headers: { Prefer: 'return=representation' }, body: JSON.stringify(lead) });
         return res.status(200).json({ ok: true, lead: data && data[0] });
       }
       if (op === 'lead_update') {
-        const settings = await loadSettings();
+        const settings = await loadSettings(scope);
         const id = str(body.id, 64);
         const patch = cleanLead(body.patch, settings, false);
         if (!id || !Object.keys(patch).length) return res.status(400).json({ ok: false, error: 'bad_request' });
-        const { data } = await sbJson('crm_leads?id=eq.' + encodeURIComponent(id) + '&select=' + COLUMN_SELECT,
+        const { data } = await sbJson('crm_leads?id=eq.' + encodeURIComponent(id) + own(scope) + '&select=' + COLUMN_SELECT,
           { method: 'PATCH', headers: { Prefer: 'return=representation' }, body: JSON.stringify(patch) });
         if (!data || !data[0]) return res.status(404).json({ ok: false, error: 'not_found' });
         return res.status(200).json({ ok: true, lead: data[0] });
@@ -555,31 +592,31 @@ module.exports = async function handler(req, res) {
       if (op === 'lead_delete') {
         const id = str(body.id, 64);
         if (!id) return res.status(400).json({ ok: false, error: 'bad_request' });
-        await sbJson('crm_leads?id=eq.' + encodeURIComponent(id), { method: 'DELETE', headers: { Prefer: 'return=minimal' } });
+        await sbJson('crm_leads?id=eq.' + encodeURIComponent(id) + own(scope), { method: 'DELETE', headers: { Prefer: 'return=minimal' } });
         return res.status(200).json({ ok: true });
       }
       if (op === 'call') {
-        const settings = await loadSettings();
-        const r = await logCall(settings, user, body);
+        const settings = await loadSettings(scope);
+        const r = await logCall(settings, user, body, scope);
         if (r.error) return res.status(r.status).json({ ok: false, error: r.error });
         return res.status(200).json({ ok: true, lead: r.lead, call: r.call });
       }
       if (op === 'skip') {
         const id = str(body.lead_id, 64);
         const hours = Math.min(24 * 30, Math.max(1, Number(body.hours) || 24));
-        const { data } = await sbJson('crm_leads?id=eq.' + encodeURIComponent(id) + '&select=' + COLUMN_SELECT,
+        const { data } = await sbJson('crm_leads?id=eq.' + encodeURIComponent(id) + own(scope) + '&select=' + COLUMN_SELECT,
           { method: 'PATCH', headers: { Prefer: 'return=representation' },
             body: JSON.stringify({ next_at: new Date(Date.now() + hours * 3600000).toISOString() }) });
         if (!data || !data[0]) return res.status(404).json({ ok: false, error: 'not_found' });
         return res.status(200).json({ ok: true, lead: data[0] });
       }
       if (op === 'import') {
-        const settings = await loadSettings();
-        return res.status(200).json(Object.assign({ ok: true }, await importRows(settings, user, body)));
+        const settings = await loadSettings(scope);
+        return res.status(200).json(Object.assign({ ok: true }, await importRows(settings, user, body, scope)));
       }
       if (op === 'settings_save') {
         const settings = cleanSettings(body.settings);
-        return res.status(200).json({ ok: true, settings: await saveSettings(settings) });
+        return res.status(200).json({ ok: true, settings: await saveSettings(settings, scope) });
       }
       return res.status(400).json({ ok: false, error: 'unknown_op' });
     }
