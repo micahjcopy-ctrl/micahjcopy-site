@@ -365,7 +365,7 @@
 <figure class="rev-card" data-rev-name="Lisa Vrancken">
 <div class="rev-stars" role="img" aria-label="5 out of 5 stars">★★★★★</div>
 <blockquote class="rev-quote">Micah was referred to my team to assist in web design, SEO, funnels &amp; paid ads. Micah is a consummate professional, understands the client&rsquo;s vision &amp; executes accordingly. He meets deadlines, graciously accepts feedback &amp; raises the bar of excellence. Micah&rsquo;s work met and exceeded my expectations. I would highly recommend Micah to anyone who needs the services he offers.</blockquote>
-<figcaption class="rev-who"><span class="rev-mono" role="img" aria-label="Lisa Vrancken">LV</span><div class="rev-id"><b>Lisa Vrancken</b><span>Founder &amp; CEO, BE&hellip;Creative Agency, LLC</span></div></figcaption>
+<figcaption class="rev-who"><img class="rev-avatar" src="/reviews/lisa-vrancken.jpg" alt="Lisa Vrancken" loading="lazy"><div class="rev-id"><b>Lisa Vrancken</b><span>Founder &amp; CEO, BE&hellip;Creative Agency, LLC</span></div></figcaption>
 </figure>
 
 </div>
@@ -377,7 +377,7 @@
   var sec=document.getElementById('reviews'), grid=document.getElementById('reviewsGrid');
   if(!sec||!grid) return;
   // Curated reviewer photos, keyed by exact name. Add a line to give any reviewer an avatar.
-  var PHOTOS={"Virgilia Virjoghe":"/reviews/virgilia.jpg","Aiden Monke":"/reviews/aiden-monke.jpg"};
+  var PHOTOS={"Virgilia Virjoghe":"/reviews/virgilia.jpg","Aiden Monke":"/reviews/aiden-monke.jpg","Lisa Vrancken":"/reviews/lisa-vrancken.jpg"};
   function esc(s){var d=document.createElement('div');d.textContent=(s==null?'':String(s));return d.innerHTML;}
   function stars(n){n=parseInt(n,10);if(!(n>=1&&n<=5))return '';var o='';for(var i=1;i<=5;i++){o+=(i<=n?'★':'<span class="off">★</span>');}return '<div class="rev-stars" role="img" aria-label="'+n+' out of 5 stars">'+o+'</div>';}
   fetch('/api/reviews?public=1').then(function(r){return r.ok?r.json():null;}).then(function(d){
