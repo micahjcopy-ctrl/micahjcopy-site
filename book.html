@@ -3,39 +3,76 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Book a call — Micah Jacobi</title>
-<meta name="description" content="Book a free 20-minute marketing diagnosis. I'll show you where your marketing is losing leads, sales, and repeat revenue, and the first thing I'd fix. You leave with a plan you can use whether we work together or not.">
+<title>Book a free 20-minute call — Micah Jacobi</title>
+<meta name="description" content="A free 20-minute call with Micah Jacobi. Bring your marketing problem and I'll tell you what's costing you money and what I'd fix first, whether we ever work together or not.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 <link rel="preload" href="/fonts/bricolage-grotesque-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="v5.css">
 <style>
-/* booking-page specifics */
-.booking-card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px;
-box-shadow:0 24px 54px rgba(23,20,15,.08);max-width:960px;margin:0 auto;overflow:hidden;}
-.booking-card iframe{display:block;width:100%;height:800px;border:0;border-radius:10px;}
-.booking-note{font-family:var(--mono);font-size:12px;color:var(--muted);text-align:center;margin:16px auto 0;max-width:620px;}
-.booking-note b{color:var(--amber);font-weight:700;}
-.bring{list-style:none;padding:0;margin:14px 0 0;}
-.bring li{position:relative;padding-left:24px;margin-bottom:10px;font-size:16px;}
-.bring li::before{content:"→";position:absolute;left:0;color:var(--amber);font-weight:700;}
-.why{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--amber);
-border-radius:12px;padding:24px 26px;margin-top:4px;}
-.why h3{margin:0 0 8px;}
+/* ---------- book page ---------- */
+.bk-nav{display:flex!important;position:static!important;transform:none!important;flex-direction:row!important;background:none!important;border:0!important;box-shadow:none!important;padding:0!important;width:auto!important;}
+.bk-nav a{border:0!important;width:auto!important;margin:0!important;padding:11px 18px!important;}
+.bk-hero .lead{max-width:600px;}
+.bk-me{margin:0 0 0 auto;max-width:400px;border-radius:24px;overflow:hidden;position:relative;aspect-ratio:3/4;
+  border:1px solid rgba(244,239,228,.12);box-shadow:0 40px 90px -40px rgba(0,0,0,.85);}
+.bk-me img{width:100%;height:100%;object-fit:cover;object-position:50% 22%;filter:grayscale(1) contrast(1.04);}
+.bk-me figcaption{position:absolute;left:0;right:0;bottom:0;padding:70px 24px 22px;background:linear-gradient(180deg,transparent,rgba(13,11,9,.92));}
+.bk-me figcaption b{display:block;font-family:var(--disp);font-weight:700;font-stretch:92%;font-size:24px;color:#F4EFE4;}
+.bk-me figcaption span{display:block;margin-top:6px;font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:#F2CF86;}
+.bk-who{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(40px,6vw,96px);align-items:start;}
+.bk-who p{font-size:clamp(17.5px,1.35vw,19.5px);line-height:1.7;color:#3F3A33;max-width:560px;}
+.bk-who p b{color:#17140F;}
+.bk-case{background:radial-gradient(110% 90% at 80% 0%,#2A1B12 0%,#0D0B09 62%);color:#F4EFE4;border-radius:24px;padding:clamp(26px,3vw,40px);}
+.bk-case .k{font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:#F2CF86;}
+.bk-case .big{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin:16px 0 10px;font-family:var(--disp);font-weight:800;font-stretch:84%;letter-spacing:-.03em;line-height:1;}
+.bk-case .big s{font-size:clamp(30px,3vw,42px);color:rgba(244,239,228,.5);text-decoration-color:#C2493F;text-decoration-thickness:3px;}
+.bk-case .big .ar{font-size:28px;color:#D9A94E;}
+.bk-case .big b{font-size:clamp(46px,4.6vw,66px);background:linear-gradient(180deg,#F2CF86,#D9A94E 60%,#B8812F);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+.bk-case p{color:rgba(244,239,228,.76)!important;font-size:16.5px!important;line-height:1.6;margin:0;}
+.bk-case ul{list-style:none;margin:24px 0 0;padding:0;border-top:1px solid rgba(244,239,228,.12);}
+.bk-case li{display:grid;grid-template-columns:7.5em 1fr;gap:14px;align-items:baseline;padding:14px 0;border-bottom:1px solid rgba(244,239,228,.12);font-size:15.5px;color:rgba(244,239,228,.76);line-height:1.45;}
+.bk-case li b{font-family:var(--disp);font-weight:760;font-stretch:88%;font-size:24px;color:#D9A94E;letter-spacing:-.02em;}
+.bk-case .src{margin-top:14px;font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:rgba(244,239,228,.5);line-height:1.6;}
+.bk-said{margin-top:clamp(56px,6vw,90px);display:grid;grid-template-columns:1fr 1fr;gap:clamp(22px,3vw,40px);}
+.bk-said .pullquote{max-width:none;margin:0;}
+.bk-next{margin-top:clamp(56px,6vw,84px);font-family:var(--disp);font-weight:650;font-stretch:94%;font-size:clamp(22px,2vw,28px);letter-spacing:-.012em;color:#17140F;}
+.bk-next a{color:#7C2A2A;text-decoration:none;border-bottom:2px solid currentColor;}
+.bk-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(22px,2.6vw,36px);margin-top:clamp(40px,4.5vw,64px);}
+.bk-fork{display:grid;grid-template-columns:1fr 1fr;gap:clamp(18px,2.4vw,30px);margin-top:clamp(40px,4.5vw,60px);max-width:980px;}
+.bk-fork .card h3{color:#F4EFE4;}
+.bk-fork .card .kick{margin-bottom:12px;}
+.bk-why{margin-top:clamp(40px,4.5vw,60px);max-width:760px;font-size:clamp(18px,1.5vw,21px)!important;line-height:1.6;color:#F4EFE4!important;border-left:3px solid #D9A94E;padding-left:24px;}
+.booking-card{background:#FFFDF8;border:1px solid rgba(23,20,15,.1);border-radius:24px;padding:14px;box-shadow:0 30px 60px -30px rgba(60,30,20,.3);max-width:980px;margin:0 auto;overflow:hidden;}
+.booking-card iframe{display:block;width:100%;height:800px;border:0;border-radius:14px;}
+.booking-note{font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:#6B645B;text-align:center;margin:20px auto 0;max-width:640px;line-height:1.7;}
+.booking-note b{color:#7C2A2A;font-weight:700;}
+.bk-prep{max-width:700px;margin:22px auto 0;}
+@media(max-width:860px){
+  .bk-me{max-width:none;aspect-ratio:auto;display:grid;grid-template-columns:72px 1fr;gap:16px;align-items:center;border:0;box-shadow:none;border-radius:0;overflow:visible;margin-top:8px;}
+  .bk-me img{width:72px;height:72px;border-radius:50%;}
+  .bk-me figcaption{position:static;padding:0;background:none;}
+  .bk-me figcaption b{font-size:20px;}
+  .bk-who,.bk-said,.bk-fork{grid-template-columns:1fr;}
+  .bk-steps{grid-template-columns:1fr;gap:44px;}
+  .bk-case li{grid-template-columns:6.4em 1fr;}
+}
 @media(max-width:640px){.booking-card iframe{height:740px;}}
 </style>
 <link rel="canonical" href="https://micahjacobi.me/book">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Micah Jacobi">
-<meta property="og:title" content="Book a call — Micah Jacobi">
-<meta property="og:description" content="Book a free 20-minute marketing diagnosis. I'll show you where your marketing is losing leads, sales, and repeat revenue, and the first thing I'd fix.">
+<meta property="og:title" content="Bring me your marketing problem. Leave with the answer.">
+<meta property="og:description" content="A free 20-minute call with Micah Jacobi. You keep the answers, whether we ever work together or not.">
 <meta property="og:url" content="https://micahjacobi.me/book">
-<meta property="og:image" content="https://micahjacobi.me/headshot-bw.jpg">
+<meta property="og:image" content="https://micahjacobi.me/img/og-book.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Book a call — Micah Jacobi">
-<meta name="twitter:description" content="A free 20-minute marketing diagnosis. Find out what's leaking and what I'd fix first.">
-<meta name="twitter:image" content="https://micahjacobi.me/headshot-bw.jpg">
+<meta name="twitter:title" content="Bring me your marketing problem. Leave with the answer.">
+<meta name="twitter:description" content="A free 20-minute call with Micah Jacobi. You keep the answers, whether we ever work together or not.">
+<meta name="twitter:image" content="https://micahjacobi.me/img/og-book.jpg">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://micahjacobi.me/#micah","name":"Micah Jacobi","url":"https://micahjacobi.me/","image":"https://micahjacobi.me/headshot-bw.jpg","jobTitle":"Marketing Specialist"},{"@type":"WebSite","@id":"https://micahjacobi.me/#website","url":"https://micahjacobi.me/","name":"Micah Jacobi","publisher":{"@id":"https://micahjacobi.me/#micah"}}]}</script>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-FZ1C922BZV"></script>
@@ -45,110 +82,132 @@ border-radius:12px;padding:24px 26px;margin-top:4px;}
 
 <header class="site-header"><div class="wrap"><nav class="nav">
 <a class="brand" href="index.html">Micah Jacobi<span class="dot">.</span></a>
-<button class="nav-toggle" aria-label="Menu" onclick="document.getElementById('nav').classList.toggle('open')">☰</button>
-<div class="nav-links" id="nav">
-<a href="services.html">Services</a>
-<a href="about.html">About</a>
-<a href="blog.html">Blog</a>
-<a class="btn btn-primary" href="#booking">Grab a time</a>
+<div class="nav-links bk-nav">
+<a class="btn btn-primary" href="#booking">Pick a time</a>
 </div>
 </nav></div></header>
 
-<!-- HERO (dark bun) -->
-<section class="hero hero-dark band-dark">
-<div class="wrap">
-<span class="eyebrow">Book a call · Free 20-minute diagnosis</span>
-<h1 class="hl">Let's find what's <span class="drip">leaking<svg viewBox="0 0 430 110" preserveAspectRatio="none" aria-hidden="true"><path class="d d1" d="M70 0 C67 0 66 12 66 20 C66 27 74 27 74 20 C74 12 73 0 70 0 Z"/><path class="d d2" d="M214 0 C211 0 210 15 210 25 C210 32 218 32 218 25 C218 15 217 0 214 0 Z"/><path class="d d3" d="M352 0 C350 0 349 9 349 15 C349 21 355 21 355 15 C355 9 354 0 352 0 Z"/><ellipse class="drop drop1" cx="70" cy="34" rx="4" ry="5"/><ellipse class="drop drop2" cx="214" cy="40" rx="4" ry="5"/><ellipse class="drop drop3" cx="352" cy="28" rx="3" ry="4"/></svg></span>.</h1>
-<p class="lead mt24">You already know something's off. The traffic's there but the sales aren't. The leads come in and go cold. Last month looked busy and the revenue still didn't move. <b>Twenty minutes is usually enough to see why.</b> I'll give you one honest read on where your marketing is losing money and the first thing I'd fix, and you leave with a plan you can run yourself, whether or not we ever work together.</p>
-<div class="btn-row mt24">
-<a class="btn btn-primary" href="#booking">Grab a time</a>
-<a class="btn-link" href="services.html">See how I work →</a>
-</div>
-<div class="coordstrip">
-<span>20 MINUTES · GOOGLE MEET</span>
-<span>NO PITCH TRAP · NO OBLIGATION</span>
-<span>YOU KEEP THE PLAN</span>
-</div>
-</div>
-</section>
-<div class="fade"></div>
-
-<!-- BOOKING WIDGET -->
-<section id="booking">
-<div class="wrap center">
-<span class="eyebrow" style="justify-content:center;">Pick a time</span>
-<h2>Book your free diagnosis.</h2>
-<figure class="pullquote pq-center">
-<img class="pq-avatar" src="/reviews/aiden-monke.jpg" alt="Aiden Monke" loading="lazy">
-<div class="pq-body">
-<blockquote class="pq-q">You shouldn&rsquo;t be considering it. You should just be saying yes to it right away.</blockquote>
-<figcaption><b>Aiden Monke</b>Co-Owner, StarForged SaberWorks &middot; <a href="index.html#reviews">Read the full review</a></figcaption>
-</div>
-</figure>
-
-<p class="mt16" style="max-width:600px;margin-left:auto;margin-right:auto;">Choose any slot that works. It goes straight onto my calendar and yours, with a Google Meet link attached. Drop your website and the one result you most want to fix in the <b>booking notes</b>, and I'll have looked before we talk, so the twenty minutes start at the diagnosis instead of the introductions. Times below are shown in your local timezone.</p>
-</div>
-<div class="wrap" style="margin-top:34px;">
-<div class="booking-card">
-<iframe src="https://calendar.google.com/calendar/appointments/schedules/AcZssZ0A_t4giLYdL8SPfgRt-xxpt_SlaOD0WBqVnDwwhwn6r8gs9VZQWhJy169st8PfEg9gOwg9gOc-?gv=true" title="Book a 20-minute marketing diagnosis with Micah Jacobi" loading="lazy" data-lenis-prevent></iframe>
-</div>
-<p class="booking-note">The moment you book, you'll get a <b>Google Calendar invite with a Meet link and a reminder</b> so nothing slips. Need a different time than what's shown? Email me at <a class="inline" href="mailto:micahjcopy@gmail.com">micahjcopy@gmail.com</a>.</p>
-</div>
-</section>
-
-<!-- HOW IT WORKS -->
-<section class="band-alt">
-<div class="wrap">
-<span class="eyebrow">What the 20 minutes looks like</span>
-<h2>Diagnosis first. Like a doctor.</h2>
-<p class="mt16">No slide deck, no discovery-call runaround. We get straight into your business and I show you what I see.</p>
-<div class="grid g3 mt32">
-<div class="step"><div class="n">01</div><span class="lab">The map</span><h3>I look at the whole funnel</h3><p>Traffic, website, follow-up, and retention, not just the one channel you came in asking about. The leak is usually somewhere you're not looking.</p></div>
-<div class="step"><div class="n">02</div><span class="lab">The leak</span><h3>We find where money slips out</h3><p>We pinpoint the weak point that's costing you most right now, and the single fix that moves the needle furthest.</p></div>
-<div class="step"><div class="n">03</div><span class="lab">The plan</span><h3>You get a clear next step</h3><p>A prioritized action in plain English. Run it yourself, hand it to your team, or have me handle it. Your call.</p></div>
-</div>
-</div>
-</section>
-
-<!-- WHAT TO BRING + WHY FREE -->
-<section>
+<!-- 1 · THE OFFER: a concrete thing (20-min call with Micah), a price (free), a reason (you keep the answer either way) -->
+<section class="hero hero-dark band-dark bk-hero">
 <div class="wrap">
 <div class="hero-grid">
 <div>
-<span class="eyebrow">Come prepared</span>
-<h2>What to bring</h2>
-<p class="mt16">The more real the inputs, the sharper the read. The booking notes get me looking early; on the call itself you don't need a deck. Just:</p>
-<ul class="bring">
-<li>Your website open in a tab.</li>
-<li>A rough sense of your numbers: traffic, leads, and revenue, or whatever you actually track.</li>
-<li>The one result you most wish were better.</li>
-</ul>
+<span class="eyebrow">Free 20-minute call with Micah Jacobi</span>
+<h1 class="hl">Bring me your marketing problem. Leave with the <span style="white-space:nowrap"><span class="drip">answer<svg viewBox="0 0 430 110" preserveAspectRatio="none" aria-hidden="true"><path class="d d1" d="M70 0 C67 0 66 12 66 20 C66 27 74 27 74 20 C74 12 73 0 70 0 Z"/><path class="d d2" d="M214 0 C211 0 210 15 210 25 C210 32 218 32 218 25 C218 15 217 0 214 0 Z"/><path class="d d3" d="M352 0 C350 0 349 9 349 15 C349 21 355 21 355 15 C355 9 354 0 352 0 Z"/><ellipse class="drop drop1" cx="70" cy="34" rx="4" ry="5"/><ellipse class="drop drop2" cx="214" cy="40" rx="4" ry="5"/><ellipse class="drop drop3" cx="352" cy="28" rx="3" ry="4"/></svg></span>.</span></h1>
+<p class="lead">For business owners whose marketing isn&rsquo;t paying back the way it should. Twenty minutes on Google Meet, free. I&rsquo;ll tell you, out loud, what&rsquo;s costing you money and exactly what I&rsquo;d fix first. <b>My goal is that you hang up able to fix it, whether we ever work together or not.</b></p>
+<div class="btn-row">
+<a class="btn btn-primary" href="#booking">Pick a time</a>
+<a class="btn-link" href="#who">If someone sent you here, start with who I am &darr;</a>
+</div>
+<div class="coordstrip">
+<span>20 minutes &middot; Google Meet</span>
+<span>Free</span>
+<span>You keep the answers</span>
+</div>
 </div>
 <div>
-<span class="eyebrow">The honest part</span>
-<h2>Why it's free</h2>
-<div class="why mt16">
-<h3>No pitch trap.</h3>
-<p>Some of my best clients started as a call where I just gave away the plan. So that's what I do. You get the real read and the next step regardless of what happens next. <b>If it's an obvious fit, we'll talk about working together at the end. If it's not, you still keep everything we found.</b> That's the whole deal, no skin off my back.</p>
-</div>
+<figure class="bk-me">
+<picture><source srcset="img/micah-headshot-900.webp" type="image/webp"><img src="img/micah-headshot-900.jpg" alt="Micah Jacobi" width="900" height="1200"></picture>
+<figcaption><b>Micah Jacobi</b><span>You&rsquo;ll be talking to me</span></figcaption>
+</figure>
 </div>
 </div>
 </div>
 </section>
 
-<!-- PROOF / CLOSE (dark bun) -->
-<section class="band-dark hero-dark center">
-<div class="wrap center">
-<span class="eyebrow" style="justify-content:center;">Who you're talking to</span>
-<h2>One senior person is accountable for all of it. <span class="em">Me.</span></h2>
-<div class="grid g4 mt32">
-<div class="stat"><div class="num">$50K</div><div class="lbl">/mo — scaled a meal-delivery brand's MRR</div></div>
-<div class="stat"><div class="num">+$100K</div><div class="lbl">/mo — added to an ecommerce brand via paid media</div></div>
-<div class="stat"><div class="num">$300K</div><div class="lbl">/mo — scaled a software company</div></div>
-<div class="stat"><div class="num">+30%</div><div class="lbl">— more leads for local med spas</div></div>
+<!-- 2 · WHO YOU'LL BE TALKING TO -->
+<section id="who">
+<div class="wrap">
+<div class="bk-who">
+<div>
+<span class="eyebrow">Who you&rsquo;ll be talking to</span>
+<h2>Hi, I&rsquo;m Micah.</h2>
+<p class="mt24">I fix the marketing behind businesses that already sell something: the ads that bring people in, the website that has to convince them, and the emails and texts that bring them back to buy again.</p>
+<p>I started at 17 with small projects. Today I work with ecommerce brands doing eight figures a year, an $80M real estate company and local businesses. I run a small team, <b>but nobody gets handed off. The person on this call is the person who answers your texts and owns the results.</b></p>
 </div>
-<p class="lead mt32" style="max-width:600px;margin-left:auto;margin-right:auto;">You won't get handed to a junior. The person reading your funnel on the call is the same one who does the work. Grab a time and let's find what's leaking.</p>
-<div class="btn-row center mt24" style="justify-content:center;"><a class="btn btn-primary" href="#booking">Grab a time</a></div>
+<div class="bk-case">
+<span class="k">Latest result &middot; wellness ecommerce brand</span>
+<div class="big"><s>$81,990</s><span class="ar">&rarr;</span><b>$206,230</b></div>
+<p>a month in email &amp; SMS revenue: the month I took over in June, then the 30 days to Nov 15. Same list, same products.</p>
+<ul>
+<li><b>$300K/mo</b><span>recurring revenue for a software startup</span></li>
+<li><b>$50K/mo</b><span>for a meal-delivery brand</span></li>
+<li><b>+30%</b><span>more leads for Florida med spas</span></li>
+</ul>
+<div class="src">Source: Attentive, Google Ads and Meta reporting. Brand named on the call.</div>
+</div>
+</div>
+
+<div class="bk-said">
+<figure class="pullquote">
+<img class="pq-avatar" src="/reviews/lisa-vrancken.jpg" alt="Lisa Vrancken" loading="lazy">
+<div class="pq-body">
+<blockquote class="pq-q">Micah was referred to my team to assist in web design, SEO, funnels &amp; paid ads. Micah is a consummate professional, understands the client&rsquo;s vision &amp; executes accordingly.</blockquote>
+<figcaption><b>Lisa Vrancken</b>Founder &amp; CEO, BE&hellip;Creative Agency</figcaption>
+</div>
+</figure>
+<figure class="pullquote">
+<img class="pq-avatar" src="/reviews/virgilia.jpg" alt="Virgilia Virjoghe" loading="lazy">
+<div class="pq-body">
+<blockquote class="pq-q">Emotional intelligence is one of Micah&rsquo;s great qualities. And accountability.</blockquote>
+<figcaption><b>Virgilia Virjoghe</b>Founder &amp; CEO, VV Global Partners</figcaption>
+</div>
+</figure>
+</div>
+
+<p class="bk-next">So here&rsquo;s what that person does with your 20 minutes. <a href="#agenda">&darr;</a></p>
+</div>
+</section>
+
+<!-- 3 · WHAT WE'LL TALK ABOUT -->
+<section class="band-alt" id="agenda">
+<div class="wrap">
+<span class="eyebrow">What we&rsquo;ll talk about</span>
+<h2>How the 20 minutes go</h2>
+<p class="lead mt24">No slides and no discovery-call runaround. We get straight into your business, and I show you what I see.</p>
+<div class="bk-steps">
+<div class="step"><div class="n">01</div><span class="lab">Before the call</span><h3>I look first</h3><p>When you book, drop your website and the one result you most want to fix in the booking notes. I look before we talk, so we start on the answer instead of the introductions.</p></div>
+<div class="step"><div class="n">02</div><span class="lab">First</span><h3>Your problem, in your words</h3><p>You tell me what isn&rsquo;t working and what you&rsquo;ve already tried. I ask about the numbers you track: traffic, leads, sales, repeat buyers.</p></div>
+<div class="step"><div class="n">03</div><span class="lab">Then</span><h3>The whole path, not one channel</h3><p>We follow a customer from the first ad or search to your page, to the follow-up, to the second order. What&rsquo;s costing you most is usually somewhere you&rsquo;re not looking.</p></div>
+<div class="step"><div class="n">04</div><span class="lab">The last few minutes</span><h3>The answer, out loud</h3><p>What&rsquo;s costing you the most, what I&rsquo;d fix first and how. Plain English, in order, so you can run it yourself, hand it to your team, or have me do it.</p></div>
+</div>
+</div>
+</section>
+
+<!-- 4 · MY GOAL ON THE CALL -->
+<section class="band-dark">
+<div class="wrap">
+<span class="eyebrow">My goal on this call</span>
+<h2>You should be able to fix it <span class="em">without me</span>.</h2>
+<p class="lead mt24">Having me do it is the last option on that list for a reason. My goal is that you get the answer on the call, out loud, not in a proposal three days later. <b>Whether you ever hire me or not, you hang up knowing what to do next.</b></p>
+<div class="bk-fork">
+<div class="card"><div class="kick">If it&rsquo;s a fit</div><h3>We talk about working together</h3><p>If you want help doing it and I&rsquo;m the right person, we&rsquo;ll spend the last couple of minutes on what that looks like. You decide.</p></div>
+<div class="card"><div class="kick">If it&rsquo;s not</div><h3>You still keep everything</h3><p>I&rsquo;ll tell you straight if I&rsquo;m not the right fit. Everything we found on the call is yours to use.</p></div>
+</div>
+<p class="bk-why">Why give it away? Because some of my best clients started as a call where I just gave away the plan.</p>
+<div class="btn-row mt32"><a class="btn btn-primary" href="#booking">Pick a time</a></div>
+</div>
+</section>
+
+<!-- 5 · BOOK -->
+<section id="booking">
+<div class="wrap center">
+<span class="eyebrow" style="justify-content:center;">Pick a time</span>
+<h2>Grab your 20 minutes.</h2>
+<p class="bk-prep">Times show in your timezone. Remember the booking notes: your website and the one result you most want to fix. On the call, have your site open and a rough idea of your numbers. That&rsquo;s all the prep there is.</p>
+<figure class="pullquote pq-center" style="margin-top:40px;">
+<img class="pq-avatar" src="/reviews/aiden-monke.jpg" alt="Aiden Monke" loading="lazy">
+<div class="pq-body">
+<blockquote class="pq-q">You shouldn&rsquo;t be considering it. You should just be saying yes to it right away.</blockquote>
+<figcaption><b>Aiden Monke</b>Co-Owner, StarForged SaberWorks</figcaption>
+</div>
+</figure>
+</div>
+<div class="wrap" style="margin-top:40px;">
+<div class="booking-card">
+<iframe src="https://calendar.google.com/calendar/appointments/schedules/AcZssZ0A_t4giLYdL8SPfgRt-xxpt_SlaOD0WBqVnDwwhwn6r8gs9VZQWhJy169st8PfEg9gOwg9gOc-?gv=true" title="Book a free 20-minute call with Micah Jacobi" loading="lazy"></iframe>
+</div>
+<p class="booking-note">The moment you book, you get a <b>Google Calendar invite with the Meet link and a reminder</b>. Need a time that isn&rsquo;t shown? Email me at <a class="inline" href="mailto:micahjcopy@gmail.com">micahjcopy@gmail.com</a>.</p>
 </div>
 </section>
 
@@ -166,7 +225,6 @@ border-radius:12px;padding:24px 26px;margin-top:4px;}
 </div>
 <div class="foot-bottom"><span>© 2026 Micah Jacobi. All rights reserved.</span><span>Marketing specialist</span></div>
 </div></footer>
-<script>document.querySelectorAll('.nav-links a').forEach(a=>a.addEventListener('click',()=>document.getElementById('nav').classList.remove('open')));</script>
 <script src="motion.js" defer></script>
 </body>
 </html>
