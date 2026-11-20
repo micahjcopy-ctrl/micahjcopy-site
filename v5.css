@@ -309,3 +309,19 @@ body.v5::after{content:"";position:fixed;inset:-50%;z-index:90;pointer-events:no
   .v5-leak .st .lk,.v5-leak .st .sl,.v5-pipe .p,.v5-pipe .dim,.v5-pipe .ring,.v5-pipe .drops,.v5-pipe .dr{animation:none;}
   .v5-pipe .ring{stroke:#C2493F;}
 }
+
+/* step label (e.g. book page: 01 + "The map") */
+.v5 .step .lab{display:block;font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--v-ox);margin:-4px 0 12px;}
+.v5 .band-dark .step .lab{color:var(--v-gold);}
+
+/* the dripping gold word (same as the homepage) */
+.v5 .drip{position:relative;display:inline-block;color:var(--v-gold);
+  background:linear-gradient(180deg,var(--v-gold2) 0%,var(--v-gold) 55%,#B8812F 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+.v5 .drip svg{position:absolute;left:0;top:80%;width:100%;height:1em;overflow:visible;pointer-events:none;}
+.v5 .drip svg path,.v5 .drip svg ellipse{fill:var(--v-gold);}
+.v5 .drip .d{transform-box:fill-box;transform-origin:50% 0;animation:v5drip-grow 5.5s cubic-bezier(.6,0,.4,1) infinite;}
+.v5 .drip .drop{transform-box:fill-box;animation:v5drip-fall 5.5s cubic-bezier(.55,0,1,.45) infinite;opacity:0;}
+.v5 .drip .d2,.v5 .drip .drop2{animation-delay:1.7s;} .v5 .drip .d3,.v5 .drip .drop3{animation-delay:3.1s;}
+@keyframes v5drip-grow{0%{transform:scaleY(.15)}55%{transform:scaleY(1)}70%{transform:scaleY(.55)}100%{transform:scaleY(.15)}}
+@keyframes v5drip-fall{0%,55%{opacity:0;transform:translateY(0)}58%{opacity:1}85%{opacity:0;transform:translateY(120%)}100%{opacity:0;transform:translateY(120%)}}
+@media (prefers-reduced-motion: reduce){.v5 .drip .d,.v5 .drip .drop{animation:none;} .v5 .drip .drop{display:none;}}
