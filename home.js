@@ -231,7 +231,7 @@
   }
 
   // drive the sim from the story steps
-  var steps = Array.prototype.slice.call(document.querySelectorAll('.leak-steps .step'));
+  var steps = Array.prototype.slice.call(document.querySelectorAll('.leak-steps .lstep'));
   var current = -1, sealTimer = 0;
   function markLeak(i, on) {            // leak i (0-3) lives on step i + 1
     var el = steps[i + 1]; if (!el) return;
