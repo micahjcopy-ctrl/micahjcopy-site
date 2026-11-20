@@ -209,7 +209,7 @@ body.v5::after{content:"";position:fixed;inset:-50%;z-index:90;pointer-events:no
 .v5 .article ol li{padding-left:6px;}
 .v5 .article ul li::before{color:var(--v-ox);}
 .v5 .article b,.v5 .article strong{color:var(--ink);}
-.v5 .lede{font-family:var(--disp);font-weight:560;font-stretch:96%;font-size:clamp(22px,2.1vw,28px);line-height:1.4;letter-spacing:-.012em;color:var(--ink);margin:0 0 34px;}
+.v5 .lede,.v5 .article .lede{font-family:var(--disp);font-weight:560;font-stretch:96%;font-size:clamp(22px,2.1vw,28px);line-height:1.4;letter-spacing:-.012em;color:var(--ink);margin:0 0 34px;}
 .v5 .keybox{background:var(--v-paper);border:1px solid rgba(23,20,15,.1);border-left:3px solid var(--v-ox);border-radius:18px;padding:24px 28px;margin:36px auto;}
 .v5 .keybox .k{font-weight:400;letter-spacing:.12em;color:var(--v-ox);}
 .v5 .keybox p{font-size:17.5px;line-height:1.65;margin-top:10px;}
@@ -325,3 +325,12 @@ body.v5::after{content:"";position:fixed;inset:-50%;z-index:90;pointer-events:no
 @keyframes v5drip-grow{0%{transform:scaleY(.15)}55%{transform:scaleY(1)}70%{transform:scaleY(.55)}100%{transform:scaleY(.15)}}
 @keyframes v5drip-fall{0%,55%{opacity:0;transform:translateY(0)}58%{opacity:1}85%{opacity:0;transform:translateY(120%)}100%{opacity:0;transform:translateY(120%)}}
 @media (prefers-reduced-motion: reduce){.v5 .drip .d,.v5 .drip .drop{animation:none;} .v5 .drip .drop{display:none;}}
+
+/* ---------- blog index: editorial cards (the identical "MJ." thumbs were noise) ---------- */
+.v5 .post .thumb{display:none!important;}
+.v5 .post{display:flex;flex-direction:column;}
+.v5 .post .body{display:flex;flex-direction:column;height:100%;padding:28px 28px 26px;border-top:3px solid var(--v-ox);}
+.v5 .post h3{font-size:clamp(21px,1.7vw,24px);line-height:1.2;margin:14px 0 auto;padding-bottom:24px;}
+.v5 .post h3 a:hover{color:var(--v-ox)!important;}
+.v5 .post .date{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--v-muted);margin:0;padding-top:16px;border-top:1px solid var(--v-cline);}
+.v5 .cat{font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--v-ox);}
