@@ -6,8 +6,10 @@
 <title>Free Retention Score — Micah Jacobi</title>
 <meta name="description" content="Score your email account in 5 minutes. See your leak in dollars and get your #1 fix free, with full implementation steps and no call required.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
+<link rel="preload" href="/fonts/bricolage-grotesque-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="v5.css">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="canonical" href="https://micahjacobi.me/score">
@@ -47,7 +49,7 @@ button.btn + button.btn{margin-top:10px;}
 #step-result,#checkout-note{display:none;}
 </style>
 </head>
-<body>
+<body class="v5">
 
 <header class="site-header"><div class="wrap"><nav class="nav">
 <a class="brand" href="index.html">Micah Jacobi<span class="dot">.</span></a>
@@ -60,13 +62,18 @@ button.btn + button.btn{margin-top:10px;}
 </nav></div></header>
 
 <!-- WIZARD -->
-<section class="page-hero" id="step-form">
+<div id="step-form">
+<section class="page-hero hero-dark band-dark" style="padding-bottom:clamp(130px,12vw,170px);">
 <div class="wrap">
 <span class="eyebrow">Free Retention Score · 5 minutes</span>
-<h1 style="font-size:48px;">Your list isn't burnt.<br>Your flows are <span class="em">off</span>.</h1>
+<h1>Your list isn't burnt.<br>Your flows are <span class="em">off</span>.</h1>
 <p class="lead mt16" style="max-width:640px;">Automated flows should drive <b>35–40% of your email revenue</b>. Most accounts run under 20%. Answer 8 questions, straight off your dashboard, and see your score, your leak in dollars, and your <b>#1 fix, free</b>.</p>
 
-<div class="card mt32" style="max-width:760px;">
+</div>
+</section>
+<section style="padding-top:0;">
+<div class="wrap">
+<div class="card" style="max-width:760px;margin-top:-96px;position:relative;z-index:2;">
 <div class="lr-grid">
 <div class="lr-field"><label>Monthly store revenue ($)</label><input id="rev" type="number" value="400000"></div>
 <div class="lr-field"><label>Email % of total revenue</label><input id="eshare" type="number" value="20"></div>
@@ -87,16 +94,17 @@ button.btn + button.btn{margin-top:10px;}
 <label><input type="checkbox" id="f_browse"> Browse abandon</label>
 </div></div>
 <div class="lr-field" style="margin-top:18px;"><label>Where do we send your score + your #1 fix?</label><input id="email" type="email" placeholder="you@brand.com"></div>
-<button class="btn btn-primary mt24" onclick="runScore()">Show my Retention Score →</button>
+<button class="btn btn-primary mt24" onclick="runScore()">Show my Retention Score</button>
 <p class="mt16" style="font-family:var(--mono);font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;">Free. No call, no pitch deck, no "strategy session." Benchmarks footnoted. Setup guide included.</p>
 </div>
 </div>
 </section>
+</div>
 
 <!-- RESULTS -->
 <section class="page-hero" id="step-result">
 <div class="wrap">
-<h1 id="r-head" style="font-size:44px;"></h1>
+<h1 id="r-head" style="font-size:clamp(32px,4vw,54px);"></h1>
 
 <div class="card mt32" style="max-width:760px;">
 <span class="eyebrow">Retention Score</span>

@@ -6,8 +6,10 @@
 <title>The Email Revenue Leak Report — Micah Jacobi</title>
 <meta name="description" content="See exactly where your email revenue is leaking — in dollars, in 5 minutes, without an agency retainer or a 'strategy call.' For DTC brands on Klaviyo & Attentive.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
+<link rel="preload" href="/fonts/bricolage-grotesque-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="v5.css">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="canonical" href="https://micahjacobi.me/leak-report">
@@ -35,7 +37,7 @@
 .tickrow>div{flex:1;padding:20px 16px;border-right:1px solid var(--line-dark)}
 .tickrow>div:last-child{border-right:none}
 .tickrow .tk{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:#9A9182}
-.tickrow .tv{font-family:var(--fr);font-weight:600;font-size:34px;color:var(--gold);margin-top:4px;font-variant-numeric:tabular-nums}
+.tickrow .tv{font-family:var(--fr);font-weight:760;font-stretch:84%;font-size:clamp(26px,2.4vw,34px);letter-spacing:-.02em;white-space:nowrap;color:var(--gold);margin-top:6px;font-variant-numeric:tabular-nums}
 .tickrow .tv.bad{color:#d98d85}
 @media(max-width:720px){.chero h1{font-size:38px}.tickrow{flex-direction:column}.tickrow>div{border-right:none;border-bottom:1px solid var(--line-dark)}.tickrow>div:last-child{border-bottom:none}}
 /* old way / new way graphic */
@@ -94,7 +96,7 @@
 @media(prefers-reduced-motion:reduce){.lrh .wrap>*{opacity:1!important;transform:none!important;animation:none!important}}
 </style>
 </head>
-<body>
+<body class="v5">
 
 <header class="site-header"><div class="wrap"><nav class="nav">
 <a class="brand" href="index.html">Micah Jacobi<span class="dot">.</span></a>
@@ -111,7 +113,7 @@
 <section class="hero hero-dark band-dark lrh chero">
 <div class="wrap">
 <span class="eyebrow">For DTC brands on Klaviyo &amp; Attentive · $50k–$2M/mo</span>
-<h1 class="hl">See exactly where your email revenue is <span class="em">leaking</span>.</h1>
+<h1 class="hl">See exactly where your email revenue is <span class="drip">leaking<svg viewBox="0 0 430 110" preserveAspectRatio="none" aria-hidden="true"><path class="d d1" d="M70 0 C67 0 66 12 66 20 C66 27 74 27 74 20 C74 12 73 0 70 0 Z"/><path class="d d2" d="M214 0 C211 0 210 15 210 25 C210 32 218 32 218 25 C218 15 217 0 214 0 Z"/><path class="d d3" d="M352 0 C350 0 349 9 349 15 C349 21 355 21 355 15 C355 9 354 0 352 0 Z"/><ellipse class="drop drop1" cx="70" cy="34" rx="4" ry="5"/><ellipse class="drop drop2" cx="214" cy="40" rx="4" ry="5"/><ellipse class="drop drop3" cx="352" cy="28" rx="3" ry="4"/></svg></span>.</h1>
 <p class="lead mt24">In dollars. In 5 minutes. Without an agency retainer, a "strategy call," or a single ad dollar. Most accounts are silently losing <b>15–20% of their email revenue</b> to paused flows, broken triggers, and full-list blasts. And the dashboard never says a word.</p>
 <div class="btn-row mt24"><a class="btn btn-primary" href="score.html">Get your free Retention Score</a></div>
 <div class="microproof">8 questions · leak shown in dollars · #1 fix free, full steps · no call, ever</div>
@@ -353,7 +355,7 @@
 <li><b>Free re-run in 60 days.</b> Put a number on what you fixed</li>
 </ul>
 <div class="guar"><b>The $1,000/mo guarantee:</b> if your report doesn't identify at least $1,000/month in recoverable flow revenue, you get a full refund and keep everything.</div>
-<div class="btn-row mt24" style="justify-content:center;"><a class="btn btn-primary" style="width:100%;text-align:center;" href="score.html">Start with the free score →</a></div>
+<div class="btn-row mt24" style="justify-content:center;"><a class="btn btn-primary" style="width:100%;text-align:center;" href="score.html">Start with the free score</a></div>
 <p style="font-family:var(--mono);font-size:11px;color:var(--muted);text-align:center;margin:12px 0 0;">The free score comes first. You'll see your leak and fix #1 before spending anything.</p>
 </div>
 </div>
@@ -439,7 +441,7 @@
 <section class="band-dark center">
 <div class="wrap">
 <span class="eyebrow">The next five minutes</span>
-<h2 style="font-size:46px;">The leak is running <span class="em">right now</span>.<br>The score is free.</h2>
+<h2>The leak is running <span class="em">right now</span>.<br>The score is free.</h2>
 <p class="lead mt16" style="max-width:560px;">Eight questions. Your number, in dollars. Your first fix, in full. If the score comes back healthy, you've lost five minutes and gained certainty. If it doesn't, wouldn't you rather know today?</p>
 <div class="btn-row mt24" style="justify-content:center;"><a class="btn btn-primary" href="score.html">Get your free Retention Score</a></div>
 <p class="mt24" style="font-family:var(--mono);font-size:12px;color:#9A9182;max-width:520px;margin-left:auto;margin-right:auto;">P.S. The $1M welcome flow from the story? Turning it back on took four clicks. The expensive part was the months nobody looked.</p>

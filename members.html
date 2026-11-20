@@ -6,8 +6,10 @@
 <title>Retention OS — Member Area | Micah Jacobi</title>
 <meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
+<link rel="preload" href="/fonts/bricolage-grotesque-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="v5.css">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-FZ1C922BZV"></script>
@@ -35,7 +37,7 @@ table.hist{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}
 .cal-week p{font-size:15px;margin:4px 0 0}
 </style>
 </head>
-<body>
+<body class="v5">
 
 <header class="site-header"><div class="wrap"><nav class="nav">
 <a class="brand" href="index.html">Micah Jacobi<span class="dot">.</span></a>
@@ -43,12 +45,12 @@ table.hist{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}
 </nav></div></header>
 
 <!-- WELCOME -->
-<section class="page-hero" style="padding-bottom:36px;">
+<section class="page-hero hero-dark band-dark">
 <div class="wrap">
 <span class="eyebrow">Member area · v1</span>
-<h1 style="font-size:44px;">Welcome, <span class="em">operator</span>.</h1>
+<h1>Welcome, <span class="em">operator</span>.</h1>
 <p class="lead mt16" style="max-width:640px;">This is the founding version, and it grows with the cohort. Right now you get the three things that matter: <b>the weekly scorecard, this month's calendar, and me</b>. Everything else ships monthly.</p>
-<p class="mt16" style="font-family:var(--mono);font-size:12px;color:var(--muted);" id="joined-note"></p>
+<p class="mt16" style="font-family:var(--mono);font-size:12px;color:rgba(244,239,228,.62);" id="joined-note"></p>
 </div>
 </section>
 
