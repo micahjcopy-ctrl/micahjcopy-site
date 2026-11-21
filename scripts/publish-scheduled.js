@@ -8,7 +8,7 @@
  *   - On each run, every unpublished post whose date <= today (America/New_York) is:
  *       1. moved from _scheduled/<slug>.html to <slug>.html (the live URL is /<slug>, cleanUrls)
  *       2. added as the newest card in blog.html (after the <!-- posts:start --> marker)
- *       3. added to sitemap.xml
+ *       3. blog lastmod bumped in sitemap.xml (posts themselves are canonical on sealedgrowth.com)
  *       4. marked published in schedule.json
  *   - The GitHub Action (.github/workflows/publish-scheduled.yml) runs this daily and commits
  *     the result; Vercel deploys the push.
@@ -83,8 +83,8 @@ function main() {
 
     fs.renameSync(src, dest);
     blog = blog.replace(MARKER, `${MARKER}\n${buildCard(post, title)}`);
-    const urlLine = `  <url><loc>${SITE}/${post.slug}</loc><lastmod>${post.date}</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>\n`;
-    sitemap = sitemap.replace('</urlset>', `${urlLine}</urlset>`);
+    // Posts are canonical on sealedgrowth.com/blog/<slug> (set in each post's <head>), so they are not
+    // added to this sitemap: listing a URL whose canonical points elsewhere sends Google mixed signals.
     sitemap = sitemap.replace(/(<loc>https:\/\/micahjacobi\.me\/blog<\/loc><lastmod>)[0-9-]+(<\/lastmod>)/, `$1${today}$2`);
     post.published = today;
     published.push(post);
